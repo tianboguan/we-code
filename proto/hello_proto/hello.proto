@@ -1,0 +1,6 @@
+message HelloMsg
+{
+    optional string hello = 1 [default = "hello we"];
+    optional int32 standard_int = 2 [default = 0];
+    optional int64 long_int = 3 [default = 0];
+}
