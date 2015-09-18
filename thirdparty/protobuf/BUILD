@@ -5,5 +5,6 @@ cc_library(
 
 cc_library(
       name = 'protoc',
-      deps = '//thirdparty/protobuf-3.0.0-alpha-3/src:protoc'
+      deps = ['//thirdparty/protobuf-3.0.0-alpha-3/src:protoc',
+              '//thirdparty/protobuf-3.0.0-alpha-3/src:protoc.bin']
 )
