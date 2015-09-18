@@ -66,7 +66,7 @@ google/protobuf/extension_set.lo: google/protobuf/extension_set.cc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/x86_64-redhat-linux/bits/atomic_word.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/initializer_list \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/basic_string.tcc \
- /usr/include/stdint.h ../config.h \
+ /usr/include/stdint.h google/protobuf/stubs/pbconfig.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/tr1/unordered_map \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/utility \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_relops.h \
@@ -116,8 +116,10 @@ google/protobuf/extension_set.lo: google/protobuf/extension_set.cc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/istream \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/istream.tcc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h \
- google/protobuf/stubs/type_traits.h \
- google/protobuf/stubs/template_util.h \
+ google/protobuf/stubs/casts.h google/protobuf/stubs/type_traits.h \
+ google/protobuf/stubs/template_util.h google/protobuf/arena.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo \
+ google/protobuf/stubs/atomic_sequence_num.h \
  google/protobuf/generated_message_util.h google/protobuf/message_lite.h \
  google/protobuf/io/coded_stream.h /usr/include/sys/param.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/limits.h \
@@ -128,7 +130,10 @@ google/protobuf/extension_set.lo: google/protobuf/extension_set.cc \
  /usr/include/bits/stdio_lim.h /usr/include/linux/param.h \
  /usr/include/asm/param.h /usr/include/asm-generic/param.h \
  google/protobuf/wire_format_lite_inl.h \
- google/protobuf/wire_format_lite.h google/protobuf/stubs/map_util.h
+ google/protobuf/wire_format_lite.h google/protobuf/arenastring.h \
+ google/protobuf/stubs/fastmem.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/bits/sys_errlist.h \
+ /usr/include/bits/stdio.h google/protobuf/stubs/map_util.h
 
 google/protobuf/stubs/hash.h:
 
@@ -306,7 +311,7 @@ google/protobuf/stubs/common.h:
 
 /usr/include/stdint.h:
 
-../config.h:
+google/protobuf/stubs/pbconfig.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/tr1/unordered_map:
 
@@ -408,9 +413,17 @@ google/protobuf/repeated_field.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h:
 
+google/protobuf/stubs/casts.h:
+
 google/protobuf/stubs/type_traits.h:
 
 google/protobuf/stubs/template_util.h:
+
+google/protobuf/arena.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo:
+
+google/protobuf/stubs/atomic_sequence_num.h:
 
 google/protobuf/generated_message_util.h:
 
@@ -447,5 +460,17 @@ google/protobuf/io/coded_stream.h:
 google/protobuf/wire_format_lite_inl.h:
 
 google/protobuf/wire_format_lite.h:
+
+google/protobuf/arenastring.h:
+
+google/protobuf/stubs/fastmem.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
 
 google/protobuf/stubs/map_util.h:

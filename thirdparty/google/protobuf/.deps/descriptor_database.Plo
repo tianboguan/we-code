@@ -83,10 +83,19 @@ google/protobuf/descriptor_database.lo: \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/set \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_multiset.h \
- google/protobuf/descriptor.pb.h google/protobuf/generated_message_util.h \
- google/protobuf/stubs/once.h google/protobuf/stubs/atomicops.h \
+ google/protobuf/descriptor.pb.h google/protobuf/arena.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo \
+ google/protobuf/stubs/atomic_sequence_num.h \
+ google/protobuf/stubs/atomicops.h \
  google/protobuf/stubs/platform_macros.h \
  google/protobuf/stubs/atomicops_internals_x86_gcc.h \
+ google/protobuf/stubs/type_traits.h \
+ google/protobuf/stubs/template_util.h google/protobuf/arenastring.h \
+ google/protobuf/stubs/fastmem.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/bits/stdio_lim.h \
+ /usr/include/bits/sys_errlist.h /usr/include/bits/stdio.h \
+ google/protobuf/generated_message_util.h google/protobuf/stubs/once.h \
+ google/protobuf/metadata.h google/protobuf/unknown_field_set.h \
  google/protobuf/message.h google/protobuf/message_lite.h \
  google/protobuf/repeated_field.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/iterator \
@@ -110,10 +119,9 @@ google/protobuf/descriptor_database.lo: \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/istream \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/istream.tcc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h \
- google/protobuf/stubs/type_traits.h \
- google/protobuf/stubs/template_util.h google/protobuf/extension_set.h \
+ google/protobuf/stubs/casts.h google/protobuf/extension_set.h \
  google/protobuf/generated_enum_reflection.h \
- google/protobuf/unknown_field_set.h \
+ google/protobuf/generated_enum_util.h \
  google/protobuf/wire_format_lite_inl.h \
  google/protobuf/wire_format_lite.h google/protobuf/io/coded_stream.h \
  /usr/include/sys/param.h \
@@ -122,10 +130,9 @@ google/protobuf/descriptor_database.lo: \
  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
- /usr/include/bits/stdio_lim.h /usr/include/linux/param.h \
- /usr/include/asm/param.h /usr/include/asm-generic/param.h \
- google/protobuf/stubs/strutil.h google/protobuf/stubs/stl_util.h \
- google/protobuf/stubs/map_util.h
+ /usr/include/linux/param.h /usr/include/asm/param.h \
+ /usr/include/asm-generic/param.h google/protobuf/stubs/strutil.h \
+ google/protobuf/stubs/stl_util.h google/protobuf/stubs/map_util.h
 
 google/protobuf/descriptor_database.h:
 
@@ -337,15 +344,43 @@ google/protobuf/descriptor.h:
 
 google/protobuf/descriptor.pb.h:
 
-google/protobuf/generated_message_util.h:
+google/protobuf/arena.h:
 
-google/protobuf/stubs/once.h:
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo:
+
+google/protobuf/stubs/atomic_sequence_num.h:
 
 google/protobuf/stubs/atomicops.h:
 
 google/protobuf/stubs/platform_macros.h:
 
 google/protobuf/stubs/atomicops_internals_x86_gcc.h:
+
+google/protobuf/stubs/type_traits.h:
+
+google/protobuf/stubs/template_util.h:
+
+google/protobuf/arenastring.h:
+
+google/protobuf/stubs/fastmem.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+google/protobuf/generated_message_util.h:
+
+google/protobuf/stubs/once.h:
+
+google/protobuf/metadata.h:
+
+google/protobuf/unknown_field_set.h:
 
 google/protobuf/message.h:
 
@@ -395,15 +430,13 @@ google/protobuf/repeated_field.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h:
 
-google/protobuf/stubs/type_traits.h:
-
-google/protobuf/stubs/template_util.h:
+google/protobuf/stubs/casts.h:
 
 google/protobuf/extension_set.h:
 
 google/protobuf/generated_enum_reflection.h:
 
-google/protobuf/unknown_field_set.h:
+google/protobuf/generated_enum_util.h:
 
 google/protobuf/wire_format_lite_inl.h:
 
@@ -428,8 +461,6 @@ google/protobuf/io/coded_stream.h:
 /usr/include/bits/posix2_lim.h:
 
 /usr/include/bits/xopen_lim.h:
-
-/usr/include/bits/stdio_lim.h:
 
 /usr/include/linux/param.h:
 

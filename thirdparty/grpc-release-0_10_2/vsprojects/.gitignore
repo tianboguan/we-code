@@ -1,0 +1,9 @@
+Debug
+Release
+*.suo
+*.user
+test_bin
+*.opensdf
+*.sdf
+third_party/*.user
+/packages

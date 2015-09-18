@@ -72,15 +72,26 @@ google/protobuf/reflection_ops.lo: google/protobuf/reflection_ops.cc \
  /usr/include/bits/select.h /usr/include/bits/sigset.h \
  /usr/include/sys/sysmacros.h /usr/include/alloca.h /usr/include/string.h \
  /usr/include/stdint.h google/protobuf/message.h \
+ google/protobuf/stubs/type_traits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/utility \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_relops.h \
+ google/protobuf/stubs/template_util.h google/protobuf/arena.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo \
+ google/protobuf/stubs/atomic_sequence_num.h \
+ google/protobuf/stubs/atomicops.h \
+ google/protobuf/stubs/platform_macros.h \
+ google/protobuf/stubs/atomicops_internals_x86_gcc.h \
  google/protobuf/message_lite.h google/protobuf/descriptor.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/set \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_tree.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_multiset.h \
- google/protobuf/descriptor.pb.h google/protobuf/generated_message_util.h \
- google/protobuf/stubs/once.h google/protobuf/stubs/atomicops.h \
- google/protobuf/stubs/platform_macros.h \
- google/protobuf/stubs/atomicops_internals_x86_gcc.h \
+ google/protobuf/descriptor.pb.h google/protobuf/arenastring.h \
+ google/protobuf/stubs/fastmem.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/bits/stdio_lim.h \
+ /usr/include/bits/sys_errlist.h /usr/include/bits/stdio.h \
+ google/protobuf/generated_message_util.h google/protobuf/stubs/once.h \
+ google/protobuf/metadata.h google/protobuf/unknown_field_set.h \
  google/protobuf/repeated_field.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/iterator \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/ostream \
@@ -103,15 +114,12 @@ google/protobuf/reflection_ops.lo: google/protobuf/reflection_ops.cc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/istream \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/istream.tcc \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h \
- google/protobuf/stubs/type_traits.h \
- /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/utility \
- /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_relops.h \
- google/protobuf/stubs/template_util.h google/protobuf/extension_set.h \
+ google/protobuf/stubs/casts.h google/protobuf/extension_set.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/map \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_map.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_multimap.h \
  google/protobuf/generated_enum_reflection.h \
- google/protobuf/unknown_field_set.h google/protobuf/stubs/strutil.h
+ google/protobuf/generated_enum_util.h google/protobuf/stubs/strutil.h
 
 /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/string:
 
@@ -303,6 +311,26 @@ google/protobuf/stubs/common.h:
 
 google/protobuf/message.h:
 
+google/protobuf/stubs/type_traits.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/utility:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_relops.h:
+
+google/protobuf/stubs/template_util.h:
+
+google/protobuf/arena.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/typeinfo:
+
+google/protobuf/stubs/atomic_sequence_num.h:
+
+google/protobuf/stubs/atomicops.h:
+
+google/protobuf/stubs/platform_macros.h:
+
+google/protobuf/stubs/atomicops_internals_x86_gcc.h:
+
 google/protobuf/message_lite.h:
 
 google/protobuf/descriptor.h:
@@ -317,15 +345,27 @@ google/protobuf/descriptor.h:
 
 google/protobuf/descriptor.pb.h:
 
+google/protobuf/arenastring.h:
+
+google/protobuf/stubs/fastmem.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
 google/protobuf/generated_message_util.h:
 
 google/protobuf/stubs/once.h:
 
-google/protobuf/stubs/atomicops.h:
+google/protobuf/metadata.h:
 
-google/protobuf/stubs/platform_macros.h:
-
-google/protobuf/stubs/atomicops_internals_x86_gcc.h:
+google/protobuf/unknown_field_set.h:
 
 google/protobuf/repeated_field.h:
 
@@ -371,13 +411,7 @@ google/protobuf/repeated_field.h:
 
 /usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stream_iterator.h:
 
-google/protobuf/stubs/type_traits.h:
-
-/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/utility:
-
-/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/bits/stl_relops.h:
-
-google/protobuf/stubs/template_util.h:
+google/protobuf/stubs/casts.h:
 
 google/protobuf/extension_set.h:
 
@@ -389,6 +423,6 @@ google/protobuf/extension_set.h:
 
 google/protobuf/generated_enum_reflection.h:
 
-google/protobuf/unknown_field_set.h:
+google/protobuf/generated_enum_util.h:
 
 google/protobuf/stubs/strutil.h:
