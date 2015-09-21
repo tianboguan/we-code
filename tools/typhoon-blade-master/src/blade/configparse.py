@@ -85,6 +85,7 @@ class BladeConfig(object):
 
             'proto_library_config': {
                 'protoc': 'thirdparty/protobuf/bin/protoc',
+                'rpc_plugin': '',
                 'protobuf_libs': [],
                 'protobuf_path': '',
                 'protobuf_incs': [],

@@ -324,6 +324,7 @@ top_env.Append(
 
         proto_config = configparse.blade_config.get_config('proto_library_config')
         protoc_bin = proto_config['protoc']
+        rpc_plugin = proto_config['rpc_plugin']
         protobuf_path = proto_config['protobuf_path']
 
         protobuf_incs_str = _incs_list_to_string(proto_config['protobuf_incs'])
@@ -338,6 +339,14 @@ top_env.Append(
             'compile_proto_cc_message))' % (
                     protoc_bin, protobuf_incs_str, self.build_dir))
         builder_list.append('BUILDERS = {"Proto" : proto_bld}')
+
+        # add auto gen rpc code
+        self._add_rule(
+            'proto_rpc_bld = Builder(action = MakeAction("%s --proto_path=. -I. %s'
+            ' -I=`dirname $SOURCE` --grpc_out=%s --plugin=%s $SOURCE", '
+            'compile_proto_cc_message))' % (
+                    protoc_bin, protobuf_incs_str, self.build_dir, rpc_plugin))
+        builder_list.append('BUILDERS = {"ProtoRpc" : proto_rpc_bld}')
 
         self._add_rule(
             'proto_java_bld = Builder(action = MakeAction("%s --proto_path=. '

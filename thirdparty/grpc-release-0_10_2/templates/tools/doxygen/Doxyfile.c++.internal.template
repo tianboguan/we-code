@@ -1,2 +1,0 @@
-<%namespace file="Doxyfile.include" import="gen_doxyfile"/>\
-${gen_doxyfile(['grpc++'], 'C++', libs, True)}

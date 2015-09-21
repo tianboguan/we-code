@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Grpc.Tools</id>
+    <title>gRPC C# Tools</title>
+    <summary>Tools for C# implementation of gRPC - an RPC library and framework</summary>
+    <description>Precompiled Windows binary for generating gRPC client/server code</description>
+    <version>$version$</version>
+    <authors>Google Inc.</authors>
+    <owners>grpc-packages</owners>
+    <licenseUrl>https://github.com/grpc/grpc/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/grpc/grpc</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>grpc_csharp_plugin.exe - gRPC C# protoc plugin version $version$</releaseNotes>
+    <copyright>Copyright 2015, Google Inc.</copyright>
+    <tags>gRPC RPC Protocol HTTP/2</tags>
+  </metadata>
+  <files>
+    <file src="..\..\vsprojects\Release\grpc_csharp_plugin.exe" target="tools" />
+  </files>
+</package>

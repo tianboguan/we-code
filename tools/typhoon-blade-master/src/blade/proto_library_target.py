@@ -90,6 +90,12 @@ class ProtoLibrary(CcTarget):
         return (self._target_file_path(path, '%s.pb.cc' % proto_name),
                 self._target_file_path(path, '%s.pb.h' % proto_name))
 
+    def _proto_gen_rpc_files(self, path, src):
+        """_proto_gen_rpc_files. """
+        proto_name = src[:-6]
+        return (self._target_file_path(path, '%s.grpc.pb.cc' % proto_name),
+                self._target_file_path(path, '%s.grpc.pb.h' % proto_name))
+
     def _proto_gen_php_file(self, path, src):
         """Generate the php file name. """
         proto_name = src[:-6]
@@ -220,6 +226,7 @@ class ProtoLibrary(CcTarget):
         sources = []
         obj_names = []
         for src in self.srcs:
+            # *.pb.cc, *.pb.h
             (proto_src, proto_hdr) = self._proto_gen_files(self.path, src)
 
             self._write_rule('%s.Proto(["%s", "%s"], "%s")' % (
@@ -237,6 +244,27 @@ class ProtoLibrary(CcTarget):
                                   proto_src,
                                   proto_src))
             sources.append(proto_src)
+
+            #'''
+            # *.rpc.pb.cc, *.rpc.pb.h
+            (proto_src, proto_hdr) = self._proto_gen_rpc_files(self.path, src)
+
+            self._write_rule('%s.ProtoRpc(["%s", "%s"], "%s")' % (
+                    env_name,
+                    proto_src,
+                    proto_hdr,
+                    os.path.join(self.path, src)))
+            #obj_name = "%s_object" % self._generate_variable_name(self.path, src)
+            obj_name = "%s_object" % self._generate_variable_name(self.path, src + ".grpc")
+            obj_names.append(obj_name)
+            self._write_rule(
+                '%s = %s.SharedObject(target="%s" + top_env["OBJSUFFIX"], '
+                'source="%s")' % (obj_name,
+                                  env_name,
+                                  proto_src,
+                                  proto_src))
+            sources.append(proto_src)
+            #'''
 
         # *.o depends on *pb.cc
         self._write_rule('%s = [%s]' % (self._objs_name(), ','.join(obj_names)))
