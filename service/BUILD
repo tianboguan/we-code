@@ -2,7 +2,7 @@ cc_binary(
   name = 'hello',
   srcs = 'main.cc',
   deps = [
-    '//common:hello_blade',
+    '//common/hello_common:hello_blade',
   ]
 )
 
@@ -42,4 +42,21 @@ cc_binary(
     '#dl',
     '#rt'
   ]   
+)
+
+cc_binary(
+  name = 'test_rapid_json',
+  srcs = 'test_rapid_json.cc',
+  #deps = [
+  #  '//proto/hello_proto:hello_proto',
+  #]
+  incs = '../common/rapidjson/',
+)
+
+cc_binary(
+  name = 'test_pb2json',
+  srcs = 'test_pb2json.cc',
+  deps = [
+    '//proto/hello_proto:hello_proto',
+  ]
 )

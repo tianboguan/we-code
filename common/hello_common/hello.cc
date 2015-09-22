@@ -1,5 +1,5 @@
 #include <iostream>
-#include "common/hello.h"
+#include "common/hello_common/hello.h"
 
 int say_hello() {
   std::cout << "hello blade" << std::endl;
