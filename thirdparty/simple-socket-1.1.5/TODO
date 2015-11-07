@@ -1,0 +1,24 @@
+UnixSockets:
+- implement a unix stream socket
+- allow to unlink created socket files
+
+Dcumentation:
+- document requirements (cmake, sctp)
+- add example for SCTP communication
+
+Testing:
+- check the TCPSocket::sendAll function
+- testcase for SCTP socket
+- test library with other OS (BSD, Mac, Windows?)
+- test library with other compilers (gcc3, icc, ...)
+
+SCTPSocket:
+- add proper receiveFlags
+- implement all SCTP functions (primaryAddress)
+
+SocketUtils:
+- add function to change the name of a network interface
+- time of last received packet (SIOCGSTAMP / SIOCGSTAMPNS)
+- routing table maintenance (SIOCADDRT / SIOCDELRT / SIOCRTMSG)
+- arp table maintenance (SIOCDARP / SIOCGARP / SIOCSARP)
+- make seperate module/cmake variable for build/not buid
