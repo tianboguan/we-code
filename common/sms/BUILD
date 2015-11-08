@@ -1,4 +1,4 @@
-cc_binary(
+cc_library(
   name = 'sms',
   srcs = 'sms.cc',
   deps = [
