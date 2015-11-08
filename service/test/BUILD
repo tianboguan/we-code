@@ -60,3 +60,12 @@ cc_binary(
     '//proto/hello_proto:hello_proto',
   ]
 )
+
+cc_binary(
+  name = 'test_glog',
+  srcs = 'test_glog.cc',
+  deps = [
+    '//thirdparty/glog:glog',
+    '//thirdparty/gflags:gflags',
+  ]
+)
