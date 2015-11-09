@@ -1,0 +1,3 @@
+before use this lib run bellow shell first
+yum install libcurl.x86_64
+yum install libcurl-devel.x86_64
