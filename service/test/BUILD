@@ -69,3 +69,11 @@ cc_binary(
     '//thirdparty/gflags:gflags',
   ]
 )
+
+cc_binary(
+  name = 'cpr_test',
+  srcs = 'cpr_test.cc',
+  deps = [
+    '//thirdparty/cpr:cpr',
+  ]
+)

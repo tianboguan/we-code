@@ -50,7 +50,4 @@ void string_to_vector(std::string strInput, char delimiter, std::vector<T> &vecO
   return;
 }
 
-
-
-
 #endif  /*__STRING_UTILS_H__*/
