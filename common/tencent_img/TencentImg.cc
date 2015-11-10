@@ -12,23 +12,23 @@ using namespace std;
 string TencentImg::GetPublicSign() {
   ostringstream oss;
   oss << "a=" << app_id_
-      << "&b=" << bucket_
-      << "&k=" << secret_id_
-      << "&e=" << time(NULL) + 864000
-      << "&t=" << time(NULL)
-      << "&r=" << rand() % 100000
-      << "&u=0&f=";
+    << "&b=" << bucket_
+    << "&k=" << secret_id_
+    << "&e=" << time(NULL) + 864000
+    << "&t=" << time(NULL)
+    << "&r=" << rand() % 100000
+    << "&u=0&f=";
   return CreateSign(oss.str());
 }
 
 string TencentImg::GetPrivateSign(const string &file_id) {
   ostringstream oss;
   oss << "a=" << app_id_
-      << "&b=" << bucket_
-      << "&k=" << secret_id_
-      << "&e=0&t=" << time(NULL)
-      << "&r=" << rand() % 100000
-      << "&u=0&f=" << file_id;
+    << "&b=" << bucket_
+    << "&k=" << secret_id_
+    << "&e=0&t=" << time(NULL)
+    << "&r=" << rand() % 100000
+    << "&u=0&f=" << file_id;
   return CreateSign(oss.str());
 }
 
@@ -63,9 +63,11 @@ string TencentImg::CreateSign(string orignal) {
   CHMAC_SHA1 chmac_sha1; 
   BYTE digest[20];
   chmac_sha1.HMAC_SHA1(orignal.c_str(), orignal.length(),
-                       secret_key_.c_str(), secret_key_.length(),
-                       digest);
-  string base64_orignal = string(digest) + "." + orignal;
-  return base64_encode(base64_orignal.c_str(), base64_orignal.size());
+      secret_key_.c_str(), secret_key_.length(),
+      digest);
+  char  base64_orignal[1024] = {0};
+  memcpy(base64_orignal, digest, 20);
+  memcpy(base64_orignal + 20, orignal.c_str(), orignal.length());
+  return base64_encode(base64_orignal, orignal.length() + 20);
 }
 
