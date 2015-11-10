@@ -77,3 +77,11 @@ cc_binary(
     '//thirdparty/cpr:cpr',
   ]
 )
+
+cc_binary(
+  name = 'redis_test',
+  srcs = 'redis_test.cc',
+  deps = [
+    '//thirdparty/hiredis-master:redis',
+  ]
+)
