@@ -6,7 +6,7 @@ bucket='feelings'
 echo "file: $file"
 echo "fileid: $fileid"
 
-# start to download picture
+# start to del picture
 auth=`./test $fileid`
 url="http://web.image.myqcloud.com/photos/v2/${appid}/${bucket}/0/${fileid}/del"
 curl -X POST -H "Authorization: $auth" $url --trace-ascii del.trace --output del.res
@@ -30,8 +30,8 @@ echo ""
 echo ""
 
 #start download
-url="http://feelings-10010517.image.myqcloud.com/google.jpg"
-curl --verbose $url --output download.res --trace-ascii download.trace
+url="http://${bucket}-${appid}.image.myqcloud.com/$fileid"
+curl --verbose $url --output download.jpg
 #echo "---------------------------download end-------------------------------"
 origin_file_size=`du -b $file | awk '{print $1}'`
 download_file_size=`du -b download.res | awk '{print $1}'`
@@ -44,3 +44,9 @@ fi
 echo "---------------------------download end-------------------------------"
 echo ""
 echo ""
+
+#start edit test
+url="http://${bucket}-${appid}.image.myqcloud.com/${file}_test"
+curl --verbose $url --output test.jpg 
+url="http://${bucket}-${appid}.image.myqcloud.com/${file}_original"
+curl --verbose $url --output orignal.jpg
