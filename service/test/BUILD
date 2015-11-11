@@ -66,7 +66,15 @@ cc_binary(
   srcs = 'test_glog.cc',
   deps = [
     '//thirdparty/glog:glog',
+  ]
+)
+
+cc_binary(
+  name = 'test_flags',
+  srcs = 'test_flag.cc',
+  deps = [
     '//thirdparty/gflags:gflags',
+    #'//thirdparty/glog:glog'
   ]
 )
 
