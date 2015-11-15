@@ -91,5 +91,6 @@ cc_binary(
   srcs = 'redis_test.cc',
   deps = [
     '//thirdparty/hiredis-master:redis',
+    '//proto/hello_proto:hello_proto',
   ]
 )
