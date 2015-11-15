@@ -1,5 +1,5 @@
 cc_library(
-  name = 'tencent_img',
+  name = 'TencentImg',
   srcs = [
     'TencentImg.cc',
   ],
