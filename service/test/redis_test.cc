@@ -3,11 +3,14 @@
 #include <string.h>
 #include <iostream>
 
-#include "thirdparty/hiredis-master/hiredis.h"
+//#include "thirdparty/hiredis-master/hiredis.h"
+#include "common/redis_utils/RedisString.h"
+#include "common/redis_utils/RedisPB.h"
 #include "proto/hello_proto/hello.pb.h"
 
 using namespace std;
 int main(int argc, char **argv) {
+#if 0
   // unsigned int j;
   redisContext *c;
   redisReply *reply;
@@ -39,9 +42,7 @@ int main(int argc, char **argv) {
   hello_msg.set_hello("lalala we lalala");
   hello_msg.set_standard_int(1);
   hello_msg.set_long_int(123456789012);
-  // char buff[512];
-  // bzero(buff, sizeof(buff));
-  // const int byteSize = hello.ByteSize(); 
+
   string serial_str;
   hello_msg.SerializeToString(&serial_str);
   cout << "msg: \n-------------------\n" << hello_msg.DebugString() << endl;
@@ -52,7 +53,7 @@ int main(int argc, char **argv) {
   freeReplyObject(reply);
 
   /* Try a GET  */
-  reply = redisCommand(c,"GET name");
+  reply = redisCommand(c,"GET %b", "name", (size_t) 4);
   // printf("GET name: %s\n", reply->str);
   // string test(reply->str, sizeof(buff));
   cout << "GET name: " << reply->str << endl;
@@ -63,6 +64,71 @@ int main(int argc, char **argv) {
 
   /* Disconnects and frees the context */
   redisFree(c);
+#endif
+
+#if 0         // test redis string utils
+  RedisString rs;
+  string key = "key";
+  string value = "value";
+  int ret;
+
+  ret = rs.Set(key, value);
+  if (ret != 0) {
+    cout << "err: " << rs.Error() << endl;
+    return -1;
+  }
+
+  string ret_value;
+  ret = rs.Get(key, ret_value);
+  // ret = rs.Get("haha", ret_value);
+  if (ret != 0) {
+    cout << "err: " << rs.Error() << endl;
+    return -1;
+  }
+  cout << "get value: " << ret_value << endl;
+  return 0;
+#endif
+
+#if 1    // test redis pb utils
+  HelloMsg key;
+  key.set_hello("key");
+  key.set_standard_int(1);
+  key.set_long_int(123456789012);
+  HelloMsg value;
+  value.set_hello("value");
+  value.set_standard_int(2);
+  value.set_long_int(222222);
+
+  RedisPB<HelloMsg, HelloMsg> rp;
+  int ret;
+  ret = rp.Set(key, value);
+  if (ret != 0) {
+    cout << "err: " << rp.Error() << endl;
+    return -1;
+  }
+
+  HelloMsg ret_value;
+  ret = rp.Get(key, ret_value);
+  if (ret != 0) {
+    cout << "err: " << rp.Error() << endl;
+    return -1;
+  }
+  cout << "get value: " << ret_value.DebugString() << endl;
+
+  string pbkey("pbkey");
+  ret = rp.Set(pbkey, key);
+  if (ret != 0) {
+    cout << "err: " << rp.Error() << endl;
+    return -1;
+  }
+
+  ret = rp.Get(pbkey, ret_value);
+  if (ret != 0) {
+    cout << "err: " << rp.Error() << endl;
+    return -1;
+  }
+  cout << "get value: " << ret_value.DebugString() << endl;
+#endif
 
   return 0;
 }
