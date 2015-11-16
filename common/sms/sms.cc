@@ -66,8 +66,8 @@ static int send_req(const string &req, string &res) {
 
     char recv_msg[2048];
     memset(recv_msg, 0, sizeof(recv_msg));
-    // receive response in 2s
-    int ret = socket.timedReceive(recv_msg, sizeof(recv_msg), 2000);
+    // receive response in 1s
+    int ret = socket.timedReceive(recv_msg, sizeof(recv_msg), 1000);
     if (ret > 0) {
       res = recv_msg;
     } else {
@@ -78,7 +78,6 @@ static int send_req(const string &req, string &res) {
     socket.disconnect();
     return 0;
   } catch( const NET::SocketException& e) {
-    // socket.disconnect();
     LOG(ERROR) << "send request to sms server encount exception: " << e.what();
     return -1;
   }
@@ -98,12 +97,3 @@ int32_t SetPassSMS(std::string mobile, string code) {
   return send_req(sms_req, sms_res);
 }
 
-/*
-int main(void) {
-  // RegistSMS("18127813634", "PatientsClub", "123456");
-  RegistSMS("18138852107", "PatientsClub", "123456");
-  // SetPassSMS("18127813634", "000000");
-  SetPassSMS("18138852107", "000000");
-  return 0;
-}
-*/

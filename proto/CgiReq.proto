@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+message EnrollReq {
+  string user = 1;
+  string password = 2;
+  string code = 3;
+}
+
+message LoginReq {
+  string user = 1;
+  string password = 2;
+}
+
+message ModifyPassReq {
+  string o_pass = 1;
+  string n_pass = 2;
+}
+
+message ResetPassReq {
+  string code = 1;
+  string n_pass = 2;
+}
+
+message VerifyCodeReq {
+  string phone = 1; 
+}
+

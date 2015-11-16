@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include "thirdparty/hiredis-master/hiredis.h"
+#include "common/redis_utils/RedisDefine.h"
 
 
 using namespace std;
@@ -11,8 +12,8 @@ using namespace std;
 class RedisString {
   public:
     RedisString() {c_ = NULL; err_oss.clear();}
-    int Get(const string& key, string& value);
-    int Set(const string& key, const string& value);
+    RedisCode Get(const string& key, string& value);
+    RedisCode Set(const string& key, const string& value);
     string Error();
 
   private:

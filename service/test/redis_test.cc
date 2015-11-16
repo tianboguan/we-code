@@ -98,36 +98,42 @@ int main(int argc, char **argv) {
   value.set_hello("value");
   value.set_standard_int(2);
   value.set_long_int(222222);
+  {
+    RedisPB2PB<HelloMsg, HelloMsg> rp;
+    int ret;
+    ret = rp.Set(key, value);
+    if (ret != 0) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
 
-  RedisPB<HelloMsg, HelloMsg> rp;
-  int ret;
-  ret = rp.Set(key, value);
-  if (ret != 0) {
-    cout << "err: " << rp.Error() << endl;
-    return -1;
+    HelloMsg ret_value;
+    ret = rp.Get(key, ret_value);
+    if (ret != 0) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
+    cout << "get value: " << ret_value.DebugString() << endl;
   }
 
-  HelloMsg ret_value;
-  ret = rp.Get(key, ret_value);
-  if (ret != 0) {
-    cout << "err: " << rp.Error() << endl;
-    return -1;
-  }
-  cout << "get value: " << ret_value.DebugString() << endl;
+  {
+    RedisStr2PB<HelloMsg> rp;
+    string pbkey("pbkey");
+    int ret;
+    ret = rp.Set(pbkey, key);
+    if (ret != 0) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
 
-  string pbkey("pbkey");
-  ret = rp.Set(pbkey, key);
-  if (ret != 0) {
-    cout << "err: " << rp.Error() << endl;
-    return -1;
+    HelloMsg ret_value;
+    ret = rp.Get(pbkey, ret_value);
+    if (ret != 0) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
+    cout << "get value: " << ret_value.DebugString() << endl;
   }
-
-  ret = rp.Get(pbkey, ret_value);
-  if (ret != 0) {
-    cout << "err: " << rp.Error() << endl;
-    return -1;
-  }
-  cout << "get value: " << ret_value.DebugString() << endl;
 #endif
 
   return 0;

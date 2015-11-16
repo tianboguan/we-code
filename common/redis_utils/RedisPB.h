@@ -5,52 +5,52 @@
 #include <sstream>
 #include "common/redis_utils/RedisString.h"
 
-
 using namespace std;
+
+// key, value均为pb结构
 template<class K, class V>
-class RedisPB : public RedisString {
+class RedisPB2PB : public RedisString {
   public:
-    // key, value均为pb结构
-    int Get(const K& k, V& v) {
+    RedisCode Get(const K& k, V& v) {
       string key;
       string value;
       k.SerializeToString(&key);
-      int ret = RedisString::Get(key, value);
-      if (ret != 0) {
+      RedisCode ret = RedisString::Get(key, value);
+      if (ret != RedisCodeOK) {
         return ret;
       }
       v.ParseFromString(value);
-      return 0;
+      return RedisCodeOK;
     }
 
-    // key, value均为pb结构
-    int Set(const K& k, const V& v) {
+    RedisCode Set(const K& k, const V& v) {
       string key;
       string value;
       k.SerializeToString(&key);
       v.SerializeToString(&value);
       return RedisString::Set(key, value);
     }
+};
 
-    // key为string, value为pb结构
-    int Get(const string& k, V& v) {
+
+// key为string, value为pb结构
+template<class T>
+class RedisStr2PB: public RedisString {
+  public:
+    RedisCode Get(const string& k, T& v) {
       string value;
-      int ret = RedisString::Get(k, value);
-      if (ret != 0) {
+      RedisCode ret = RedisString::Get(k, value);
+      if (ret != RedisCodeOK) {
         return ret;
       }
       v.ParseFromString(value);
-      return 0;
+      return RedisCodeOK;
     }
 
-    // key为string, value为pb结构
-    int Set(const string& k, const V& v) {
+    RedisCode Set(const string& k, const T& v) {
       string value;
       v.SerializeToString(&value);
       return RedisString::Set(k, value);
-    }
-    string Error() {
-      return RedisString::Error();
     }
 };
 

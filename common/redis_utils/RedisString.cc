@@ -4,47 +4,62 @@
 
 using namespace std;
 
-int RedisString::Get(const string& key, string& value) {
+RedisCode RedisString::Get(const string& key, string& value) {
   int ret;
   ret = Connect();
   if (ret != 0) {
-    return -1;
+    return RedisCodeError;
   }
 
   redisReply *reply = NULL;
-  reply = redisCommand(c_,"GET %b ", key.data(), key.size());
-  if (reply->str == NULL) {
+  reply = (redisReply *)redisCommand(c_,"GET %b ", key.data(), key.size());
+  if (reply == NULL) {
     err_oss << "GET failed! key: " << key << endl;
-    freeReplyObject(reply);
-    return -1;
+    return RedisCodeError;
   }
+  if (reply->type == int(REDIS_REPLY_NIL)) {
+    err_oss << "GET key not found: " << key << endl;
+    freeReplyObject(reply);
+    return RedisCodeKeyNotFound;
+  }
+
+  if (reply->type == int(REDIS_REPLY_ERROR)) {
+    err_oss << "GET failed! key: " << key << " err: " << reply->str << endl;
+    freeReplyObject(reply);
+    return RedisCodeError;
+  }
+
   value.assign(reply->str, reply->len);
   freeReplyObject(reply);
   redisFree(c_);
-
-  return 0;
+  return RedisCodeOK;
 }
 
-int RedisString::Set(const string& key, const string& value) {
+RedisCode RedisString::Set(const string& key, const string& value) {
   int ret;
   ret = Connect();
   if (ret != 0) {
-    return -1;
+    return RedisCodeError;
   }
 
   redisReply *reply = NULL;
-  reply = redisCommand(c_,"SET %b %b", key.data(), key.size(),
+  reply = (redisReply *)redisCommand(c_,"SET %b %b", key.data(), key.size(),
                        value.data(), value.size()); 
-  if (string("OK") != reply->str) {
+  if (reply == NULL) {
+    err_oss << "SET failed! key: " << key << ", value: " << value
+      << ", unkown error" << endl;
+    return RedisCodeError;
+  }
+  if (reply->str != string("OK")) {
     err_oss << "SET failed! key: " << key << ", value: " << value
       << ", Error: " << reply->str << endl;
     freeReplyObject(reply);
-    return -1;
+    return RedisCodeError;
   }
+
   freeReplyObject(reply);
   redisFree(c_);
-
-  return 0;
+  return RedisCodeOK;
 }
 
 string RedisString::Error() {
@@ -68,7 +83,7 @@ int RedisString::Connect() {
 
   // auth
   redisReply *reply = NULL;
-  reply = redisCommand(c_, "AUTH 8b9fb2df-7603-4155-887b-f70c1ae12dca:patientsclub0755");
+  reply = (redisReply *)redisCommand(c_, "AUTH 8b9fb2df-7603-4155-887b-f70c1ae12dca:patientsclub0755");
   if (string("OK") != reply->str) {
     err_oss << "auth failed! " << endl;
     freeReplyObject(reply);
