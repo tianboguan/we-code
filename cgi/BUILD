@@ -4,6 +4,7 @@ cc_binary(
     'test.cc',
   ],
   deps = [
+    '//cgi/lib:cgi',
     '//thirdparty/glog:glog',
     '//common/cgi_utils:CgiUtils'
   ]
