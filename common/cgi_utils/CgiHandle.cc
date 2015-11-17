@@ -1,12 +1,12 @@
 #include <string>
 #include <iterator>
 #include <map>
-#include "common/cgi_utils/CgiParam.h"
+#include "common/cgi_utils/CgiHandle.h"
 
 using namespace std;
 using namespace cgicc;
 
-CgiParam::CgiParam() {
+CgiHandle::CgiHandle() {
   method_ = form_data_.getEnvironment().getRequestMethod();
 
   const_form_iterator iter;
@@ -17,7 +17,7 @@ CgiParam::CgiParam() {
   }
 }
 
-string CgiParam::operator [] (const string& key) {
+string CgiHandle::operator [] (const string& key) {
   map<string, string>::const_iterator iter;
   iter = query_kv_.find(key);
   if (iter != query_kv_.end()) {
@@ -27,10 +27,10 @@ string CgiParam::operator [] (const string& key) {
   }
 }
 
-const map<string, string>& CgiParam::GetParams() {
+const map<string, string>& CgiHandle::GetParams() {
   return query_kv_;
 }
 
-string CgiParam::GetMethod() {
+string CgiHandle::GetMethod() {
   return method_;
 }

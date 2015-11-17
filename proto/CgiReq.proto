@@ -1,9 +1,17 @@
 syntax = "proto3";
 
+// cgi公共信息
+message CgiBaseInfo {
+  string user = 1;                   
+  string token = 2;
+  string action = 3;
+}
+
+//-------------- 帐号相关接口-----------------
+// 帐号请求
 message EnrollReq {
   string user = 1;
   string password = 2;
-  string code = 3;
 }
 
 message LoginReq {
@@ -11,17 +19,25 @@ message LoginReq {
   string password = 2;
 }
 
+// logout empty msg
+
 message ModifyPassReq {
   string o_pass = 1;
   string n_pass = 2;
 }
 
 message ResetPassReq {
-  string code = 1;
-  string n_pass = 2;
+  string n_pass = 1;
 }
 
+// send code empty msg
+
 message VerifyCodeReq {
-  string phone = 1; 
+  string code = 1; 
+}
+
+// 帐号响应
+message AccountRes {
+  string token = 1;
 }
 

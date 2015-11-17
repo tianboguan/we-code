@@ -4,13 +4,17 @@ enum UserStatus {
   USER_STATUS_ENROLL = 0;     // 待注册
   USER_STATUS_LOGIN = 1;      // 登录
   USER_STATUS_LOGOUT = 2;     // 登出
+  USER_STATUS_PASSWD = 3;     // 修改密码：
 }
 
 message AccountInfo {
-  string user = 1;
-  string password = 2;
-  string code = 3;
-  string token = 4;
-  UserStatus status = 5;
-}
+  string user = 1;                  // 用户名
+  string password = 2;              // 用户密码
+  string code = 3;                  // 验证码
+  string token = 4;                 // 登录签名
+  string new_password = 5;          // 新密码
+  UserStatus status = 6;            // 用户状态
+  int32 try_passwd_count = 7;       // 试密码次数
+  int64 try_passwd_block_time = 8;  // 上次被锁时间
+}                                   
 

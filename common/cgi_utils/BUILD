@@ -1,7 +1,7 @@
 cc_library(
   name = 'CgiUtils',
   srcs = [
-    'CgiParam.cc',
+    'CgiHandle.cc',
   ],
   deps = [
     '//thirdparty/cgicc:cgicc',

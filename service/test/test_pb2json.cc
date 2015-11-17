@@ -1,19 +1,12 @@
 #include <iostream>
+#if 0
 #include <google/protobuf/util/json_util.h>
 #include <google/protobuf/util/type_resolver.h>
 #include <google/protobuf/util/type_resolver_util.h>
 #include <google/protobuf/descriptor.h>
+#endif
 #include "proto/hello_proto/hello.pb.h"
-
-using namespace std;
-using namespace google::protobuf::util;
-using namespace google;
-using namespace google::protobuf;
-
-static const char kTypeUrlPrefix[] = "type.googleapis.com";
-static string GetTypeUrl(const Descriptor* message) {
-  return string(kTypeUrlPrefix) + "/" + message->full_name();
-}
+#include "common/utils/Pb2Json.h"
 
 int main() {
   HelloMsg hello_msg;
@@ -26,6 +19,7 @@ int main() {
 
   cout << hello_msg.DebugString() << endl;
 
+#if 0
   JsonOptions opts;
   opts.add_whitespace = true;
   opts.always_print_primitive_fields = true;
@@ -41,10 +35,21 @@ int main() {
 
   cout << "pb debug string: "<< endl;
   cout << hello_msg.DebugString() << endl;
+#else
+  string json;
+  string json_strip;
+  PB2String(hello_msg, json, false);
+  PB2String(hello_msg, json_strip, true);
+#endif
 
   cout << endl;
-  cout << "json string: "<< endl;
-  cout << json_result << endl;
+  cout << "json : "<< endl;
+  cout << json << endl;
+  cout << endl;
+  cout << endl;
+  cout << endl;
+  cout << "json strip: "<< endl;
+  cout << json_strip << endl;
 
   return 0;
 }

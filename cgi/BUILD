@@ -9,3 +9,15 @@ cc_binary(
     '//common/cgi_utils:CgiUtils'
   ]
 )
+
+cc_binary(
+  name = 'account.cgi',
+  srcs = [
+    'account.cc',
+  ],
+  deps = [
+    '//cgi/lib:cgi',
+    '//thirdparty/glog:glog',
+    '//common/cgi_utils:CgiUtils'
+  ]
+)

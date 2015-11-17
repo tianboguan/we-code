@@ -1,0 +1,35 @@
+== Info: About to connect() to web.image.myqcloud.com port 80 (#0)
+== Info:   Trying 101.227.131.47... == Info: connected
+== Info: Connected to web.image.myqcloud.com (101.227.131.47) port 80 (#0)
+=> Send header, 411 bytes (0x19b)
+0000: POST /photos/v2/10010517/feelings/0/google.jpg/del HTTP/1.1
+003d: User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7
+007d:  NSS/3.19.1 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2
+00b9: Host: web.image.myqcloud.com
+00d7: Accept: */*
+00e4: Authorization: 4oAujuzPc5ux2igQyqnmhpND6jhhPTEwMDEwNTE3JmI9ZmVlb
+0124: GluZ3Mmaz1BS0lEQ0dXb2VPN2REdTJoaUllRVZ5NnA3cWxqM29zSEpINFAmZT0wJ
+0164: nQ9MTQ0NzQ3OTI0MyZyPTg5MzgzJnU9MCZmPWdvb2dsZS5qcGc=
+0199: 
+<= Recv header, 17 bytes (0x11)
+0000: HTTP/1.1 200 OK
+<= Recv header, 24 bytes (0x18)
+0000: Connection: keep-alive
+<= Recv header, 34 bytes (0x22)
+0000: Keep-Alive: timeout=20, max=1024
+<= Recv header, 24 bytes (0x18)
+0000: Server: QZHTTP-2.38.35
+<= Recv header, 37 bytes (0x25)
+0000: Date: Sat, 14 Nov 2015 05:34:04 GMT
+<= Recv header, 19 bytes (0x13)
+0000: Content-type: */*
+<= Recv header, 32 bytes (0x20)
+0000: Access-Control-Allow-Origin: *
+<= Recv header, 20 bytes (0x14)
+0000: Content-Length: 29
+<= Recv header, 2 bytes (0x2)
+0000: 
+<= Recv data, 29 bytes (0x1d)
+0000: {"code":0,"message":"......"}
+== Info: Connection #0 to host web.image.myqcloud.com left intact
+== Info: Closing connection #0

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "thirdparty/glog/logging.h"
-#include "common/cgi_utils/CgiParam.h"
+#include "common/cgi_utils/CgiHandle.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
   LOG(ERROR) << "glog in cgi test, error"; 
   LOG(WARNING) << "glog in cgi test, warning"; 
   LOG(INFO) << "glog in cgi test, info"; 
-  CgiParam cgi_handle;
+  CgiHandle cgi_handle;
   cout << "method: " << cgi_handle.GetMethod()<< endl; 
   map<string, string> params = cgi_handle.GetParams();
   map<string, string>::iterator iter;

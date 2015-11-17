@@ -11,6 +11,9 @@ class ParseCgiReq {
   public:
     ParseCgiReq(const map<string, string> &params) : params_(params) {}
 
+    // base info
+    int Parse(CgiBaseInfo &base);
+
     // account related
     int Parse(EnrollReq &enroll);
     int Parse(LoginReq &login);
@@ -24,6 +27,7 @@ class ParseCgiReq {
     bool Check(string key, bool escape = false);
     map<string, string> params_;
     ostringstream err_oss;
+    int ret_;
 };
 
 

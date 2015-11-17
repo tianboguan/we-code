@@ -1,5 +1,5 @@
-#ifndef COMMON_CGI_UTILS_CGI_PARAM_H_
-#define COMMON_CGI_UTILS_CGI_PARAM_H_
+#ifndef COMMON_CGI_UTILS_CGIHANDLE_H_
+#define COMMON_CGI_UTILS_CGIHANDLE_H_
 
 #include <string>
 #include <iterator>
@@ -7,12 +7,11 @@
 #include "thirdparty/cgicc/Cgicc.h"
 #include "thirdparty/cgicc/CgiEnvironment.h"
 
-
 using namespace std;
 
-class CgiParam{
+class CgiHandle{
   public:
-    CgiParam();
+    CgiHandle();
     string operator [] (const string& key);
     string GetMethod();
     const map<string, string> &GetParams();
@@ -23,4 +22,4 @@ class CgiParam{
     string method_;
 };
 
-#endif // COMMON_CGI_UTILS_CGI_PARAM_H_
+#endif // COMMON_CGI_UTILS_CGIHANDLE_H_

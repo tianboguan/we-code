@@ -2,6 +2,7 @@
 #define CGI_LIB_LOGIN_H_
 
 #include <string>
+#include <map>
 #include <sstream>
 #include "proto/CgiReq.pb.h"
 #include "common/redis_utils/RedisPB.h"
@@ -18,17 +19,16 @@ class Account{
     int Logout();
     int ModifyPass(const ModifyPassReq &modify_pass);
     int ResetPass(const ResetPassReq &reset_pass);
+    int SendCode();
     int VerifyCode(const VerifyCodeReq &verify_code);
     int CheckLogin();
 
     string Error();
-
-  private:
     string CreateCode();
     string CreateToken();
 
   private:
-    ostringstream err_oss;
+    int error_code_;
     string key_;                 // redis key
     string user_;                 // redis key
     string token_;
