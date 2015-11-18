@@ -36,20 +36,8 @@ int main() {
   cout << "pb debug string: "<< endl;
   cout << hello_msg.DebugString() << endl;
 #else
-  string json;
-  string json_strip;
-  PB2String(hello_msg, json, false);
-  PB2String(hello_msg, json_strip, true);
+  cout << Pb2Json(hello_msg, false) << endl;
+  cout << Pb2Json(hello_msg, true) << endl;
 #endif
-
-  cout << endl;
-  cout << "json : "<< endl;
-  cout << json << endl;
-  cout << endl;
-  cout << endl;
-  cout << endl;
-  cout << "json strip: "<< endl;
-  cout << json_strip << endl;
-
   return 0;
 }

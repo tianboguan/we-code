@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string.h>
 #include "thirdparty/simplesocket/TCPSocket.h"
-#include "thirdparty/glog/logging.h"
+#include "thirdparty/plog/Log.h"
 #include "common/encode/urlencode.h"
 
 using namespace std;
@@ -71,14 +71,14 @@ static int send_req(const string &req, string &res) {
     if (ret > 0) {
       res = recv_msg;
     } else {
-      LOG(ERROR) << "receive sms server response failed in 2s!";
+      LOG_ERROR << "receive sms server response failed in 2s!";
       return -1;
     }
 
     socket.disconnect();
     return 0;
   } catch( const NET::SocketException& e) {
-    LOG(ERROR) << "send request to sms server encount exception: " << e.what();
+    LOG_ERROR << "send request to sms server encount exception: " << e.what();
     return -1;
   }
 }

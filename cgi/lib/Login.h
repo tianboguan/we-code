@@ -27,6 +27,9 @@ class Account{
     string CreateCode();
     string CreateToken();
 
+    int Read(AccountInfo &account_info);
+    int Del();
+
   private:
     int error_code_;
     string key_;                 // redis key

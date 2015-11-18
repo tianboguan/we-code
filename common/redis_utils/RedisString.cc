@@ -62,6 +62,25 @@ RedisCode RedisString::Set(const string& key, const string& value) {
   return RedisCodeOK;
 }
 
+RedisCode RedisString::Del(const string& key) {
+  int ret;
+  ret = Connect();
+  if (ret != 0) {
+    return RedisCodeError;
+  }
+
+  redisReply *reply = NULL;
+  reply = (redisReply *)redisCommand(c_,"DEL %b", key.data(), key.size()); 
+  if (reply == NULL) {
+    err_oss << "DEL failed! key: " << key << ", unkown error" << endl;
+    return RedisCodeError;
+  }
+
+  freeReplyObject(reply);
+  redisFree(c_);
+  return RedisCodeOK;
+}
+
 string RedisString::Error() {
   return err_oss.str();
 }

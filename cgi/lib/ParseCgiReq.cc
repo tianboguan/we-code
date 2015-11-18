@@ -20,7 +20,6 @@ int ParseCgiReq::Parse(CgiBaseInfo &base) {
 int ParseCgiReq::Parse(EnrollReq &enroll) {
   CHECK("user", true);
   CHECK("password", true);
-  CHECK("code", true);
   enroll.set_user(params_["user"]);
   enroll.set_password(params_["password"]);
   return 0;
@@ -50,7 +49,7 @@ int ParseCgiReq::Parse(ResetPassReq &reset_pass) {
 }
 
 int ParseCgiReq::Parse(VerifyCodeReq &verify_code) {
-  CHECK("phone", true);
+  CHECK("code", true);
   verify_code.set_code(params_["code"]);
   return 0;
 }
@@ -61,6 +60,7 @@ string ParseCgiReq::Error() {
 
 bool ParseCgiReq::Check(string key, bool escape) {
   if (params_.find(key) == params_.end()) {
+    err_oss << "not find: " << key << endl;
     return false;
   }
   if (escape) {

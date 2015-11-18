@@ -14,6 +14,7 @@ class RedisString {
     RedisString() {c_ = NULL; err_oss.clear();}
     RedisCode Get(const string& key, string& value);
     RedisCode Set(const string& key, const string& value);
+    RedisCode Del(const string& key);
     string Error();
 
   private:

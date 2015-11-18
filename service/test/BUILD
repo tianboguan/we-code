@@ -94,3 +94,10 @@ cc_binary(
     '//proto/hello_proto:hello_proto',
   ]
 )
+
+cc_binary(
+  name = 'plog_test',
+  srcs = 'plog_test.cc',
+  deps = [
+  ]
+)

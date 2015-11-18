@@ -1,10 +1,11 @@
 syntax = "proto3";
 
 enum UserStatus {
-  USER_STATUS_ENROLL = 0;     // 待注册
-  USER_STATUS_LOGIN = 1;      // 登录
-  USER_STATUS_LOGOUT = 2;     // 登出
-  USER_STATUS_PASSWD = 3;     // 修改密码：
+  USER_STATUS_INVALID = 0;    // 非法状态
+  USER_STATUS_ENROLL = 1;     // 待注册
+  USER_STATUS_LOGIN = 2;      // 登录
+  USER_STATUS_LOGOUT = 3;     // 登出
+  USER_STATUS_PASSWD = 4;     // 修改密码：
 }
 
 message AccountInfo {
