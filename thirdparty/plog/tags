@@ -1,0 +1,234 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AndroidAppender	include/plog/Appenders/AndroidAppender.h	/^        AndroidAppender(const char* tag) : m_tag(tag)$/;"	f	class:plog::AndroidAppender	signature:(const char* tag)
+AndroidAppender	include/plog/Appenders/AndroidAppender.h	/^    class AndroidAppender : public IAppender$/;"	c	namespace:plog
+ColorConsoleAppender	include/plog/Appenders/ColorConsoleAppender.h	/^        ColorConsoleAppender() : m_isatty(!!_isatty(::_fileno(stdout))), m_stdoutHandle(), m_originalAttr()$/;"	f	class:plog::ColorConsoleAppender	signature:()
+ColorConsoleAppender	include/plog/Appenders/ColorConsoleAppender.h	/^    class ColorConsoleAppender : public ConsoleAppender<Formatter>$/;"	c	namespace:plog
+ConsoleAppender	include/plog/Appenders/ConsoleAppender.h	/^        ConsoleAppender()$/;"	f	class:plog::ConsoleAppender	signature:()
+ConsoleAppender	include/plog/Appenders/ConsoleAppender.h	/^    class ConsoleAppender : public IAppender$/;"	c	namespace:plog
+CsvFormatter	include/plog/Formatters/CsvFormatter.h	/^    class CsvFormatter$/;"	c	namespace:plog
+File	include/plog/Util.h	/^            File() : m_file(-1)$/;"	f	class:plog::util::File	signature:()
+File	include/plog/Util.h	/^            File(const nchar* fileName) : m_file(-1)$/;"	f	class:plog::util::File	signature:(const nchar* fileName)
+File	include/plog/Util.h	/^        class File : NonCopyable$/;"	c	namespace:plog::util
+FuncMessageFormatter	include/plog/Formatters/FuncMessageFormatter.h	/^    class FuncMessageFormatter$/;"	c	namespace:plog
+IAppender	include/plog/Appenders/IAppender.h	/^    class IAppender$/;"	c	namespace:plog
+IF_LOG	include/plog/Log.h	32;"	d
+IF_LOG_	include/plog/Log.h	31;"	d
+LOG	include/plog/Log.h	38;"	d
+LOGD	include/plog/Log.h	55;"	d
+LOGD_	include/plog/Log.h	62;"	d
+LOGD_IF	include/plog/Log.h	89;"	d
+LOGD_IF_	include/plog/Log.h	96;"	d
+LOGE	include/plog/Log.h	58;"	d
+LOGE_	include/plog/Log.h	65;"	d
+LOGE_IF	include/plog/Log.h	92;"	d
+LOGE_IF_	include/plog/Log.h	99;"	d
+LOGF	include/plog/Log.h	59;"	d
+LOGF_	include/plog/Log.h	66;"	d
+LOGF_IF	include/plog/Log.h	93;"	d
+LOGF_IF_	include/plog/Log.h	100;"	d
+LOGI	include/plog/Log.h	56;"	d
+LOGI_	include/plog/Log.h	63;"	d
+LOGI_IF	include/plog/Log.h	90;"	d
+LOGI_IF_	include/plog/Log.h	97;"	d
+LOGV	include/plog/Log.h	54;"	d
+LOGV_	include/plog/Log.h	61;"	d
+LOGV_IF	include/plog/Log.h	88;"	d
+LOGV_IF_	include/plog/Log.h	95;"	d
+LOGW	include/plog/Log.h	57;"	d
+LOGW_	include/plog/Log.h	64;"	d
+LOGW_IF	include/plog/Log.h	91;"	d
+LOGW_IF_	include/plog/Log.h	98;"	d
+LOG_	include/plog/Log.h	37;"	d
+LOG_DEBUG	include/plog/Log.h	41;"	d
+LOG_DEBUG_	include/plog/Log.h	48;"	d
+LOG_DEBUG_IF	include/plog/Log.h	75;"	d
+LOG_DEBUG_IF_	include/plog/Log.h	82;"	d
+LOG_ERROR	include/plog/Log.h	44;"	d
+LOG_ERROR_	include/plog/Log.h	51;"	d
+LOG_ERROR_IF	include/plog/Log.h	78;"	d
+LOG_ERROR_IF_	include/plog/Log.h	85;"	d
+LOG_FATAL	include/plog/Log.h	45;"	d
+LOG_FATAL_	include/plog/Log.h	52;"	d
+LOG_FATAL_IF	include/plog/Log.h	79;"	d
+LOG_FATAL_IF_	include/plog/Log.h	86;"	d
+LOG_IF	include/plog/Log.h	72;"	d
+LOG_IF_	include/plog/Log.h	71;"	d
+LOG_INFO	include/plog/Log.h	42;"	d
+LOG_INFO_	include/plog/Log.h	49;"	d
+LOG_INFO_IF	include/plog/Log.h	76;"	d
+LOG_INFO_IF_	include/plog/Log.h	83;"	d
+LOG_VERBOSE	include/plog/Log.h	40;"	d
+LOG_VERBOSE_	include/plog/Log.h	47;"	d
+LOG_VERBOSE_IF	include/plog/Log.h	74;"	d
+LOG_VERBOSE_IF_	include/plog/Log.h	81;"	d
+LOG_WARNING	include/plog/Log.h	43;"	d
+LOG_WARNING_	include/plog/Log.h	50;"	d
+LOG_WARNING_IF	include/plog/Log.h	77;"	d
+LOG_WARNING_IF_	include/plog/Log.h	84;"	d
+Logger	include/plog/Logger.h	/^        Logger(Severity maxSeverity = none) : m_maxSeverity(maxSeverity)$/;"	f	class:plog::Logger	signature:(Severity maxSeverity = none)
+Logger	include/plog/Logger.h	/^    class Logger : public util::Singleton<Logger<instance> >, public IAppender$/;"	c	namespace:plog
+Mutex	include/plog/Util.h	/^            Mutex()$/;"	f	class:plog::util::Mutex	signature:()
+Mutex	include/plog/Util.h	/^        class Mutex : NonCopyable$/;"	c	namespace:plog::util
+MutexLock	include/plog/Util.h	/^            MutexLock(Mutex& mutex) : m_mutex(mutex)$/;"	f	class:plog::util::MutexLock	signature:(Mutex& mutex)
+MutexLock	include/plog/Util.h	/^        class MutexLock : NonCopyable$/;"	c	namespace:plog::util
+NonCopyable	include/plog/Util.h	/^            NonCopyable()$/;"	f	class:plog::util::NonCopyable	signature:()
+NonCopyable	include/plog/Util.h	/^            NonCopyable(const NonCopyable&);$/;"	p	class:plog::util::NonCopyable	signature:(const NonCopyable&)
+NonCopyable	include/plog/Util.h	/^        class NonCopyable$/;"	c	namespace:plog::util
+PLOG_DEFAULT_INSTANCE	include/plog/Logger.h	7;"	d
+PLOG_GET_FUNC	include/plog/Log.h	21;"	d
+PLOG_GET_FUNC	include/plog/Log.h	23;"	d
+PLOG_GET_FUNC	include/plog/Log.h	25;"	d
+PLOG_GET_THIS	include/plog/Log.h	15;"	d
+PLOG_GET_THIS	include/plog/Log.h	17;"	d
+PLOG_NSTR	include/plog/Util.h	26;"	d
+PLOG_NSTR	include/plog/Util.h	28;"	d
+Record	include/plog/Record.h	/^        Record(Severity severity, const char* func, size_t line, const void* object)$/;"	f	class:plog::Record	signature:(Severity severity, const char* func, size_t line, const void* object)
+Record	include/plog/Record.h	/^    class Record$/;"	c	namespace:plog
+RollingFileAppender	include/plog/Appenders/RollingFileAppender.h	/^        RollingFileAppender(const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	class:plog::RollingFileAppender	signature:(const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+RollingFileAppender	include/plog/Appenders/RollingFileAppender.h	/^        RollingFileAppender(const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	class:plog::RollingFileAppender	signature:(const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+RollingFileAppender	include/plog/Appenders/RollingFileAppender.h	/^    class RollingFileAppender : public IAppender$/;"	c	namespace:plog
+Severity	include/plog/Severity.h	/^    enum Severity$/;"	g	namespace:plog
+Singleton	include/plog/Util.h	/^            Singleton()$/;"	f	class:plog::util::Singleton	signature:()
+Singleton	include/plog/Util.h	/^        class Singleton : NonCopyable$/;"	c	namespace:plog::util
+Time	include/plog/Util.h	/^        struct Time$/;"	s	namespace:plog::util
+Time	include/plog/Util.h	/^        typedef timeb Time;$/;"	t	namespace:plog::util
+TxtFormatter	include/plog/Formatters/TxtFormatter.h	/^    class TxtFormatter$/;"	c	namespace:plog
+UTF8Converter	include/plog/Converters/UTF8Converter.h	/^    class UTF8Converter$/;"	c	namespace:plog
+_PLOG_NSTR	include/plog/Util.h	25;"	d
+_isatty	include/plog/Appenders/ColorConsoleAppender.h	/^        static int _isatty(int fd) { return ::isatty(fd); }$/;"	f	class:plog::ColorConsoleAppender	signature:(int fd)
+addAppender	include/plog/Logger.h	/^        Logger& addAppender(IAppender* appender)$/;"	f	class:plog::Logger	signature:(IAppender* appender)
+buildFileName	include/plog/Appenders/RollingFileAppender.h	/^        util::nstring buildFileName(int fileNumber = 0)$/;"	f	class:plog::RollingFileAppender	signature:(int fileNumber = 0)
+checkSeverity	include/plog/Logger.h	/^        bool checkSeverity(Severity severity) const$/;"	f	class:plog::Logger	signature:(Severity severity) const
+close	include/plog/Util.h	/^            void close()$/;"	f	class:plog::util::File	signature:()
+convert	include/plog/Converters/UTF8Converter.h	/^        static const std::string& convert(const util::nstring& str)$/;"	f	class:plog::UTF8Converter	signature:(const util::nstring& str)
+convert	include/plog/Converters/UTF8Converter.h	/^        static std::string convert(const util::nstring& str)$/;"	f	class:plog::UTF8Converter	signature:(const util::nstring& str)
+debug	include/plog/Severity.h	/^        debug = 5,$/;"	e	enum:plog::Severity
+detail	include/plog/Record.h	/^    namespace detail$/;"	n	namespace:plog
+error	include/plog/Severity.h	/^        error = 2,$/;"	e	enum:plog::Severity
+fatal	include/plog/Severity.h	/^        fatal = 1,$/;"	e	enum:plog::Severity
+findExtensionDot	include/plog/Util.h	/^        inline const nchar* findExtensionDot(const nchar* fileName)$/;"	f	namespace:plog::util	signature:(const nchar* fileName)
+format	include/plog/Formatters/CsvFormatter.h	/^        static util::nstring format(const Record& record)$/;"	f	class:plog::CsvFormatter	signature:(const Record& record)
+format	include/plog/Formatters/FuncMessageFormatter.h	/^        static util::nstring format(const Record& record)$/;"	f	class:plog::FuncMessageFormatter	signature:(const Record& record)
+format	include/plog/Formatters/TxtFormatter.h	/^        static util::nstring format(const Record& record)$/;"	f	class:plog::TxtFormatter	signature:(const Record& record)
+ftime	include/plog/Util.h	/^        inline void ftime(Time* t)$/;"	f	namespace:plog::util	signature:(Time* t)
+get	include/plog/Logger.h	/^    inline Logger<PLOG_DEFAULT_INSTANCE>* get()$/;"	f	namespace:plog	signature:()
+get	include/plog/Logger.h	/^    inline Logger<instance>* get()$/;"	f	namespace:plog	signature:()
+getFunc	include/plog/Record.h	/^        std::string getFunc() const$/;"	f	class:plog::Record	signature:() const
+getInstance	include/plog/Util.h	/^            static T* getInstance()$/;"	f	class:plog::util::Singleton	signature:()
+getLine	include/plog/Record.h	/^        size_t getLine() const$/;"	f	class:plog::Record	signature:() const
+getMaxSeverity	include/plog/Logger.h	/^        Severity getMaxSeverity() const$/;"	f	class:plog::Logger	signature:() const
+getMessage	include/plog/Record.h	/^        const util::nstring getMessage() const$/;"	f	class:plog::Record	signature:() const
+getObject	include/plog/Record.h	/^        const void* getObject() const$/;"	f	class:plog::Record	signature:() const
+getSeverity	include/plog/Record.h	/^        Severity getSeverity() const$/;"	f	class:plog::Record	signature:() const
+getSeverityName	include/plog/Severity.h	/^    inline const char* getSeverityName(Severity severity)$/;"	f	namespace:plog	signature:(Severity severity)
+getTid	include/plog/Record.h	/^        unsigned int getTid() const$/;"	f	class:plog::Record	signature:() const
+getTime	include/plog/Record.h	/^        const util::Time& getTime() const$/;"	f	class:plog::Record	signature:() const
+gettid	include/plog/Util.h	/^        inline unsigned int gettid()$/;"	f	namespace:plog::util	signature:()
+header	include/plog/Converters/UTF8Converter.h	/^        static std::string header(const util::nstring& str)$/;"	f	class:plog::UTF8Converter	signature:(const util::nstring& str)
+header	include/plog/Formatters/CsvFormatter.h	/^        static util::nstring header()$/;"	f	class:plog::CsvFormatter	signature:()
+header	include/plog/Formatters/FuncMessageFormatter.h	/^        static util::nstring header()$/;"	f	class:plog::FuncMessageFormatter	signature:()
+header	include/plog/Formatters/TxtFormatter.h	/^        static util::nstring header()$/;"	f	class:plog::TxtFormatter	signature:()
+info	include/plog/Severity.h	/^        info = 4,$/;"	e	enum:plog::Severity
+init	include/plog/Init.h	/^    inline Logger<PLOG_DEFAULT_INSTANCE>& init(Severity maxSeverity = none, IAppender* appender = NULL)$/;"	f	namespace:plog	signature:(Severity maxSeverity = none, IAppender* appender = NULL)
+init	include/plog/Init.h	/^    inline Logger<PLOG_DEFAULT_INSTANCE>& init(Severity maxSeverity, const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	namespace:plog	signature:(Severity maxSeverity, const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+init	include/plog/Init.h	/^    inline Logger<PLOG_DEFAULT_INSTANCE>& init(Severity maxSeverity, const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	namespace:plog	signature:(Severity maxSeverity, const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+init	include/plog/Init.h	/^    inline Logger<instance>& init(Severity maxSeverity = none, IAppender* appender = NULL)$/;"	f	namespace:plog	signature:(Severity maxSeverity = none, IAppender* appender = NULL)
+init	include/plog/Init.h	/^    inline Logger<instance>& init(Severity maxSeverity, const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	namespace:plog	signature:(Severity maxSeverity, const char* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+init	include/plog/Init.h	/^    inline Logger<instance>& init(Severity maxSeverity, const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)$/;"	f	namespace:plog	signature:(Severity maxSeverity, const util::nchar* fileName, size_t maxFileSize = 0, int maxFiles = 0)
+isCsv	include/plog/Init.h	/^        bool isCsv(const util::nchar* fileName)$/;"	f	namespace:plog::__anon1	signature:(const util::nchar* fileName)
+kMaxMessageSize	include/plog/Formatters/CsvFormatter.h	/^        static const size_t kMaxMessageSize = 32000;$/;"	m	class:plog::CsvFormatter
+localtime_s	include/plog/Util.h	/^        inline void localtime_s(struct tm* t, const time_t* time)$/;"	f	namespace:plog::util	signature:(struct tm* t, const time_t* time)
+lock	include/plog/Util.h	/^            void lock()$/;"	f	class:plog::util::Mutex	signature:()
+m_appenders	include/plog/Logger.h	/^        std::vector<IAppender*> m_appenders;$/;"	m	class:plog::Logger
+m_file	include/plog/Appenders/RollingFileAppender.h	/^        util::File      m_file;$/;"	m	class:plog::RollingFileAppender
+m_file	include/plog/Util.h	/^            int m_file;$/;"	m	class:plog::util::File
+m_fileExt	include/plog/Appenders/RollingFileAppender.h	/^        util::nstring   m_fileExt;$/;"	m	class:plog::RollingFileAppender
+m_fileNameNoExt	include/plog/Appenders/RollingFileAppender.h	/^        util::nstring   m_fileNameNoExt;$/;"	m	class:plog::RollingFileAppender
+m_fileSize	include/plog/Appenders/RollingFileAppender.h	/^        size_t          m_fileSize;$/;"	m	class:plog::RollingFileAppender
+m_firstWrite	include/plog/Appenders/RollingFileAppender.h	/^        bool            m_firstWrite;$/;"	m	class:plog::RollingFileAppender
+m_func	include/plog/Record.h	/^        const char* const   m_func;$/;"	m	class:plog::Record
+m_instance	include/plog/Util.h	/^            static T* m_instance;$/;"	m	class:plog::util::Singleton
+m_instance	include/plog/Util.h	/^        T* Singleton<T>::m_instance = NULL;$/;"	m	class:plog::util::Singleton
+m_isatty	include/plog/Appenders/ColorConsoleAppender.h	/^        bool    m_isatty;$/;"	m	class:plog::ColorConsoleAppender
+m_lastFileNumber	include/plog/Appenders/RollingFileAppender.h	/^        const int       m_lastFileNumber;$/;"	m	class:plog::RollingFileAppender
+m_line	include/plog/Record.h	/^        const size_t        m_line;$/;"	m	class:plog::Record
+m_maxFileSize	include/plog/Appenders/RollingFileAppender.h	/^        const size_t    m_maxFileSize;$/;"	m	class:plog::RollingFileAppender
+m_maxSeverity	include/plog/Logger.h	/^        Severity m_maxSeverity;$/;"	m	class:plog::Logger
+m_message	include/plog/Record.h	/^        util::nstringstream m_message;$/;"	m	class:plog::Record
+m_mutex	include/plog/Appenders/RollingFileAppender.h	/^        util::Mutex     m_mutex;$/;"	m	class:plog::RollingFileAppender
+m_mutex	include/plog/Util.h	/^            Mutex& m_mutex;$/;"	m	class:plog::util::MutexLock
+m_object	include/plog/Record.h	/^        const void* const   m_object;$/;"	m	class:plog::Record
+m_originalAttr	include/plog/Appenders/ColorConsoleAppender.h	/^        WORD    m_originalAttr;$/;"	m	class:plog::ColorConsoleAppender
+m_severity	include/plog/Record.h	/^        const Severity      m_severity;$/;"	m	class:plog::Record
+m_stdoutHandle	include/plog/Appenders/ColorConsoleAppender.h	/^        HANDLE  m_stdoutHandle;$/;"	m	class:plog::ColorConsoleAppender
+m_sync	include/plog/Util.h	/^            CRITICAL_SECTION m_sync;$/;"	m	class:plog::util::Mutex
+m_sync	include/plog/Util.h	/^            pthread_mutex_t m_sync;$/;"	m	class:plog::util::Mutex
+m_tag	include/plog/Appenders/AndroidAppender.h	/^        const char* const m_tag;$/;"	m	class:plog::AndroidAppender
+m_tid	include/plog/Record.h	/^        const unsigned int  m_tid;$/;"	m	class:plog::Record
+m_time	include/plog/Record.h	/^        util::Time          m_time;$/;"	m	class:plog::Record
+millitm	include/plog/Util.h	/^            unsigned short millitm;$/;"	m	struct:plog::util::Time
+nchar	include/plog/Util.h	/^        typedef wchar_t nchar;$/;"	t	namespace:plog::util
+none	include/plog/Severity.h	/^        none = 0,$/;"	e	enum:plog::Severity
+nstring	include/plog/Util.h	/^        typedef std::wstring nstring;$/;"	t	namespace:plog::util
+nstringstream	include/plog/Util.h	/^        typedef std::wstringstream nstringstream;$/;"	t	namespace:plog::util
+open	include/plog/Util.h	/^            off_t open(const nchar* fileName)$/;"	f	class:plog::util::File	signature:(const nchar* fileName)
+openLogFile	include/plog/Appenders/RollingFileAppender.h	/^        void openLogFile()$/;"	f	class:plog::RollingFileAppender	signature:()
+operator +=	include/plog/Logger.h	/^        void operator+=(const Record& record)$/;"	f	class:plog::Logger	signature:(const Record& record)
+operator <<	include/plog/Record.h	/^        Record& operator<<(char data)$/;"	f	class:plog::Record	signature:(char data)
+operator <<	include/plog/Record.h	/^        Record& operator<<(const T& data)$/;"	f	class:plog::Record	signature:(const T& data)
+operator <<	include/plog/Record.h	/^        Record& operator<<(wchar_t data)$/;"	f	class:plog::Record	signature:(wchar_t data)
+operator <<	include/plog/Record.h	/^        inline void operator<<(util::nstringstream& stream, const char* data)$/;"	f	namespace:plog::detail	signature:(util::nstringstream& stream, const char* data)
+operator <<	include/plog/Record.h	/^        inline void operator<<(util::nstringstream& stream, const std::string& data)$/;"	f	namespace:plog::detail	signature:(util::nstringstream& stream, const std::string& data)
+operator <<	include/plog/Record.h	/^        inline void operator<<(util::nstringstream& stream, const std::wstring& data)$/;"	f	namespace:plog::detail	signature:(util::nstringstream& stream, const std::wstring& data)
+operator <<	include/plog/Record.h	/^        inline void operator<<(util::nstringstream& stream, const wchar_t* data)$/;"	f	namespace:plog::detail	signature:(util::nstringstream& stream, const wchar_t* data)
+operator =	include/plog/Util.h	/^            NonCopyable& operator=(const NonCopyable&);$/;"	p	class:plog::util::NonCopyable	signature:(const NonCopyable&)
+plog	include/plog/Appenders/AndroidAppender.h	/^namespace plog$/;"	n
+plog	include/plog/Appenders/ColorConsoleAppender.h	/^namespace plog$/;"	n
+plog	include/plog/Appenders/ConsoleAppender.h	/^namespace plog$/;"	n
+plog	include/plog/Appenders/IAppender.h	/^namespace plog$/;"	n
+plog	include/plog/Appenders/RollingFileAppender.h	/^namespace plog$/;"	n
+plog	include/plog/Converters/UTF8Converter.h	/^namespace plog$/;"	n
+plog	include/plog/Formatters/CsvFormatter.h	/^namespace plog$/;"	n
+plog	include/plog/Formatters/FuncMessageFormatter.h	/^namespace plog$/;"	n
+plog	include/plog/Formatters/TxtFormatter.h	/^namespace plog$/;"	n
+plog	include/plog/Init.h	/^namespace plog$/;"	n
+plog	include/plog/Logger.h	/^namespace plog$/;"	n
+plog	include/plog/Record.h	/^namespace plog$/;"	n
+plog	include/plog/Severity.h	/^namespace plog$/;"	n
+plog	include/plog/Util.h	/^namespace plog$/;"	n
+processFuncName	include/plog/Util.h	/^        inline std::string processFuncName(const char* func)$/;"	f	namespace:plog::util	signature:(const char* func)
+rename	include/plog/Util.h	/^            static int rename(const nchar* oldFilename, const nchar* newFilename)$/;"	f	class:plog::util::File	signature:(const nchar* oldFilename, const nchar* newFilename)
+resetColor	include/plog/Appenders/ColorConsoleAppender.h	/^        void resetColor()$/;"	f	class:plog::ColorConsoleAppender	signature:()
+rollLogFiles	include/plog/Appenders/RollingFileAppender.h	/^        void rollLogFiles()$/;"	f	class:plog::RollingFileAppender	signature:()
+seek	include/plog/Util.h	/^            off_t seek(off_t offset, int whence)$/;"	f	class:plog::util::File	signature:(off_t offset, int whence)
+setColor	include/plog/Appenders/ColorConsoleAppender.h	/^        void setColor(Severity severity)$/;"	f	class:plog::ColorConsoleAppender	signature:(Severity severity)
+setMaxSeverity	include/plog/Logger.h	/^        void setMaxSeverity(Severity severity)$/;"	f	class:plog::Logger	signature:(Severity severity)
+splitFileName	include/plog/Util.h	/^        inline void splitFileName(const nchar* fileName, nstring& fileNameNoExt, nstring& fileExt)$/;"	f	namespace:plog::util	signature:(const nchar* fileName, nstring& fileNameNoExt, nstring& fileExt)
+time	include/plog/Util.h	/^            time_t time;$/;"	m	struct:plog::util::Time
+toNarrow	include/plog/Util.h	/^        inline std::string toNarrow(const wchar_t* wstr)$/;"	f	namespace:plog::util	signature:(const wchar_t* wstr)
+toPriority	include/plog/Appenders/AndroidAppender.h	/^        static android_LogPriority toPriority(Severity severity)$/;"	f	class:plog::AndroidAppender	signature:(Severity severity)
+toUTF8	include/plog/Util.h	/^        inline std::string toUTF8(const std::wstring& wstr)$/;"	f	namespace:plog::util	signature:(const std::wstring& wstr)
+toWide	include/plog/Util.h	/^        inline std::wstring toWide(const char* str)$/;"	f	namespace:plog::util	signature:(const char* str)
+unlink	include/plog/Util.h	/^            static int unlink(const nchar* fileName)$/;"	f	class:plog::util::File	signature:(const nchar* fileName)
+unlock	include/plog/Util.h	/^            void unlock()$/;"	f	class:plog::util::Mutex	signature:()
+util	include/plog/Util.h	/^    namespace util$/;"	n	namespace:plog
+verbose	include/plog/Severity.h	/^        verbose = 6$/;"	e	enum:plog::Severity
+warning	include/plog/Severity.h	/^        warning = 3,$/;"	e	enum:plog::Severity
+write	include/plog/Appenders/AndroidAppender.h	/^        virtual void write(const Record& record)$/;"	f	class:plog::AndroidAppender	signature:(const Record& record)
+write	include/plog/Appenders/ColorConsoleAppender.h	/^        virtual void write(const Record& record)$/;"	f	class:plog::ColorConsoleAppender	signature:(const Record& record)
+write	include/plog/Appenders/ConsoleAppender.h	/^        virtual void write(const Record& record)$/;"	f	class:plog::ConsoleAppender	signature:(const Record& record)
+write	include/plog/Appenders/IAppender.h	/^        virtual void write(const Record& record) = 0;$/;"	p	class:plog::IAppender	signature:(const Record& record)
+write	include/plog/Appenders/RollingFileAppender.h	/^        virtual void write(const Record& record)$/;"	f	class:plog::RollingFileAppender	signature:(const Record& record)
+write	include/plog/Logger.h	/^        virtual void write(const Record& record)$/;"	f	class:plog::Logger	signature:(const Record& record)
+write	include/plog/Util.h	/^            int write(const std::basic_string<CharType>& str)$/;"	f	class:plog::util::File	signature:(const std::basic_string<CharType>& str)
+write	include/plog/Util.h	/^            int write(const void* buf, size_t count)$/;"	f	class:plog::util::File	signature:(const void* buf, size_t count)
+~File	include/plog/Util.h	/^            ~File()$/;"	f	class:plog::util::File	signature:()
+~IAppender	include/plog/Appenders/IAppender.h	/^        virtual ~IAppender()$/;"	f	class:plog::IAppender	signature:()
+~Mutex	include/plog/Util.h	/^            ~Mutex()$/;"	f	class:plog::util::Mutex	signature:()
+~MutexLock	include/plog/Util.h	/^            ~MutexLock()$/;"	f	class:plog::util::MutexLock	signature:()
+~Singleton	include/plog/Util.h	/^            ~Singleton()$/;"	f	class:plog::util::Singleton	signature:()

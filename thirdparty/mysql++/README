@@ -1,0 +1,24 @@
+#precondition
+
+[joshua@VM_138_209_centos mysql++]$ rpm -qa | grep mysql
+
+* mysql-devel-5.1.73-5.el6_6.x86_64
+* mysql++-3.0.9-3.el6.x86_64
+* mysql-server-5.1.73-5.el6_6.x86_64
+* mysql-libs-5.1.73-5.el6_6.x86_64
+* mysql++-devel-3.0.9-3.el6.x86_64
+* mysql-5.1.73-5.el6_6.x86_64
+
+
+sample BUILD
+-------------------
+cc_binary(
+  name = 'mysql_test',
+  srcs = [
+    'test.cc',
+  ],
+  deps = [
+    '#mysqlpp',
+  ]
+)
+---------------------

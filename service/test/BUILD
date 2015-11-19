@@ -101,3 +101,11 @@ cc_binary(
   deps = [
   ]
 )
+
+cc_binary(
+  name = 'mysql_test',
+  srcs = 'mysql_test.cc',
+  deps = [
+    '#mysqlpp',
+  ]
+)
