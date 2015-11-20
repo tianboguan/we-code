@@ -5,10 +5,12 @@
 #include <map>
 #include <sstream>
 #include "proto/CgiReq.pb.h"
-#include "common/redis_utils/RedisPB.h"
+#include "common/redis_utils/RedisPb.h"
 #include "proto/CacheData.pb.h"
 
 using namespace std;
+
+const string kAcountPrefix = "account_";
 
 class Account{
   public:
@@ -35,7 +37,7 @@ class Account{
     string key_;                 // redis key
     string user_;                 // redis key
     string token_;
-    RedisStr2PB<AccountInfo> redis_;
+    RedisStr2Pb<AccountInfo> redis_;
 };
 
 

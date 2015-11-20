@@ -5,7 +5,6 @@
 #include "thirdparty/plog/Log.h"
 #include "common/sms/sms.h"
 #include "common/encode/md5.h"
-#include "common/redis_utils/RedisDefine.h"
 #include "common/utils/string_utils.h"
 
 using namespace std;
@@ -19,7 +18,7 @@ Account::Account(const string &user, const string &token) {
 
 int Account::Enroll(const EnrollReq &enroll, string &token) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -36,7 +35,7 @@ int Account::Enroll(const EnrollReq &enroll, string &token) {
   account_info.set_password(value_to_string(rand()));
   account_info.set_new_password(enroll.password());
   account_info.set_status(USER_STATUS_ENROLL);
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -49,13 +48,13 @@ int Account::Enroll(const EnrollReq &enroll, string &token) {
 
 int Account::Login(const LoginReq &login, string &token) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = -1;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     error_code_ = 2;
     return error_code_;         // passwd error
   }
@@ -71,7 +70,7 @@ int Account::Login(const LoginReq &login, string &token) {
   token = CreateToken();
   account_info.set_token(token);
   account_info.set_status(USER_STATUS_LOGIN);
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -90,7 +89,7 @@ int Account::Logout() {
   }
 
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -101,7 +100,7 @@ int Account::Logout() {
   token_ = CreateToken();
   account_info.set_token(token_);
   account_info.set_status(USER_STATUS_LOGOUT);
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -113,13 +112,13 @@ int Account::Logout() {
 
 int Account::ModifyPass(const ModifyPassReq &modify_pass) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = -1;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
@@ -134,7 +133,7 @@ int Account::ModifyPass(const ModifyPassReq &modify_pass) {
   }
 
   account_info.set_password(modify_pass.n_pass());
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -147,20 +146,20 @@ int Account::ModifyPass(const ModifyPassReq &modify_pass) {
 
 int Account::ResetPass(const ResetPassReq &reset_pass) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = -1;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
   }
 
   account_info.set_new_password(reset_pass.n_pass());
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -173,13 +172,13 @@ int Account::ResetPass(const ResetPassReq &reset_pass) {
 
 int Account::SendCode() {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = -1;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
@@ -187,7 +186,7 @@ int Account::SendCode() {
 
   string code = user_ == "18127813634" ? "6666" :CreateCode();
   account_info.set_code(code);
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -206,12 +205,12 @@ int Account::SendCode() {
 
 int Account::VerifyCode(const VerifyCodeReq &verify_code) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
@@ -227,7 +226,7 @@ int Account::VerifyCode(const VerifyCodeReq &verify_code) {
 
   account_info.set_status(USER_STATUS_LOGIN);
   account_info.set_password(account_info.new_password());
-  ret = redis_.Set(key_, account_info);
+  ret = redis_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Set account info failed! user: "
       << user_ << ", err: " << redis_.Error();
@@ -242,13 +241,13 @@ int Account::CheckLogin() {
     return 0;
   }
   AccountInfo account_info;
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = 2;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
@@ -305,13 +304,13 @@ string Account::CreateToken() {
 }
 
 int Account::Read(AccountInfo &account_info) {
-  RedisCode ret = redis_.Get(key_, account_info);
+  RedisCode ret = redis_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
     LOG_ERROR << "Get account info failed! user: "
       << user_ << ", err: " << redis_.Error();
     error_code_ = 2;
     return error_code_;
-  } else if (ret == RedisCodeKeyNotFound) {
+  } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
     error_code_ = 2;
     return error_code_;
@@ -321,7 +320,7 @@ int Account::Read(AccountInfo &account_info) {
 }
 
 int Account::Del() {
-  RedisCode ret = redis_.Del(key_);
+  RedisCode ret = redis_.Query("DEL", (key_));
   if (ret != RedisCodeOK) {
     LOG_ERROR << "Del account info failed! user: "
       << user_ << ", err: " << redis_.Error();

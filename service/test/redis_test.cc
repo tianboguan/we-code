@@ -4,8 +4,8 @@
 #include <iostream>
 
 //#include "thirdparty/hiredis-master/hiredis.h"
-#include "common/redis_utils/RedisString.h"
-#include "common/redis_utils/RedisPB.h"
+#include "common/redis_utils/RedisCpp.h"
+#include "common/redis_utils/RedisPb.h"
 #include "proto/hello_proto/hello.pb.h"
 
 using namespace std;
@@ -87,35 +87,79 @@ int main(int argc, char **argv) {
   }
   cout << "get value: " << ret_value << endl;
   return 0;
+#else
+#if 0
+  RedisCpp rs;
+  string key = "key";
+  string value = "value";
+  int ret;
+
+  ret = rs.Query("SET", key, value);
+  if (ret != 0) {
+    cout << "err: " << rs.Error() << endl;
+    return -1;
+  }
+
+
+  //ret = rs.Query("DEL", key);
+  //if (ret != 0) {
+  //  cout << "err: " << rs.Error() << endl;
+  //  return -1;
+  //}
+
+  string ret_value;
+  ret = rs.Query("GET", key, &ret_value);
+  if (ret != 0) {
+    cout << "err: " << rs.Error() << ", code: " << ret << endl;
+    return -1;
+  }
+  cout << "get value: " << ret_value << endl;
+  return 0;
+#endif
 #endif
 
-#if 1    // test redis pb utils
-  HelloMsg key;
-  key.set_hello("key");
-  key.set_standard_int(1);
-  key.set_long_int(123456789012);
+  //HelloMsg key;
+  //key.set_hello("key");
+  //key.set_standard_int(1);
+  //key.set_long_int(123456789012);
   HelloMsg value;
   value.set_hello("value");
   value.set_standard_int(2);
   value.set_long_int(222222);
+  std::string key = "key";
   {
-    RedisPB2PB<HelloMsg, HelloMsg> rp;
+    // RedisPb2Pb<HelloMsg, HelloMsg> rp;
+    RedisStr2Pb<HelloMsg> rp;
     int ret;
-    ret = rp.Set(key, value);
-    if (ret != 0) {
+    ret = rp.Query("SET", key, value);
+    if (ret != RedisCodeOK) {
       cout << "err: " << rp.Error() << endl;
       return -1;
     }
 
     HelloMsg ret_value;
-    ret = rp.Get(key, ret_value);
+    ret = rp.Query("GET", key, &ret_value);
     if (ret != 0) {
       cout << "err: " << rp.Error() << endl;
       return -1;
     }
     cout << "get value: " << ret_value.DebugString() << endl;
+
+    ret = rp.Query("DEL", key);
+    if (ret != 0) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
+    cout << "del success!" << endl;
+
+    ret = rp.Query("GET", key, &ret_value);
+    if (ret != RedisCodeOK && ret != RedisCodeNil) {
+      cout << "err: " << rp.Error() << endl;
+      return -1;
+    }
   }
 
+#if 0    // test redis pb utils
   {
     RedisStr2PB<HelloMsg> rp;
     string pbkey("pbkey");

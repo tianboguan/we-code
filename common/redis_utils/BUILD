@@ -1,7 +1,7 @@
 cc_library(
   name = 'RedisUtils',
   srcs = [
-    'RedisString.cc',
+    'RedisBase.cc',
   ],
   deps = [
     '//thirdparty/hiredis-master:redis'

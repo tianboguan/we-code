@@ -42,7 +42,6 @@ int ParseCgiReq::Parse(ModifyPassReq &modify_pass) {
 }
 
 int ParseCgiReq::Parse(ResetPassReq &reset_pass) {
-  CHECK("code", true);
   CHECK("n_pass", true);
   reset_pass.set_n_pass(params_["n_pass"]);
   return 0;
