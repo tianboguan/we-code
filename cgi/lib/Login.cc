@@ -7,7 +7,7 @@
 #include "common/encode/md5.h"
 #include "common/utils/string_utils.h"
 
-using namespace std;
+// using namespace std;
 
 
 Account::Account(const string &user, const string &token) {

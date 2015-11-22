@@ -53,6 +53,12 @@ int ParseCgiReq::Parse(VerifyCodeReq &verify_code) {
   return 0;
 }
 
+int ParseCgiReq::Parse(FollowReq &follow) {
+  CHECK("target_user", true);
+  follow.set_target_user(params_["target_user"]);
+  return 0;
+}
+
 string ParseCgiReq::Error() {
   return err_oss.str();
 }

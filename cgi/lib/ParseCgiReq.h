@@ -21,6 +21,9 @@ class ParseCgiReq {
     int Parse(ResetPassReq &reset_pass);
     int Parse(VerifyCodeReq &verify_code);
 
+    // follow related
+    int Parse(FollowReq &follow);
+
     string Error();
 
   private:

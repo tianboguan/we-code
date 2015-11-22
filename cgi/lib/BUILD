@@ -3,6 +3,7 @@ cc_library(
   srcs = [
     'ParseCgiReq.cc',
     'Login.cc',
+    'Follow.cc',
   ],
   deps = [
     '//proto:cgi_req_proto',
