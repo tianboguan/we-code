@@ -4,6 +4,7 @@ cc_library(
     'ParseCgiReq.cc',
     'Login.cc',
     'Follow.cc',
+    'Profile.cc',
   ],
   deps = [
     '//proto:cgi_req_proto',

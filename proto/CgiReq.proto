@@ -1,4 +1,7 @@
+
 syntax = "proto3";
+
+import 'proto/CacheData.proto';
 
 // cgi公共信息
 message CgiBaseInfo {
@@ -41,3 +44,28 @@ message AccountRes {
   string token = 1;
 }
 
+
+//-------------- 关系链相关接品 -------------
+message FollowReq {
+  string target_user = 1;
+}
+
+message FollowListRes {
+  repeated UserProfile users = 1;
+}
+
+message FollowStatusRes {
+  bool follow = 1;
+}
+
+
+
+//------------ 用户资料管理 -----------------
+// 个人资料profile见CacheData.proto里的 UserProfile
+
+message AltHeadRes {
+  string head_url = 1;           // 头像上传url
+  string name = 2;               // 头像名字
+  string sign = 3;               // 上传签名
+  string callback = 4;           // 回调数据
+}

@@ -6,11 +6,8 @@
 #include <stdlib.h>
 #include <iostream>
 
-using namespace std;
-
-
-string TencentImg::GetPublicSign() {
-  ostringstream oss;
+std::string TencentImg::GetPublicSign() {
+  std::ostringstream oss;
   oss << "a=" << app_id_
     << "&b=" << bucket_
     << "&k=" << secret_id_
@@ -21,8 +18,8 @@ string TencentImg::GetPublicSign() {
   return CreateSign(oss.str());
 }
 
-string TencentImg::GetPrivateSign(const string &file_id) {
-  ostringstream oss;
+std::string TencentImg::GetPrivateSign(const std::string &file_id) {
+  std::ostringstream oss;
   oss << "a=" << app_id_
     << "&b=" << bucket_
     << "&k=" << secret_id_
@@ -32,18 +29,18 @@ string TencentImg::GetPrivateSign(const string &file_id) {
   return CreateSign(oss.str());
 }
 
-vector<string> TencentImg::GetFileId(const string &user_name, int count) {
-  vector<string> urls;
+std::vector<std::string> TencentImg::GetFileId(const std::string &user_name, int count) {
+  std::vector<std::string> urls;
   time_t now = time(NULL);
   for (int i = 0;  i < count; i++) {
-    ostringstream oss;
-    oss << user_name << "_" << now << "_" << i;
+    std::ostringstream oss;
+    oss << user_name << "_" << now << "_" << i << ".jpg";
     urls.push_back(oss.str());
   }
   return urls;
 }
 
-string TencentImg::GetUrl(const string &file_id, ImgUrlType type) {
+std::string TencentImg::GetUrl(const std::string &file_id, ImgUrlType type) {
   switch (type) {
     case UploadImgUrl:
       return base_url_ + file_id;
@@ -59,7 +56,7 @@ string TencentImg::GetUrl(const string &file_id, ImgUrlType type) {
   return "";
 }
 
-string TencentImg::CreateSign(string orignal) {
+std::string TencentImg::CreateSign(std::string orignal) {
   CHMAC_SHA1 chmac_sha1; 
   BYTE digest[20];
   chmac_sha1.HMAC_SHA1(orignal.c_str(), orignal.length(),

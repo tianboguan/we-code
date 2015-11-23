@@ -74,9 +74,7 @@ int Follow::FollowList(const FollowReq &req, FollowListRes *res) {
     return -1;
   }
 
-  // build res
-
-  return 0;
+  return BuildFollowListRes(users, kFollowPrefix, res);
 }
 
 int Follow::FollowedList(const FollowReq &req, FollowListRes *res) {
@@ -92,8 +90,7 @@ int Follow::FollowedList(const FollowReq &req, FollowListRes *res) {
     return -1;
   }
 
-  // build res
-  return 0;
+  return BuildFollowListRes(users, kFollowedPrefix, res);
 }
 
 int Follow::FollowStatus(const FollowReq &req, FollowStatusRes *res) {
@@ -155,12 +152,10 @@ int Follow::DeBlock(const FollowReq &req) {
   return 0;
 }
 
-int Follow::IsBlocked(const string &target_user, bool *blocked) {
+int Follow::IsBlocked(const std::string &target_user, bool *blocked) {
   int test = 0;
   std::string key(kBlockUserPrefix + user_);
-  RedisCode ret;
-
-  ret = redis_.Query("SISMEMBER", key, target_user, &test);
+  RedisCode ret = redis_.Query("SISMEMBER", key, target_user, &test);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "get user " << user_ << "block " << target_user
       << " status falied! err: " << redis_.Error();
@@ -172,11 +167,33 @@ int Follow::IsBlocked(const string &target_user, bool *blocked) {
   return 0;
 }
 
-string Follow::Error() {
+std::string Follow::Error() {
   return err_oss_.str();
 }
 
-int Follow::GetUserProfile(const std::vector<string> &users,
-    FollowListRes *res) {
+int Follow::BuildFollowListRes(const std::vector<std::string> &users,
+    std::string key_prefix, FollowListRes *res) {
+  std::vector<std::string> keys;
+  std::vector<UserProfile> values;
+
+  for (std::vector<std::string>::const_iterator iter = users.begin();
+      iter != users.end(); ++iter) {
+    keys.push_back(key_prefix + *iter);
+  }
+
+  RedisCode ret = profile_redis_.Query("MGET", keys, &values);
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "get " << user_ << " follow list failed! err: "
+      << redis_.Error();
+    err_oss_ << "取关注人列表信息失败";
+    return -1;
+  }
+
+  for (std::vector<UserProfile>::const_iterator iter = values.begin();
+      iter != values.end(); ++iter) {
+    UserProfile* user = res->add_users();
+    *user = *iter;
+  }
+
   return 0;
 }

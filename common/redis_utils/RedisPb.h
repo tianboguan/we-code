@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include "common/redis_utils/RedisCpp.h"
+#include "common/utils/Pb2Json.h"
 
 // key 为 string, value 为 pb
 template<class V>
@@ -11,6 +12,7 @@ class RedisStr2Pb: public RedisCpp{
   public:
     RedisStr2Pb(int time_out = 200) : RedisCpp(time_out) {}
 
+    // such as DECR 
     RedisCode Query(std::string cmd, const std::string &key) {
       return RedisCpp::Query(cmd, key);
     }
@@ -21,6 +23,7 @@ class RedisStr2Pb: public RedisCpp{
       return RedisCpp::Query(cmd, key, sv);
     }
 
+    // such as GET
     RedisCode Query(std::string cmd, const std::string &key, V *value) {
       std::string sv;
       RedisCode ret = RedisCpp::Query(cmd, key, &sv);
@@ -29,6 +32,23 @@ class RedisStr2Pb: public RedisCpp{
       }
 
       value->ParseFromString(sv);
+      return ret;
+    }
+
+    // such as MGET
+    RedisCode Query(std::string cmd, const std::vector<std::string> &keys,
+        std::vector<V> *values) {
+      std::vector<std::string> vs;
+      RedisCode ret = RedisCpp::Query(cmd, keys, &vs);
+      if (ret != RedisCodeOK) {
+        return ret;
+      }
+      std::vector<std::string>::const_iterator iter;
+      for (iter = vs.begin(); iter != vs.end(); ++iter) {
+        V value;
+        value.ParseFromString(*iter);
+        values->push_back(value);
+      }
       return ret;
     }
 };

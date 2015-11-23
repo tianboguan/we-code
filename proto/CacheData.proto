@@ -19,3 +19,30 @@ message AccountInfo {
   int64 try_passwd_block_time = 8;  // 上次被锁时间
 }                                   
 
+message UserProfile {
+  string user = 1;
+  string nickname = 2;
+  string head_url = 3;
+  string agender = 4;
+  int64 birthday = 5;
+  string address = 6;
+  string signature = 7;
+  string disease = 8;
+  string role = 9;
+  int64 start_time = 10;
+  int64 enroll_time = 11;
+  bool follow = 12;                // 是否已关注目标用户
+  string new_head_url = 13;
+}
+
+message UserStat {
+  string user = 1;
+  int32 login_count = 2;
+  int32 follow_count = 3;
+  int32 followed_count = 4;
+  int32 record_count = 5;
+  int32 comment_count = 6;
+  int32 commented_count = 7;
+  int32 like_count = 8;
+  int32 liked_count = 9;
+}
