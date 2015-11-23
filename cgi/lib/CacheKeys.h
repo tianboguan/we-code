@@ -25,4 +25,15 @@ const std::string kProfilePrefix = "uf_";
 // user stat
 const std::string kStatPrefix= "us_";
 
+
+// ------ business data cache key ------------
+// disease
+const std::string kDisease = "disease";
+// address
+const std::string kAddressPrefix = "ad_";
+// tags
+const std::string kTagWeather = "weather";
+const std::string kTagMood = "mood";
+const std::string kTagStatus = "status";
+
 #endif // CGI_LIB_CACHEKEYS_H_

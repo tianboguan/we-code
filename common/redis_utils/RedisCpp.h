@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 #include "thirdparty/hiredis-master/hiredis.h"
 #include "common/redis_utils/RedisBase.h"
 
@@ -126,7 +127,7 @@ class RedisCpp : public RedisBase {
       return RedisCodeOK;
     }
 
-    // cmd input 1 param, return a set of values
+    // cmd input 1 param, return a vector of values
     // such as SMEMBERS key
     // return RedisCodeOK on success, other on error
     RedisCode Query(std::string cmd, const std::string &key,
@@ -155,6 +156,40 @@ class RedisCpp : public RedisBase {
       return RedisCodeOK;
     }
 
+    // cmd input 1 param, return a map of data 
+    // such as HGETALL key
+    // return RedisCodeOK on success, other on error
+    RedisCode Query(std::string cmd, const std::string &key,
+        std::map<std::string, std::string> *values) {
+      if (Connect()) {
+        return RedisCodeError;
+      }
+
+      std::string format = cmd + " %b ";
+      redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
+          key.data(), key.size());
+      if (reply->type == REDIS_REPLY_ERROR) {
+        err_oss << cmd << " " << key << ", info: " << reply->str;
+        freeReplyObject(reply);
+        return RedisCodeError;
+      } 
+
+      if (reply->type == REDIS_REPLY_ARRAY) {
+        if (reply->elements % 2 != 0) {
+          err_oss << cmd << " " << key << ", return odd elements";
+          freeReplyObject(reply);
+          return RedisCodeError;
+        }
+        for (uint64_t i = 0; i < reply->elements; i += 2) {
+          std::string k, v;
+          k.assign(reply->element[i]->str, reply->element[i]->len);
+          v.assign(reply->element[i+1]->str, reply->element[i+1]->len);
+          (*values)[k] = v;
+        }
+      }
+      freeReplyObject(reply);
+      return RedisCodeOK;
+    }
     // cmd input a set of params, return a set of values
     // such as MGET key1 key2 key3 ...
     // return RedisCodeOK on success, other on error

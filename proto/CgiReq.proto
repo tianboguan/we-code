@@ -69,3 +69,27 @@ message AltHeadRes {
   string sign = 3;               // 上传签名
   string callback = 4;           // 回调数据
 }
+
+
+
+// --------- 业务数据管理 ----------------
+// 疾病相关 
+message ElementList {
+  repeated string elements = 1;          // 数据列表
+}
+
+// 地址相关
+message AddressReq {
+  string address_code = 1;               // 待查行政区域编码
+}
+message AddressRes {
+  map<string, string> address = 1;           // 地址编码到名称的映射表
+}
+
+// tag 相关
+message TagReq {
+  string tag_class = 1;                      // 标签类型名
+}
+message TagRes {
+  map<string, ElementList> tags = 1;   // 标签数据列表
+}
