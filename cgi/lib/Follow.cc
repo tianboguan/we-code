@@ -1,5 +1,6 @@
 #include "cgi/lib/Follow.h"
 #include "cgi/lib/CacheKeys.h"
+#include "cgi/lib/CgiCode.h"
 #include "thirdparty/plog/Log.h"
 
 int Follow::Add(const FollowReq &req) {
@@ -9,17 +10,13 @@ int Follow::Add(const FollowReq &req) {
 
   IsBlocked(req.target_user(), &blocked);
   if (blocked) {
-    err_oss_ << "你已被对方拉黑";
-    return -1;
+    return kCgiCodeBlocked;
   }
 
   // 把目标用户添加自己的关注列表
   ret = redis_.Query("SADD", key, req.target_user());
   if (ret == RedisCodeError) {
-    LOG_ERROR << "user " << user_ << "add user " << req.target_user()
-      << " to his followed list falied! err: " << redis_.Error();
-    err_oss_ << "关注失败";
-    return -1;
+    return kCgiCodeSystemError;
   }
 
   // 把自己加入目标用户的被关注列表
@@ -27,9 +24,8 @@ int Follow::Add(const FollowReq &req) {
   ret = redis_.Query("SADD", key, user_);
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "add himself to " << req.target_user()
-      << "'s followed list falied! err: " << redis_.Error();
-    err_oss_ << "关注失败";
-    return -1;
+      << "'s followed list falied!";
+    return kCgiCodeSystemError ;
   }
 
   return 0;
@@ -43,9 +39,8 @@ int Follow::Del(const FollowReq &req) {
   ret = redis_.Query("SREM", key, req.target_user());
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "del user " << req.target_user()
-      << " from his followed list falied! err: " << redis_.Error();
-    err_oss_ << "取消关注失败";
-    return -1;
+      << " from his followed list falied!";
+    return kCgiCodeSystemError;
   }
 
   // 从对方的被关注列表里删除
@@ -53,9 +48,8 @@ int Follow::Del(const FollowReq &req) {
   ret = redis_.Query("SREM", key, user_);
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "del himself from " << req.target_user()
-      << "'s followed list falied! err: " << redis_.Error();
-    err_oss_ << "取消关注失败";
-    return -1;
+      << "'s followed list falied!"; 
+    return kCgiCodeSystemError;
   }
 
   return 0;
@@ -69,9 +63,8 @@ int Follow::FollowList(const FollowReq &req, FollowListRes *res) {
   ret = redis_.Query("SMEMBERS", key, &users);
   if (ret == RedisCodeError) {
     LOG_ERROR << "get user " << req.target_user()
-      << "'s follow list falied! err: " << redis_.Error();
-    err_oss_ << "取关注列表失败";
-    return -1;
+      << "'s follow list falied!";
+    return kCgiCodeSystemError;
   }
 
   return BuildFollowListRes(users, kFollowPrefix, res);
@@ -85,9 +78,8 @@ int Follow::FollowedList(const FollowReq &req, FollowListRes *res) {
   ret = redis_.Query("SMEMBERS", key, &users);
   if (ret == RedisCodeError) {
     LOG_ERROR << "get user " << req.target_user()
-      << "'s follow list falied! err: " << redis_.Error();
-    err_oss_ << "取关注列表失败";
-    return -1;
+      << "'s follow list falied!"; 
+    return kCgiCodeSystemError;
   }
 
   return BuildFollowListRes(users, kFollowedPrefix, res);
@@ -101,9 +93,8 @@ int Follow::FollowStatus(const FollowReq &req, FollowStatusRes *res) {
   ret = redis_.Query("SISMEMBER", key, req.target_user(), &test);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "get user " << user_ << "follow " << req.target_user()
-      << " status falied! err: " << redis_.Error();
-    err_oss_ << "取关注状态失败";
-    return -1;
+      << " status falied!"; 
+    return kCgiCodeSystemError;
   }
 
   test == 0 ? res->set_follow(false) :res->set_follow(true);
@@ -118,9 +109,8 @@ int Follow::Block(const FollowReq &req) {
   ret = redis_.Query("SADD", key, req.target_user());
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "add user " << req.target_user()
-      << " to his block list falied! err: " << redis_.Error();
-    err_oss_ << "关黑名单失败";
-    return -1;
+      << " to his block list falied!"; 
+    return kCgiCodeSystemError;
   }
 
   // 把自己从目标用户的关注列表删除
@@ -128,9 +118,8 @@ int Follow::Block(const FollowReq &req) {
   ret = redis_.Query("SREM", key, user_);
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "delete himself from " << req.target_user()
-      << "'s followed list falied! err: " << redis_.Error();
-    err_oss_ << "关黑名单失败";
-    return -1;
+      << "'s followed list falied!";
+    return kCgiCodeSystemError;
   }
 
   return 0;
@@ -144,9 +133,8 @@ int Follow::DeBlock(const FollowReq &req) {
   ret = redis_.Query("SREM", key, req.target_user());
   if (ret == RedisCodeError) {
     LOG_ERROR << "user " << user_ << "del user " << req.target_user()
-      << " from his block list falied! err: " << redis_.Error();
-    err_oss_ << "取消黑名单失败";
-    return -1;
+      << " from his block list falied!";
+    return kCgiCodeSystemError;
   }
 
   return 0;
@@ -158,17 +146,12 @@ int Follow::IsBlocked(const std::string &target_user, bool *blocked) {
   RedisCode ret = redis_.Query("SISMEMBER", key, target_user, &test);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "get user " << user_ << "block " << target_user
-      << " status falied! err: " << redis_.Error();
-    err_oss_ << "取黑名单状态失败";
-    return -1;
+      << " status falied!";
+    return kCgiCodeSystemError;
   }
 
-  *blocked = test == 0 ? false : true;
+  *blocked = (test == 0 ? false : true);
   return 0;
-}
-
-std::string Follow::Error() {
-  return err_oss_.str();
 }
 
 int Follow::BuildFollowListRes(const std::vector<std::string> &users,
@@ -183,10 +166,8 @@ int Follow::BuildFollowListRes(const std::vector<std::string> &users,
 
   RedisCode ret = profile_redis_.Query("MGET", keys, &values);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "get " << user_ << " follow list failed! err: "
-      << redis_.Error();
-    err_oss_ << "取关注人列表信息失败";
-    return -1;
+    LOG_ERROR << "get " << user_ << " follow list failed!";
+    return kCgiCodeSystemError;
   }
 
   for (std::vector<UserProfile>::const_iterator iter = values.begin();

@@ -1,6 +1,7 @@
 #include "cgi/lib/Profile.h"
 #include "thirdparty/plog/Log.h"
 #include "cgi/lib/CacheKeys.h"
+#include "cgi/lib/CgiCode.h"
 #include "common/tencent_img/TencentImg.h"
 
 int Profile::Add(const UserProfile &profile) {
@@ -9,25 +10,22 @@ int Profile::Add(const UserProfile &profile) {
   std::string key = kProfilePrefix + user_;
   ret = redis_.Query("EXISTS", key, &value);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "EXISTS " << key << " failed! err: " << redis_.Error();
-    err_oss_ << "创建用户信息失败";
-    return -1;
+    LOG_ERROR << "check profile exit or not failed! user: " << user_;
+    return kCgiCodeSystemError;
   }
 
   if (value) {
     LOG_ERROR << user_ << "'s profile is exist, can't to create new one";
-    err_oss_ << "创建用户信息失败";
-    return -1;
+    return kCgiCodeRecreateUserProfile;
   }
 
   ret = profile_redis_.Query("SET", key, profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "SET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "创建用户信息失败";
-    return -1;
+    LOG_ERROR << "set user profile failed! user: " << user_;
+    return kCgiCodeSystemError;
   }
 
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Profile::Alt(const UserProfile &profile) {
@@ -36,21 +34,19 @@ int Profile::Alt(const UserProfile &profile) {
   std::string key = kProfilePrefix + user_;
   ret = profile_redis_.Query("GET", key, &old_profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "GET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "修改用户信息失败";
-    return -1;
+    LOG_ERROR << "get user profile failed! user: " << user_; 
+    return kCgiCodeSystemError;
   }
 
   old_profile.MergeFrom(profile);
 
   ret = profile_redis_.Query("SET", key, old_profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "SET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "修改用户信息失败";
-    return -1;
+    LOG_ERROR << "update user profile failed! user: " << user_; 
+    return kCgiCodeSystemError;
   }
 
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Profile::AltHead(AltHeadRes *res) {
@@ -73,20 +69,18 @@ int Profile::AltHead(AltHeadRes *res) {
   std::string key = kProfilePrefix + user_;
   ret = profile_redis_.Query("GET", key, &profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "GET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "修改用户头像失败";
-    return -1;
+    LOG_ERROR << "get user profile failed! user: " << user_;
+    return kCgiCodeSystemError;
   }
 
   profile.set_new_head_url(download_url);
   ret = profile_redis_.Query("SET", key, profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "SET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "修改用户头像失败";
-    return -1;
+    LOG_ERROR << "update user profile failed! user: " << user_; 
+    return kCgiCodeSystemError;
   }
 
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Profile::Query(const std::string &target_user, UserProfile *profile) {
@@ -94,11 +88,10 @@ int Profile::Query(const std::string &target_user, UserProfile *profile) {
   std::string key = kProfilePrefix + target_user;
   ret = profile_redis_.Query("GET", key, profile);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "GET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "查询用户资料失败";
-    return -1;
+    LOG_ERROR << "read user profile failed! user: " << user_;
+    return kCgiCodeSystemError;
   }
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Profile::Stat(const std::string &target_user, UserStat *stat) {
@@ -106,14 +99,9 @@ int Profile::Stat(const std::string &target_user, UserStat *stat) {
   std::string key = kStatPrefix + target_user;
   ret = stat_redis_.Query("GET", key, stat);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "GET " << key << " falied! err: " << redis_.Error();
-    err_oss_ << "查询用户统计数据失败";
-    return -1;
+    LOG_ERROR << "get user stat failed! user: " << user_; 
+    return kCgiCodeSystemError;
   }
-  return 0;
-}
-
-std::string Profile::Error() {
-  return 0;
+  return kCgiCodeOk;
 }
 

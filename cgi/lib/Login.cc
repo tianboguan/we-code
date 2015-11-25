@@ -6,8 +6,8 @@
 #include "common/sms/sms.h"
 #include "common/encode/md5.h"
 #include "common/utils/string_utils.h"
-
-// using namespace std;
+#include "cgi/lib/CgiCode.h"
+#include "cgi/lib/CacheKeys.h"
 
 
 Account::Account(const string &user, const string &token) {
@@ -16,155 +16,149 @@ Account::Account(const string &user, const string &token) {
   token_ = token;
 }
 
-int Account::Enroll(const EnrollReq &enroll, string &token) {
-  AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
-  if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
-  } else if (ret == RedisCodeOK) {
-    error_code_ = 1;
-    return error_code_;   // there is already a user
+int Account::Enroll(const EnrollReq &req, AccountRes *res) {
+  string user = GetUserId(req.phone());
+  string key = kAcountPrefix + user;
+  int value;
+  RedisCode ret = redis_.Query("EXISTS", key, &value);
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "check user exists or not, phone: " << req.phone();
+    return kCgiCodeSystemError;
   }
 
-  token = CreateToken();
-  account_info.set_user(user_);
-  account_info.set_token(token);
-  account_info.set_password(value_to_string(rand()));
-  account_info.set_new_password(enroll.password());
-  account_info.set_status(USER_STATUS_ENROLL);
-  ret = redis_.Query("SET", key_, account_info);
-  if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+  if (value) {
+    LOG_ERROR << "phone: " << req.phone() << " has benn enrolled";
+    return kCgiCodePhoneEnrolled;
   }
+
+  AccountInfo account_info;
+  string token = CreateToken();
+  account_info.set_user(user);
+  account_info.set_phone(req.phone());
+  account_info.set_password(value_to_string(rand()));
+  account_info.set_code("6666");
+  account_info.set_token(token);
+  account_info.set_new_password(req.password());
+  account_info.set_status(USER_STATUS_ENROLL);
+  ret = redis_pb_.Query("SET", key, account_info);
+  if (ret == RedisCodeError) {
+    LOG_ERROR << "enroll add user info failed, phone: " << req.phone();
+    return kCgiCodeSystemError;
+  }
+
+  res->set_token(token);
+  res->set_user(user);
 
   return 0;
 }
 
-int Account::Login(const LoginReq &login, string &token) {
+int Account::Login(const LoginReq &req, AccountRes *res) {
+  string user = GetUserId(req.phone());
+  string key = kAcountPrefix + user;
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "login get user info failed, phone: " << req.phone();
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
-    error_code_ = 2;
-    return error_code_;         // passwd error
+    return kCgiCodeUserInvalid;
   }
 
-  if (account_info.password() != login.password()) {
-    LOG_ERROR << "login passwd invalid! user: " << user_
-      << "provide: " << login.password()
+  if (account_info.password() != req.password()) {
+    LOG_ERROR << "login passwd invalid! user: " << user
+      << "provide: " << req.password()
       << "expect: " << account_info.password();
-    error_code_ = 3;
-    return error_code_;         // passwd error
+    return kCgiCodePasswdError;
   }
 
-  token = CreateToken();
+  string token = CreateToken();
   account_info.set_token(token);
   account_info.set_status(USER_STATUS_LOGIN);
-  ret = redis_.Query("SET", key_, account_info);
+  ret = redis_pb_.Query("SET", key, account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "login update user info failed, phone: " << req.phone();
+    return kCgiCodeSystemError;
   }
+
+  res->set_user(user);
+  res->set_token(token);
 
   return 0;
 }
 
 int Account::Logout() {
-  if (CheckLogin() != 0) {
-    LOG_ERROR << "user: " << user_ << "check login status failed!";
-    error_code_ = -1;
-    return error_code_;
+  int rt = CheckLogin();
+  if (rt != kCgiCodeOk) {
+    return rt;
   }
 
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "user:  " << user_ << " logout failed!";
+    return kCgiCodeSystemError;
   }
 
   token_ = CreateToken();
   account_info.set_token(token_);
   account_info.set_status(USER_STATUS_LOGOUT);
-  ret = redis_.Query("SET", key_, account_info);
+  ret = redis_pb_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "logout clean token info failed! ";
+    return kCgiCodeSystemError;
   }
   return 0;
 }
 
 int Account::ModifyPass(const ModifyPassReq &modify_pass) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "modify passwd failed! user: " << user_ ;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
   if (account_info.password() != modify_pass.o_pass()) {
     LOG_ERROR << "reset pass old password invalid! user: " << user_
       << "provide: " << modify_pass.o_pass()
       << "expect: " << account_info.password();
-    error_code_ = 4;
-    return error_code_;
+    return kCgiCodeOldPasswdError;
   }
 
   account_info.set_password(modify_pass.n_pass());
-  ret = redis_.Query("SET", key_, account_info);
+  ret = redis_pb_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "upadte user passwd! user: " << user_;
+    return kCgiCodeSystemError;
   }
 
   return 0;
 }
 
-int Account::ResetPass(const ResetPassReq &reset_pass) {
+int Account::ResetPass(const ResetPassReq &req, AccountRes *res) {
+  string user = GetUserId(req.phone());
+  string key = kAcountPrefix + user;
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "get ole passwd failed! user: " << user_;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
-  account_info.set_new_password(reset_pass.n_pass());
-  ret = redis_.Query("SET", key_, account_info);
+  string token = CreateToken();
+  account_info.set_token(token);
+  account_info.set_status(USER_STATUS_PASSWD);
+  account_info.set_new_password(req.n_pass());
+  ret = redis_pb_.Query("SET", key, account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "set new passwd failed! user: " << user_ ;
+    return kCgiCodeSystemError;
   }
 
   return 0;
@@ -172,32 +166,26 @@ int Account::ResetPass(const ResetPassReq &reset_pass) {
 
 int Account::SendCode() {
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "send code get user info failed! user: " << user_;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
-  string code = user_ == "18127813634" ? "6666" :CreateCode();
+  string code = (user_ == "18127813634" ? "6666" :CreateCode());
   account_info.set_code(code);
-  ret = redis_.Query("SET", key_, account_info);
+  ret = redis_pb_.Query("SET", key_, account_info);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = -1;
-    return error_code_;
+    LOG_ERROR << "update code info failed! user: " << user_ ;
+    return kCgiCodeUserInvalid;
   }
 
-  if (SetPassSMS(user_, code) != 0) {
+  if (SetPassSMS(account_info.phone(), code) != 0) {
     LOG_ERROR << "send sms failed! user: " << user_;
-    error_code_ = 5;
-    return error_code_;
+    return kCgiCodeSendSmsError;
   }
 
   return 0;
@@ -205,32 +193,34 @@ int Account::SendCode() {
 
 int Account::VerifyCode(const VerifyCodeReq &verify_code) {
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    return error_code_;
+    LOG_ERROR << "Get user info failed! user: " << user_;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
   if (account_info.code() != verify_code.code()) {
     LOG_ERROR << "code not match! user: " << user_ 
       << "expect: " << account_info.code()
       << "provide: " << verify_code.code();
-    error_code_ = 6;
-    return error_code_;
+    return kCgiCodeSmsCodeInvalid;
+  }
+  if (token_ != account_info.token()) {
+    LOG_ERROR << "token not match! user: " << user_ 
+      << "expect: " << account_info.token()
+      << "provide: " << token_;
+    return kCgiCodeUserAbnormal;
   }
 
   account_info.set_status(USER_STATUS_LOGIN);
   account_info.set_password(account_info.new_password());
-  ret = redis_.Query("SET", key_, account_info);
+  ret = redis_pb_.Query("SET", key_, account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Set account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    return error_code_;
+    LOG_ERROR << "update user login status failed! user: " << user_;
+    return kCgiCodeUserInvalid;
   }
 
   return 0;
@@ -238,19 +228,15 @@ int Account::VerifyCode(const VerifyCodeReq &verify_code) {
 
 int Account::CheckLogin() {
   if (user_ == "18127813634") {
-    return 0;
+    return kCgiCodeOk;
   }
   AccountInfo account_info;
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
   if (token_ != account_info.token()
@@ -259,32 +245,10 @@ int Account::CheckLogin() {
       <<", expect token: " << account_info.token()
       << ", provide token: " << token_
       << ", user status: " << account_info.status();
-    error_code_ = 7;
-    return error_code_;
+    return kCgiCodeNotLogin;
   }
 
   return 0;
-}
-
-string Account::Error() {
-  static map<int, string> AccountError = {
-    {0, "处理成功."},
-    {-1, "系统错误."},
-    {1, "该用户已经存在, 讲直接登录或是重置密码登录."},
-    {2, "用户不存在,请先注册."},
-    {3, "密码错误."},
-    {4, "旧密码错误."},
-    {5, "验证码发送失败, 请重新发送."},
-    {6, "验证码错误."},
-    {7, "请先登录."},
-  };
-
-  if (AccountError.find(error_code_) != AccountError.end()) {
-    return AccountError[error_code_];
-  } else {
-    LOG_ERROR << "unkown error code: " << error_code_;
-    return "系统异常"; 
-  }
 }
 
 string Account::CreateCode() {
@@ -304,26 +268,32 @@ string Account::CreateToken() {
 }
 
 int Account::Read(AccountInfo &account_info) {
-  RedisCode ret = redis_.Query("GET", key_, &account_info);
+  RedisCode ret = redis_pb_.Query("GET", key_, &account_info);
   if (ret == RedisCodeError) {
-    LOG_ERROR << "Get account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
-    error_code_ = 2;
-    return error_code_;
+    LOG_ERROR << "Get account info failed! user: " << user_;
+    return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "account info not found! user: " << user_ ;
-    error_code_ = 2;
-    return error_code_;
+    return kCgiCodeUserInvalid;
   }
 
   return 0;
 }
 
 int Account::Del() {
-  RedisCode ret = redis_.Query("DEL", (key_));
+  RedisCode ret = redis_pb_.Query("DEL", (key_));
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "Del account info failed! user: "
-      << user_ << ", err: " << redis_.Error();
+    LOG_ERROR << "Del account info failed! user: " << user_; 
+    return kCgiCodeSystemError;
   }
-  return ret;
+  return kCgiCodeOk;
+}
+
+string Account::GetUserId(const string &phone) {
+  std::string temp;
+  temp.assign(phone.rbegin(), phone.rend());
+  int64_t num;
+  string_to_value(temp, num);
+  num += 137438691328;
+  return value_to_string(num);
 }

@@ -13,12 +13,12 @@ message CgiBaseInfo {
 //-------------- 帐号相关接口-----------------
 // 帐号请求
 message EnrollReq {
-  string user = 1;
+  string phone = 1;
   string password = 2;
 }
 
 message LoginReq {
-  string user = 1;
+  string phone = 1;
   string password = 2;
 }
 
@@ -30,7 +30,8 @@ message ModifyPassReq {
 }
 
 message ResetPassReq {
-  string n_pass = 1;
+  string phone = 1;
+  string n_pass = 2;
 }
 
 // send code empty msg
@@ -41,7 +42,8 @@ message VerifyCodeReq {
 
 // 帐号响应
 message AccountRes {
-  string token = 1;
+  string user = 1;
+  string token = 2;
 }
 
 

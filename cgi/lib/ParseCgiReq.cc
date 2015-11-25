@@ -1,9 +1,10 @@
 #include "cgi/lib/ParseCgiReq.h"
+#include "cgi/lib/CgiCode.h"
 
-#define CHECK(key, escape)  \
-ret_ = Check(key, escape);   \
-if (!ret_) {                 \
-  return -1;                \
+#define CHECK(key, escape)      \
+ret_ = Check(key, escape);      \
+if (!ret_) {                    \
+  return kCgiCodePasswdError;   \
 }
 
 int ParseCgiReq::Parse(CgiBaseInfo &base) {
@@ -13,24 +14,24 @@ int ParseCgiReq::Parse(CgiBaseInfo &base) {
   base.set_user(params_["user"]);
   base.set_token(params_["token"]);
   base.set_action(params_["action"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 // account related
 int ParseCgiReq::Parse(EnrollReq &enroll) {
-  CHECK("user", true);
+  CHECK("phone", true);
   CHECK("password", true);
-  enroll.set_user(params_["user"]);
+  enroll.set_phone(params_["phone"]);
   enroll.set_password(params_["password"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 int ParseCgiReq::Parse(LoginReq &login) {
-  CHECK("user", true);
+  CHECK("phone", true);
   CHECK("password", true);
-  login.set_user(params_["user"]);
+  login.set_phone(params_["phone"]);
   login.set_password(params_["password"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 int ParseCgiReq::Parse(ModifyPassReq &modify_pass) {
@@ -38,25 +39,27 @@ int ParseCgiReq::Parse(ModifyPassReq &modify_pass) {
   CHECK("n_pass", true);
   modify_pass.set_o_pass(params_["o_pass"]);
   modify_pass.set_n_pass(params_["n_pass"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 int ParseCgiReq::Parse(ResetPassReq &reset_pass) {
   CHECK("n_pass", true);
+  CHECK("phone", true);
   reset_pass.set_n_pass(params_["n_pass"]);
-  return 0;
+  reset_pass.set_phone(params_["phone"]);
+  return kCgiCodeOk;
 }
 
 int ParseCgiReq::Parse(VerifyCodeReq &verify_code) {
   CHECK("code", true);
   verify_code.set_code(params_["code"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 int ParseCgiReq::Parse(FollowReq &follow) {
   CHECK("target_user", true);
   follow.set_target_user(params_["target_user"]);
-  return 0;
+  return kCgiCodeOk;
 }
 
 string ParseCgiReq::Error() {

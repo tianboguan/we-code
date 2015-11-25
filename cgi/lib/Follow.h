@@ -22,8 +22,6 @@ class Follow {
     int DeBlock(const FollowReq &req);
     int IsBlocked(const std::string &target_user, bool *blocked);
 
-    std::string Error();
-
   private:
     int BuildFollowListRes(const std::vector<std::string> &users,
         std::string key_prefix, FollowListRes *res);

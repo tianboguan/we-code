@@ -2,7 +2,6 @@
 #define COMMON_REDIS_UTILS_REDISBASE_H_
 
 #include <string>
-#include <sstream>
 #include "thirdparty/hiredis-master/hiredis.h"
 
 enum RedisCode {
@@ -14,9 +13,7 @@ enum RedisCode {
 class RedisBase{
   public:
     // time_out ms 
-    RedisBase(int time_out) : c_(NULL), time_out_(time_out) {
-      err_oss.clear();
-    }
+    RedisBase(int time_out) : c_(NULL), time_out_(time_out) {}
 
     ~RedisBase() {
       if (c_) {
@@ -24,17 +21,11 @@ class RedisBase{
       }
     }
 
-    // return error string when query failed
-    std::string Error() {
-      return err_oss.str();
-    }
-
     // connect redis server
     int Connect();
 
   public:
     redisContext *c_;
-    std::ostringstream err_oss;
 
   private:
     int time_out_;            // communicate timeout 

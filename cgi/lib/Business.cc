@@ -1,12 +1,12 @@
 #include "cgi/lib/Business.h"
 #include "cgi/lib/CacheKeys.h"
+#include "cgi/lib/CgiCode.h"
 #include "thirdparty/plog/Log.h"
 
 int Business::Disease(ElementList *res) {
   std::vector<std::string> values;
   if (redis_.Query("SMEMBERS", kDisease, &values) != RedisCodeOK) {
-    LOG_ERROR << "SMEMBERS " << kDisease << " failed! err: " << redis_.Error();
-    err_oss_ << "系统错误";
+    return kCgiCodeSystemError;
   }
 
   for (std::vector<std::string>::const_iterator iter = values.begin();
@@ -22,8 +22,7 @@ int Business::Address(const AddressReq &req, AddressRes *res) {
   std::string key(kAddressPrefix + req.address_code());
   std::map<std::string, std::string> address;
   if (redis_.Query("HGETALL", key, &address) != RedisCodeOK) {
-    LOG_ERROR << "HGETALL " << key << " failed! err: " << redis_.Error();
-    err_oss_ << "系统错误";
+    return kCgiCodeSystemError;
   }
 
   ::google::protobuf::Map<::std::string, ::std::string> *res_map;
@@ -42,20 +41,20 @@ int Business::Tag(const TagReq &req, TagRes *res) {
   if (req.tag_class() != "all") {
     ret = GetTags(req.tag_class(), &res_data[req.tag_class()]);
     if (ret != 0) {
-      return -1;
+      return ret;
     }
   } else {
     ret = GetTags(kTagWeather, &res_data[kTagWeather]);
     if (ret != 0) {
-      return -1;
+      return ret;
     }
     ret = GetTags(kTagMood, &res_data[kTagMood]);
     if (ret != 0) {
-      return -1;
+      return ret;
     }
     ret = GetTags(kTagStatus, &res_data[kTagStatus]);
     if (ret != 0) {
-      return -1;
+      return ret;
     }
   }
 
@@ -82,9 +81,7 @@ std::string Business::Error() {
 int Business::GetTags(const std::string &key,
     std::vector<std::string> *values) {
   if (redis_.Query("SMEMBERS", key, values) != RedisCodeOK) {
-    LOG_ERROR << "SMEMBERS" << key << " failed! err: " << redis_.Error();
-    err_oss_ << "系统错误";
-    return -1;
+    return kCgiCodeSystemError;
   }
   return 0;
 }

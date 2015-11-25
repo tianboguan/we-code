@@ -4,6 +4,6 @@ cc_binary(
     'test.cc',
   ],
   deps = [
-    '//common/tencent_img:tencent_img',
+    '//common/tencent_img:TencentImg',
   ]
 )
