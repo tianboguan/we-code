@@ -9,13 +9,13 @@
 
 class Profile {
   public:
-    Profile(std::string &user) : user_(user) {}; 
+    Profile(const std::string &user) : user_(user) {}; 
 
     int Add(const UserProfile &profile);
     int Alt(const UserProfile &profile);
-    int AltHead(AltHeadRes *res);
+    int AltHead(ImgRes *res);
     int Query(const std::string &target_user, UserProfile *profile);
-    int Stat(const std::string &target_user, UserStat *stat);
+    int Query(const std::string &target_user, UserStat *stat);
 
   private:
     // int GetUserProfile(const std::vector<string> &users, FollowListRes *res);

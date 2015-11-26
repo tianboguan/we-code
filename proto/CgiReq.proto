@@ -64,15 +64,22 @@ message FollowStatusRes {
 
 //------------ 用户资料管理 -----------------
 // 个人资料profile见CacheData.proto里的 UserProfile
-
-message AltHeadRes {
-  string head_url = 1;           // 头像上传url
-  string name = 2;               // 头像名字
-  string sign = 3;               // 上传签名
-  string callback = 4;           // 回调数据
+message QueryProfileReq {
+  string target_user = 1;        // 目标用户
 }
 
+message AltProfileReq {
+  string profile = 1;            // profile jason串
+}
 
+// alt head response 
+message ImgRes {
+  string appid = 1;              // 应用
+  string bucket = 2;             // 空间
+  string fileid = 3;             // 图片id
+  string sign = 4;               // 上传签名
+  string callback = 5;           // 回调数据
+}
 
 // --------- 业务数据管理 ----------------
 // 疾病相关 

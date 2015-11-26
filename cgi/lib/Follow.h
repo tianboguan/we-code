@@ -11,7 +11,7 @@
 
 class Follow {
   public:
-    Follow(std::string &user) : user_(user) {}; 
+    Follow(const std::string &user) : user_(user) {}; 
 
     int Add(const FollowReq &req);
     int Del(const FollowReq &req);

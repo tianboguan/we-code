@@ -6,6 +6,23 @@
 #include <stdlib.h>
 #include <iostream>
 
+TencentImg::TencentImg() {
+  app_id_ = "10010517"; 
+  bucket_ = "feelings";
+  secret_id_ = "AKIDCGWoeO7dDu2hiIeEVy6p7qlj3osHJH4P";
+  secret_key_ = "BI8L0haIRG3TL8TthAGgtNQ2RBhVrIa4";
+  base_url_ = "http://web.image.myqcloud.com/photos/v2/10010517/feelings/0/";
+  download_base_url_ = "http://feelings-10010517.image.myqcloud.com/";
+}
+
+std::string TencentImg::GetAppId() {
+  return app_id_;
+}
+
+std::string TencentImg::GetBucket() {
+  return bucket_;
+}
+
 std::string TencentImg::GetPublicSign() {
   std::ostringstream oss;
   oss << "a=" << app_id_

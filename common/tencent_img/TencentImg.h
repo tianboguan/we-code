@@ -17,15 +17,10 @@ enum ImgUrlType {
 
 class TencentImg {
   public:
-    TencentImg() {
-      app_id_ = "10010517"; 
-      bucket_ = "feelings";
-      secret_id_ = "AKIDCGWoeO7dDu2hiIeEVy6p7qlj3osHJH4P";
-      secret_key_ = "BI8L0haIRG3TL8TthAGgtNQ2RBhVrIa4";
-      base_url_ = "http://web.image.myqcloud.com/photos/v2/10010517/feelings/0/";
-      download_base_url_ = "http://feelings-10010517.image.myqcloud.com/";
-    }
+    TencentImg(); 
 
+    std::string GetAppId();
+    std::string GetBucket();
     std::string GetPublicSign();
     std::string GetPrivateSign(const std::string &file_id);
     std::vector<std::string> GetFileId(const std::string &user_name, int count);

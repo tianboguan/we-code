@@ -49,20 +49,16 @@ int Profile::Alt(const UserProfile &profile) {
   return kCgiCodeOk;
 }
 
-int Profile::AltHead(AltHeadRes *res) {
+int Profile::AltHead(ImgRes *res) {
   TencentImg tencent_img;
-  std::string file_id;
-
-  file_id = tencent_img.GetFileId(user_, 1)[0];
-  std::string upload_url = tencent_img.GetUrl(file_id, UploadImgUrl);
+  std::string file_id = tencent_img.GetFileId(user_, 1)[0];
   std::string download_url = tencent_img.GetUrl(file_id, DownloadImgUrl);
-  std::string sign = tencent_img.GetPrivateSign(file_id);
-  std::ostringstream callback;
-  callback << "user=" << user_ << "|type=head|url=" << download_url; 
-  res->set_head_url(upload_url);
-  res->set_name(file_id);
-  res->set_sign(sign);
-  res->set_callback(callback.str());
+
+  res->set_appid(tencent_img.GetAppId());
+  res->set_bucket(tencent_img.GetBucket());
+  res->set_fileid(file_id);
+  res->set_sign(tencent_img.GetPrivateSign(file_id));
+  res->set_callback("patientsclub");
 
   RedisCode ret;
   UserProfile profile;
@@ -94,7 +90,7 @@ int Profile::Query(const std::string &target_user, UserProfile *profile) {
   return kCgiCodeOk;
 }
 
-int Profile::Stat(const std::string &target_user, UserStat *stat) {
+int Profile::Query(const std::string &target_user, UserStat *stat) {
   RedisCode ret;
   std::string key = kStatPrefix + target_user;
   ret = stat_redis_.Query("GET", key, stat);

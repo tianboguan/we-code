@@ -5,7 +5,7 @@
 #include "cgi/lib/Login.h"
 #include "cgi/lib/ParseCgiReq.h"
 #include "cgi/lib/BuildCgiRes.h"
-#include "common/utils/Pb2Json.h"
+// #include "common/utils/Pb2Json.h"
 
 using namespace std;
 
@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
       LOG_ERROR << parser.Error();
       SendPostResWithoutData(ret);
     } else { 
-      string token;
       ret = account.Enroll(enroll, &res);
       if (ret == kCgiCodeOk) {
         SendPostResWithData(ret, res);
@@ -51,7 +50,6 @@ int main(int argc, char *argv[]) {
       LOG_ERROR << parser.Error();
       SendPostResWithoutData(ret);
     } else {
-      string token;
       ret = account.Login(login, &res);
       if (ret == kCgiCodeOk) {
         SendPostResWithData(ret, res);

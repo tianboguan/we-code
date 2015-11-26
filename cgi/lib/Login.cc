@@ -248,7 +248,7 @@ int Account::CheckLogin() {
     return kCgiCodeNotLogin;
   }
 
-  return 0;
+  return kCgiCodeOk;
 }
 
 string Account::CreateCode() {

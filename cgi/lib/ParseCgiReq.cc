@@ -2,7 +2,7 @@
 #include "cgi/lib/CgiCode.h"
 
 #define CHECK(key, escape)      \
-ret_ = Check(key, escape);      \
+  ret_ = Check(key, escape);      \
 if (!ret_) {                    \
   return kCgiCodePasswdError;   \
 }
@@ -62,13 +62,25 @@ int ParseCgiReq::Parse(FollowReq &follow) {
   return kCgiCodeOk;
 }
 
-string ParseCgiReq::Error() {
+int ParseCgiReq::Parse(QueryProfileReq &query_profile) {
+  CHECK("target_user", true);
+  query_profile.set_target_user(params_["target_user"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(AltProfileReq &alt_profile) {
+  CHECK("profile", true);
+  alt_profile.set_profile(params_["profile"]);
+  return kCgiCodeOk;
+}
+
+std::string ParseCgiReq::Error() {
   return err_oss.str();
 }
 
-bool ParseCgiReq::Check(string key, bool escape) {
+bool ParseCgiReq::Check(std::string key, bool escape) {
   if (params_.find(key) == params_.end()) {
-    err_oss << "not find: " << key << endl;
+    err_oss << "not find: " << key << std::endl;
     return false;
   }
   if (escape) {

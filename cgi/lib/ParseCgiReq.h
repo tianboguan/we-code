@@ -2,14 +2,15 @@
 #define CGI_LIB_PARSECGIREQ_H_
 
 #include <map>
+#include <string>
 #include <sstream>
 #include "proto/CgiReq.pb.h"
 
-using namespace std;
+// using namespace std;
 
 class ParseCgiReq {
   public:
-    ParseCgiReq(const map<string, string> &params) : params_(params) {}
+    ParseCgiReq(const std::map<std::string, std::string> &params) : params_(params) {}
 
     // base info
     int Parse(CgiBaseInfo &base);
@@ -24,12 +25,16 @@ class ParseCgiReq {
     // follow related
     int Parse(FollowReq &follow);
 
-    string Error();
+    // profile related
+    int Parse(QueryProfileReq &query_profile);
+    int Parse(AltProfileReq &alt_profile);
+
+    std::string Error();
 
   private:
-    bool Check(string key, bool escape = false);
-    map<string, string> params_;
-    ostringstream err_oss;
+    bool Check(std::string key, bool escape = false);
+    std::map<std::string, std::string> params_;
+    std::ostringstream err_oss;
     int ret_;
 };
 

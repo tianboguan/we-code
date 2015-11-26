@@ -25,7 +25,7 @@ class Account{
     int Del();
 
   private:
-    string GetUserId(const string &phone);
+    std::string GetUserId(const std::string &phone);
     std::string CreateCode();
     std::string CreateToken();
 
