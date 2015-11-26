@@ -46,3 +46,15 @@ cc_binary(
     '//common/tencent_img:TencentImg'
   ]
 )
+
+cc_binary(
+  name = 'business.cgi',
+  srcs = [
+    'business_cgi.cc',
+  ],
+  deps = [
+    '//thirdparty/glog:glog',
+    '//common/cgi_utils:CgiUtils',
+    '//cgi/lib:cgi',
+  ]
+)

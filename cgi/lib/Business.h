@@ -8,20 +8,17 @@
 
 class Business {
   public:
-    Business(); 
+    Business() {}; 
 
     int Disease(ElementList *res);
     int Address(const AddressReq &req,AddressRes *res);
     int Tag(const TagReq &req, TagRes *res);
 
-    std::string Error();
-
   private:
     int GetTags(const std::string &key, std::vector<std::string> *values);
 
   private:
-    std::string user_;
-    std::ostringstream err_oss_;
+    int i_;
     RedisCpp redis_;
 };
 

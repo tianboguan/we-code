@@ -15,7 +15,7 @@ int Business::Disease(ElementList *res) {
     *element = *iter;
   }
   
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Business::Address(const AddressReq &req, AddressRes *res) {
@@ -32,7 +32,7 @@ int Business::Address(const AddressReq &req, AddressRes *res) {
     (*res_map)[iter->first] = iter->second;
   }
 
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Business::Tag(const TagReq &req, TagRes *res) {
@@ -40,20 +40,20 @@ int Business::Tag(const TagReq &req, TagRes *res) {
   int ret;
   if (req.tag_class() != "all") {
     ret = GetTags(req.tag_class(), &res_data[req.tag_class()]);
-    if (ret != 0) {
+    if (ret != kCgiCodeOk) {
       return ret;
     }
   } else {
     ret = GetTags(kTagWeather, &res_data[kTagWeather]);
-    if (ret != 0) {
+    if (ret != kCgiCodeOk) {
       return ret;
     }
     ret = GetTags(kTagMood, &res_data[kTagMood]);
-    if (ret != 0) {
+    if (ret != kCgiCodeOk) {
       return ret;
     }
     ret = GetTags(kTagStatus, &res_data[kTagStatus]);
-    if (ret != 0) {
+    if (ret != kCgiCodeOk) {
       return ret;
     }
   }
@@ -71,11 +71,7 @@ int Business::Tag(const TagReq &req, TagRes *res) {
     (*res_tags)[iter1->first] = elements;
   }
   
-  return 0;
-}
-
-std::string Business::Error() {
-  return 0;
+  return kCgiCodeOk;
 }
 
 int Business::GetTags(const std::string &key,
@@ -83,6 +79,6 @@ int Business::GetTags(const std::string &key,
   if (redis_.Query("SMEMBERS", key, values) != RedisCodeOK) {
     return kCgiCodeSystemError;
   }
-  return 0;
+  return kCgiCodeOk;
 }
 

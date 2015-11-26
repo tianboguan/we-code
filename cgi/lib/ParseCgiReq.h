@@ -29,6 +29,10 @@ class ParseCgiReq {
     int Parse(QueryProfileReq &query_profile);
     int Parse(AltProfileReq &alt_profile);
 
+    // business related
+    int Parse(AddressReq &address);
+    int Parse(TagReq &tag);
+
     std::string Error();
 
   private:

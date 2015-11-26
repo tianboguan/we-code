@@ -74,6 +74,18 @@ int ParseCgiReq::Parse(AltProfileReq &alt_profile) {
   return kCgiCodeOk;
 }
 
+int ParseCgiReq::Parse(AddressReq &address) {
+  CHECK("address_code", true);
+  address.set_address_code(params_["address_code"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(TagReq &tag) {
+  CHECK("tag_class", true);
+  tag.set_tag_class(params_["tag_class"]);
+  return kCgiCodeOk;
+}
+
 std::string ParseCgiReq::Error() {
   return err_oss.str();
 }
