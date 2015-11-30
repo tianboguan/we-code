@@ -46,8 +46,7 @@ message AccountRes {
   string token = 2;
 }
 
-
-//-------------- 关系链相关接品 -------------
+//-------------- 关系链相关接口 -------------
 message FollowReq {
   string target_user = 1;
 }
@@ -60,6 +59,78 @@ message FollowStatusRes {
   bool follow = 1;
 }
 
+
+// --------------互动处理相关接口--------------
+message LikeReq {
+  string record_id = 1;
+}
+
+message UnlikeReq {
+  string record_id = 1;
+}
+
+message CommentReq {
+  string record_id = 1;
+  string comment_id = 2;
+  string comment = 3;
+}
+
+message UncommentReq {
+  string record_id = 1;
+  string comment_id = 2;
+}
+
+message InteractDetailReq {
+  string record_id = 1;
+}
+
+message UserBaseInfo {
+  string user = 1;                    // 用户帐号
+  string nickname = 2;                // 昵称
+  string head = 3;                    // 头像
+}
+
+message CommentInfo {
+  string id = 1;                      // 评论id
+  int64 time = 2;                     // 评论时间 
+  UserBaseInfo user_info = 3;         // 评论用户信息
+  string comment = 4;                 // 评论内容
+  string target_nickname = 5;         // 回复目标用户的昵称
+}
+
+message LikeInfo {
+  string id = 1;                      // 评论id
+  int64 time = 2;                     // 评论时间 
+  UserBaseInfo user_info = 3;         // 评论用户信息
+}
+
+message InteractDetailRes {
+  repeated LikeInfo likes = 1;        // 赞明细
+  repeated CommentInfo comments = 2;  // 评论明细
+}
+
+message InteractNoticeReq {
+  string type = 1;                   // 类型
+  int32 page = 2;                    // 页号
+}
+
+message RecordBaseInfo {
+  string id = 1;                     // 记录id
+  string picture = 2;                // 记录图片
+  string text = 3;                   // 记录文本内容
+}
+
+message InteractNode {               // 一条互动通知数据
+  string type = 1;
+  CommentInfo comment_info = 2;
+  LikeInfo like_info = 3;
+  RecordBaseInfo record_info = 4;
+}
+
+message InteractNoticeRes {
+  int32 page = 1;                          // 页号
+  repeated InteractNode interacts = 2;     // 互动列表
+}
 
 
 //------------ 用户资料管理 -----------------
@@ -84,12 +155,12 @@ message ImgRes {
 // --------- 业务数据管理 ----------------
 // 疾病相关 
 message ElementList {
-  repeated string elements = 1;          // 数据列表
+  repeated string elements = 1;              // 数据列表
 }
 
 // 地址相关
 message AddressReq {
-  string address_code = 1;               // 待查行政区域编码
+  string address_code = 1;                   // 待查行政区域编码
 }
 message AddressRes {
   map<string, string> address = 1;           // 地址编码到名称的映射表
@@ -100,5 +171,5 @@ message TagReq {
   string tag_class = 1;                      // 标签类型名
 }
 message TagRes {
-  map<string, ElementList> tags = 1;   // 标签数据列表
+  map<string, ElementList> tags = 1;        // 标签数据列表
 }

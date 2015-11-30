@@ -7,6 +7,7 @@ cc_library(
     'Profile.cc',
     'Business.cc',
     'CgiCode.cc',
+    'Interact.cc',
   ],
   deps = [
     '//proto:cgi_req_proto',
