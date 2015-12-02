@@ -28,6 +28,12 @@ class RedisCpp : public RedisBase {
     // return RedisCodeOK on sucess, other on error
     RedisCode Query(std::string cmd, const std::string &key, const std::string &value);
 
+    // cmd input 3 param, test cmd exec status
+    // such as HSET key field field_value
+    // return RedisCodeOK on success, other on error
+    RedisCode Query(std::string cmd, const std::string &key, 
+        const std::string &param1, const std::string &param2);
+
     // cmd input 2 param, return a int value
     // such as SISMEMBER key member 
     // return RedisCodeOK on sucess and set *value,  other on error
@@ -38,6 +44,12 @@ class RedisCpp : public RedisBase {
     // such as GET key
     // return RedisCodeOK on sucess, RedisCodeNil on key not found, other on error
     RedisCode Query(std::string cmd, const std::string &key, std::string *value);
+
+    // cmd input 2 param, return a string value
+    // such as HGET key
+    // return RedisCodeOK on sucess, RedisCodeNil on key not found, other on error
+    RedisCode Query(std::string cmd, const std::string &key,
+        const std::string &param1, std::string *value);
 
     // cmd input 1 param, return a vector of values
     // such as SMEMBERS key
@@ -56,6 +68,12 @@ class RedisCpp : public RedisBase {
     // return RedisCodeOK on success, other on error
     RedisCode Query(std::string cmd, const std::vector<std::string> &keys,
         std::vector<std::string> *values);
+
+    // cmd input a key and a range, return a set of values
+    // such as LRANGE key start stop
+    // return RedisCodeOK on success, other on error
+    RedisCode Query(std::string cmd, const std::string &key, int start,
+        int stop, std::vector<std::string> *values);
 };
 
 #endif // COMMON_REDIS_UTILS_REDISCPP_H_

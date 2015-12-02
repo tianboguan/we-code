@@ -1,5 +1,6 @@
 #include "cgi/lib/ParseCgiReq.h"
 #include "cgi/lib/CgiCode.h"
+#include "common/utils/string_utils.h"
 
 #define CHECK(key, escape)      \
   ret_ = Check(key, escape);      \
@@ -83,6 +84,50 @@ int ParseCgiReq::Parse(AddressReq &address) {
 int ParseCgiReq::Parse(TagReq &tag) {
   CHECK("tag_class", true);
   tag.set_tag_class(params_["tag_class"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(LikeReq &like) {
+  CHECK("record_id", true);
+  like.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(UnlikeReq &unlike) {
+  CHECK("record_id", true);
+  unlike.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(CommentReq &comment) {
+  CHECK("record_id", true);
+  CHECK("comment_id", true);
+  CHECK("comment", true);
+  comment.set_record_id(params_["record_id"]);
+  comment.set_comment_id(params_["comment_id"]);
+  comment.set_comment(params_["comment"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(UncommentReq &uncomment) {
+  CHECK("record_id", true);
+  CHECK("comment_id", true);
+  uncomment.set_record_id(params_["record_id"]);
+  uncomment.set_comment_id(params_["comment_id"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(InteractDetailReq &interact_detail) {
+  CHECK("record_id", true);
+  interact_detail.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+
+int ParseCgiReq::Parse(InteractListReq &interact_list) {
+  CHECK("page", true);
+  int page;
+  string_to_value(params_["page"], page);
+  interact_list.set_page(page);
   return kCgiCodeOk;
 }
 

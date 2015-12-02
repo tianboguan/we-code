@@ -46,3 +46,15 @@ cc_binary(
     '//cgi/lib:cgi',
   ]
 )
+
+cc_binary(
+  name = 'interact.cgi',
+  srcs = [
+    'interact_cgi.cc',
+  ],
+  deps = [
+    '//thirdparty/glog:glog',
+    '//common/cgi_utils:CgiUtils',
+    '//cgi/lib:cgi',
+  ]
+)

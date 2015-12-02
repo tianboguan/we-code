@@ -251,7 +251,7 @@ int Account::CheckLogin() {
   return kCgiCodeOk;
 }
 
-string Account::CreateCode() {
+std::string Account::CreateCode() {
   int code = rand() % 10000;
   char buf[6];
   bzero(buf, sizeof(buf));
@@ -259,7 +259,7 @@ string Account::CreateCode() {
   return buf;
 }
 
-string Account::CreateToken() {
+std::string Account::CreateToken() {
   char buf[32];
   bzero(buf, sizeof(buf));
   snprintf(buf, sizeof(buf), "%s%ld", user_.c_str(), time(NULL));
@@ -289,7 +289,7 @@ int Account::Del() {
   return kCgiCodeOk;
 }
 
-string Account::GetUserId(const string &phone) {
+std::string Account::GetUserId(const std::string &phone) {
   std::string temp;
   temp.assign(phone.rbegin(), phone.rend());
   int64_t num;

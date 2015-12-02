@@ -25,6 +25,20 @@ const std::string kProfilePrefix = "uf_";
 // user stat
 const std::string kStatPrefix= "us_";
 
+// ------ record info cache key -----------------
+// record
+const std::string kRecordPrefix = "rc_";
+
+
+// -------- interact info cache key -------------
+// inter data it_[interact id]
+// const std::string kInteractPrefix = "it_";
+// record inter data list it_[record id]
+const std::string kRecordInteractPrefix = "ri_";
+// notice inter data in_[user]
+const std::string kInteractNoticePrefix = "no_";
+// history inter data hi_[user]
+const std::string kInteractHistoryPrefix = "hi_";
 
 // ------ business data cache key ------------
 // disease

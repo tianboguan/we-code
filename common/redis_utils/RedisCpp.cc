@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include "common/utils/string_utils.h"
 #include "thirdparty/plog/Log.h"
 #include "thirdparty/hiredis-master/hiredis.h"
 
@@ -72,6 +73,30 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key, const std::st
   return RedisCodeOK;
 }
 
+// cmd input 3 param, test cmd exec status
+// such as HSET key field field_value
+// return RedisCodeOK on success, other on error
+RedisCode RedisCpp::Query(std::string cmd, const std::string &key, 
+    const std::string &param1, const std::string &param2) {
+  if (Connect()) {
+    return RedisCodeError;
+  }
+
+  std::string format = cmd + " %b %b %b ";
+  redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
+      key.data(), key.size(),
+      param1.data(), param1.size(),
+      param2.data(), param2.size());
+  if (reply->type == REDIS_REPLY_ERROR) {
+    LOG_ERROR << cmd << " " << key << ", info: " << reply->str;
+    freeReplyObject(reply);
+    return RedisCodeError;
+  } 
+
+  freeReplyObject(reply);
+  return RedisCodeOK;
+}
+
 // cmd input 2 param, return a int value
 // such as SISMEMBER key member 
 // return RedisCodeOK on sucess and set *value,  other on error
@@ -106,6 +131,31 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key, std::string *
   std::string format = cmd + " %b ";
   redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
       key.data(), key.size());
+  if (reply->type == REDIS_REPLY_ERROR) {
+    LOG_ERROR << cmd << " " << key << ", info: " << reply->str;
+    freeReplyObject(reply);
+    return RedisCodeError;
+  } else if (reply->type == REDIS_REPLY_NIL) {
+    freeReplyObject(reply);
+    return RedisCodeNil;
+  }
+
+  value->assign(reply->str, reply->len);
+  freeReplyObject(reply);
+  return RedisCodeOK;
+}
+// cmd input 2 param, return a string value
+// such as HGET key
+// return RedisCodeOK on sucess, RedisCodeNil on key not found, other on error
+RedisCode RedisCpp::Query(std::string cmd, const std::string &key,
+    const std::string &param1, std::string *value) {
+  if (Connect()) {
+    return RedisCodeError;
+  }
+
+  std::string format = cmd + " %b %b ";
+  redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
+      key.data(), key.size(), param1.data(), param1.size());
   if (reply->type == REDIS_REPLY_ERROR) {
     LOG_ERROR << cmd << " " << key << ", info: " << reply->str;
     freeReplyObject(reply);
@@ -183,6 +233,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key,
   freeReplyObject(reply);
   return RedisCodeOK;
 }
+
 // cmd input a set of params, return a set of values
 // such as MGET key1 key2 key3 ...
 // return RedisCodeOK on success, other on error
@@ -245,5 +296,41 @@ RedisCode RedisCpp::Query(std::string cmd, const std::vector<std::string> &keys,
   delete [] argv_len;
 
   return RedisCodeOK;
+}
+
+// cmd input a key and a range, return a set of values
+// such as LRANGE key start stop
+// return RedisCodeOK on success, other on error
+RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int start,
+    int stop, std::vector<std::string> *values) {
+  if (Connect()) {
+    return RedisCodeError;
+  }
+
+  std::string format = cmd + " %b %s %s ";
+  redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
+      key.data(), key.size(), value_to_string(start).c_str(),
+      value_to_string(stop).c_str());
+  if (reply->type == REDIS_REPLY_ERROR) {
+    LOG_ERROR << cmd << " " << key << " " << start
+      << " " << stop << ", info: " << reply->str;
+    freeReplyObject(reply);
+    return RedisCodeError;
+  } 
+
+  if (reply->type == REDIS_REPLY_ARRAY) {
+    for (uint64_t i = 0; i < reply->elements; i++) {
+      std::string v;
+      v.assign(reply->element[i]->str, reply->element[i]->len);
+      values->push_back(v);
+    }
+    freeReplyObject(reply);
+    return RedisCodeOK;
+  } else {
+    LOG_ERROR << cmd << " " << key << " " << start
+      << " " << stop << ", return not a array!";
+    freeReplyObject(reply);
+    return RedisCodeError;
+  }
 }
 
