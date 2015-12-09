@@ -77,9 +77,30 @@ message RecordBaseInfo {
   string text = 3;                     // 记录文本内容
 }
 
-message InterElement {                  // 一条互动详细数据
+message InterElement {                 // 一条互动详细数据
   string type = 1;                     // 互动数据类型
   InterData inter_data = 2;            // 互动数据
   RecordBaseInfo record_info = 3;      // 互动记录数据
+}
+
+
+// 记录相关数据
+// 单条记录内容
+message RecordData {
+  string id = 1;
+  string user = 2;
+  int64 time = 3;
+  string weather = 4;
+  string mood = 5;
+  string status = 6;
+  string text = 7;
+  string address = 8;
+  bool public = 9;
+  repeated string picture = 10;
+}
+
+// 一个用户下的记录列表
+message UserRecordData {
+  repeated string record_ids = 1;
 }
 

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <map>
-#include "common/utils/string_utils.h"
+#include "common/utils/StringUtils.h"
 #include "thirdparty/plog/Log.h"
 #include "thirdparty/hiredis-master/hiredis.h"
 

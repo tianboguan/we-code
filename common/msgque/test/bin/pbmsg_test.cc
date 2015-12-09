@@ -17,6 +17,12 @@ int main(int argc, char** argv) {
     return 1;
   }
 
+  if (que.isEmpty()) {
+    cout << "que is empty" << endl;
+  } else {
+    cout << "overflow: " << que.overflowedCount() << endl; 
+  }
+
   int i = 0;
   while(true) {
     HelloMsg hello_msg;
@@ -30,8 +36,17 @@ int main(int argc, char** argv) {
     if (!que.enq(hello_msg)) {
       cout << "enq msg failed! " << endl;
       break;
+    } else {
+      cout << "enq msg success! index: " << ++i << endl;
     }
-    i++;
+  }
+
+  cout << "\nafter enq ----------------------" << endl;
+
+  if (que.isEmpty()) {
+    cout << "que is empty";
+  } else {
+    cout << "overflow: " << que.overflowedCount() << endl; 
   }
 
   int j = 0;
@@ -41,7 +56,7 @@ int main(int argc, char** argv) {
       cout << "----------- index: " << ++j << ", total: " << i << "---------------------" << endl;
       cout << msg.DebugString() << endl;
     } else {
-      return -1;
+      break;
     }
   }
 

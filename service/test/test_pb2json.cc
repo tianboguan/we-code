@@ -6,7 +6,7 @@
 #include <google/protobuf/descriptor.h>
 #endif
 #include "proto/hello_proto/hello.pb.h"
-#include "common/utils/Pb2Json.h"
+#include "common/utils/PbJsonUtil.h"
 
 int main() {
   HelloMsg hello_msg;
@@ -36,8 +36,13 @@ int main() {
   cout << "pb debug string: "<< endl;
   cout << hello_msg.DebugString() << endl;
 #else
-  cout << Pb2Json(hello_msg, false) << endl;
-  cout << Pb2Json(hello_msg, true) << endl;
+  string result;
+  PbJsonUtil<HelloMsg> util; 
+  if (util.Pb2Json(hello_msg, &result)) {
+    cout << result << endl;
+  } else {
+    cout << "error cao" << endl;
+  }
 #endif
   return 0;
 }

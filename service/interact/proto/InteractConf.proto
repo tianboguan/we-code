@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message IneractQueueConf {
+  string queue_path = 1;
+  int64 shm_size = 2;
+}
+
+message InteractDirConf {
+  string invoice_dir = 1;
+  string cache_dir = 2;
+  string notice_dir = 3;
+  string statistic_dir = 4;
+}
+
+message InteractConf {
+  IneractQueueConf queue = 1;
+  InteractDirConf dir = 2;
+  int32 port = 3;
+}

@@ -133,28 +133,24 @@ int main(int argc, char **argv) {
     int ret;
     ret = rp.Query("SET", key, value);
     if (ret != RedisCodeOK) {
-      cout << "err: " << rp.Error() << endl;
       return -1;
     }
 
     HelloMsg ret_value;
     ret = rp.Query("GET", key, &ret_value);
     if (ret != 0) {
-      cout << "err: " << rp.Error() << endl;
       return -1;
     }
     cout << "get value: " << ret_value.DebugString() << endl;
 
     ret = rp.Query("DEL", key);
     if (ret != 0) {
-      cout << "err: " << rp.Error() << endl;
       return -1;
     }
     cout << "del success!" << endl;
 
     ret = rp.Query("GET", key, &ret_value);
     if (ret != RedisCodeOK && ret != RedisCodeNil) {
-      cout << "err: " << rp.Error() << endl;
       return -1;
     }
   }
