@@ -1,5 +1,5 @@
 proto_library(
-    name = 'cgi_req_proto',
+    name = 'CgiReqProto',
     srcs = [ 
         'CgiReq.proto'
     ],  
@@ -9,10 +9,29 @@ proto_library(
 )
 
 proto_library(
-    name = 'cache_data_proto',
+    name = 'UserProto',
     srcs = [ 
-        'CacheData.proto'
+        'user.proto'
     ],  
     deps = [ 
     ]   
 )
+
+
+# proto_library(
+#     name = 'InteractProto',
+#     srcs = [ 
+#         'interact.proto'
+#     ],  
+#     deps = [ 
+#     ]   
+# )
+# 
+# proto_library(
+#     name = 'RecordProto',
+#     srcs = [ 
+#         'record.proto'
+#     ],  
+#     deps = [ 
+#     ]   
+# )
