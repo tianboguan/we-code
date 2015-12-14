@@ -1,23 +1,25 @@
 cc_binary(
-  name = 'get_account',
+  name = 'account_tool',
   srcs = [
-    'get_account.cc',
+    'account_tool.cc',
   ],
   deps = [
     '//cgi/lib:cgi',
+    '//common/app:AppComm',
     '//thirdparty/gflags:gflags',
-    '//common/cgi_utils:CgiUtils'
+    '//common/redis_utils:RedisUtils',
   ]
 )
 
 cc_binary(
-  name = 'del_account',
+  name = 'profile_tool',
   srcs = [
-    'del_account.cc',
+    'profile_tool.cc',
   ],
   deps = [
     '//cgi/lib:cgi',
+    '//common/app:AppComm',
     '//thirdparty/gflags:gflags',
-    '//common/cgi_utils:CgiUtils'
+    '//common/redis_utils:RedisUtils',
   ]
 )
