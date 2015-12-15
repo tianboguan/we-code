@@ -21,7 +21,7 @@ class RedisCpp : public RedisBase {
     // cmd input 1 param, return a int value
     // such as: EXISTS key
     // return RedisCodeOK on sucess, other on error
-    RedisCode Query(std::string cmd, const std::string &key, int *value);
+    RedisCode Query(std::string cmd, const std::string &key, int64_t *value);
 
     // cmd input 2 params, test cmd exec status 
     // such as: SET key value
@@ -29,7 +29,7 @@ class RedisCpp : public RedisBase {
     RedisCode Query(std::string cmd, const std::string &key, const std::string &value);
 
     // cmd input 3 param, test cmd exec status
-    // such as HSET key field field_value
+    // such as HSET/HINCRBY key field field_value
     // return RedisCodeOK on success, other on error
     RedisCode Query(std::string cmd, const std::string &key, 
         const std::string &param1, const std::string &param2);
@@ -74,6 +74,12 @@ class RedisCpp : public RedisBase {
     // return RedisCodeOK on success, other on error
     RedisCode Query(std::string cmd, const std::string &key, int start,
         int stop, std::vector<std::string> *values);
+
+    // cmd input a key and a range, test cmd exec status 
+    // such as LTRIM key start stop
+    // return RedisCodeOK on success, other on error
+    RedisCode Query(std::string cmd, const std::string &key, int start,
+        int stop);
 };
 
 #endif // COMMON_REDIS_UTILS_REDISCPP_H_

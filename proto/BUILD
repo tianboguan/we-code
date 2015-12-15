@@ -4,6 +4,10 @@ proto_library(
         'CgiReq.proto'
     ],  
     deps = [ 
+      '//proto:UserProto',
+      '//proto:ProfileProto',
+      '//proto:RecordProto',
+      '//proto:InteractProto'
       #'//common/rpc:qzone_rpc_service_proto',
     ]   
 )
@@ -17,21 +21,39 @@ proto_library(
     ]   
 )
 
+proto_library(
+    name = 'ProfileProto',
+    srcs = [ 
+        'profile.proto'
+    ],  
+    deps = [ 
+    ]   
+)
 
-# proto_library(
-#     name = 'InteractProto',
-#     srcs = [ 
-#         'interact.proto'
-#     ],  
-#     deps = [ 
-#     ]   
-# )
-# 
-# proto_library(
-#     name = 'RecordProto',
-#     srcs = [ 
-#         'record.proto'
-#     ],  
-#     deps = [ 
-#     ]   
-# )
+proto_library(
+    name = 'FollowProto',
+    srcs = [ 
+        'follow.proto'
+    ],  
+    deps = [ 
+    ]   
+)
+
+proto_library(
+    name = 'InteractProto',
+    srcs = [ 
+        'interact.proto'
+    ],  
+    deps = [ 
+      '//proto:RecordProto'
+    ]   
+)
+
+proto_library(
+    name = 'RecordProto',
+    srcs = [ 
+        'record.proto'
+    ],  
+    deps = [ 
+    ]   
+)

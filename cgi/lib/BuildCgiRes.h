@@ -2,26 +2,44 @@
 #define CGI_LIB_BUILDCGIRES_H_
 #include <string>
 #include <iostream>
-#include "common/utils/PbJsonUtil.h"
-#include "cgi/lib/CgiCode.h"
+#include <sstream>
+#include "common/pbjson/pbjson.h"
+#include "common/app/CgiCode.h"
+#include "thirdparty/plog/Log.h"
 
 using namespace std;
 
 template<class T>
 void SendPostResWithData(int code, const T &data) {
-  PbJsonUtil<T> util;
   string json;
-  util.Pb2Json(data, &json);
-  cout << "Content-type: text/script\n\n"
-      << "code: " << code << "\n"
-      << "message: " << GetErrMsg(code) << "\n"
-      << "data: " << json << "\n";
+  pbjson::pb2json(&data, json);
+
+  ostringstream oss;
+  oss << "Content-type: text/script\n\n"
+      << "{\"code\":" << code << ","
+      << "\"message\":\"" << GetErrMsg(code) << "\","
+      << "\"data\":" << json << "}\n";
+
+  LOG_ERROR << "cgi response";
+  LOG_ERROR << "------------------------";
+  LOG_ERROR << oss.str();
+
+  cout << oss.str();
+
 }
 
 void SendPostResWithoutData(int code) {
-  cout << "Content-type: text/script\n\n"
-      << "code: " << code << "\n"
-      << "message: " << GetErrMsg(code)<< "\n";
+
+  ostringstream oss;
+  oss << "Content-type: text/script\n\n"
+      << "{\"code\":" << code << ","
+      << "\"message\":\"" << GetErrMsg(code)<< "\"}\n";
+
+  LOG_ERROR << "cgi response";
+  LOG_ERROR << "------------------------";
+  LOG_ERROR << oss.str();
+
+  cout << oss.str();
 }
 
 

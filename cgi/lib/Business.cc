@@ -1,11 +1,11 @@
 #include "cgi/lib/Business.h"
-#include "cgi/lib/CacheKeys.h"
-#include "cgi/lib/CgiCode.h"
+#include "common/app/RedisKeys.h"
 #include "thirdparty/plog/Log.h"
+#include "common/app/CgiCode.h"
 
 int Business::Disease(ElementList *res) {
   std::vector<std::string> values;
-  if (redis_.Query("SMEMBERS", kDisease, &values) != RedisCodeOK) {
+  if (redis_.Query("SMEMBERS", GetDiseaseKey(), &values) != RedisCodeOK) {
     return kCgiCodeSystemError;
   }
 
@@ -19,9 +19,9 @@ int Business::Disease(ElementList *res) {
 }
 
 int Business::Address(const AddressReq &req, AddressRes *res) {
-  std::string key(kAddressPrefix + req.address_code());
   std::map<std::string, std::string> address;
-  if (redis_.Query("HGETALL", key, &address) != RedisCodeOK) {
+  if (redis_.Query("HGETALL", GetAddressKey(req.address_code()), &address)
+      != RedisCodeOK) {
     return kCgiCodeSystemError;
   }
 
@@ -74,11 +74,9 @@ int Business::Tag(const TagReq &req, TagRes *res) {
   return kCgiCodeOk;
 }
 
-int Business::GetTags(const std::string &key,
+int Business::GetTags(const std::string &tag_name,
     std::vector<std::string> *values) {
-  if (redis_.Query("SMEMBERS", key, values) != RedisCodeOK) {
-    return kCgiCodeSystemError;
-  }
-  return kCgiCodeOk;
+  return redis_.Query("SMEMBERS", GetTagKey(tag_name), values) == RedisCodeOK ?
+    kCgiCodeOk : kCgiCodeSystemError;
 }
 

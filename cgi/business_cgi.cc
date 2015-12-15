@@ -6,7 +6,6 @@
 #include "cgi/lib/Login.h"
 #include "cgi/lib/ParseCgiReq.h"
 #include "cgi/lib/BuildCgiRes.h"
-#include "common/utils/PbJsonUtil.h"
 
 using namespace std;
 

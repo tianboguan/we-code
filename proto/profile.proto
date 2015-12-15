@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+message UserProfile {
+  string user = 1;
+  string nickname = 2;
+  string head = 3;
+  string agender = 4;
+  int64 birthday = 5;
+  string address = 6;
+  string signature = 7;
+  string disease = 8;
+  string role = 9;
+  int64 enrolltime = 10;
+}
+
+message UserStat {
+  string user = 1;
+  int32 login = 2;
+  int32 follow = 3;
+  int32 followed = 4;
+  int32 record = 5;
+  int32 comment = 6;
+  int32 commented = 7;
+  int32 like = 8;
+  int32 liked = 9;
+}
+
+
+message StripUserProfile {
+  string user = 1;                    // 用户帐号
+  string nickname = 2;                // 昵称
+  string head = 3;                    // 头像
+}
+
+message TUtf8 {
+  string test = 1;
+}
+

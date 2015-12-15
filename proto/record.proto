@@ -4,7 +4,7 @@ import 'proto/user.proto';
 
 // 记录相关数据
 // 单条记录内容
-message RecordData {
+message Record {
   string id = 1;
   string user = 2;
   int64 time = 3;
@@ -19,30 +19,30 @@ message RecordData {
 }
 
 // 记录概要内容
-message RecordBaseInfo {
+message StripRecord {
   string id = 1;                       // 记录id
   string picture = 2;                  // 记录图片
   string text = 3;                     // 记录文本内容
 }
 
-service Record {
-  // Sends a greeting
-  rpc HandleRecord (RecordReq) returns (RecordRes) {}
-}
-
-enum RecordOP {
-  RECORD_OP_INVALID = 0;               // 非法操作
-  RECORD_OP_ADD = 1;                   // 新增
-  RECORD_OP_DELETE = 2;                // 删除
-}
-
-message RecordReq {
-  RecordOP op = 1;
-  string id = 2;
-  int64 time = 3;
-}
-
-message RecordRes {
-  int32 code = 1;
-  string id = 2;
-}
+//service Record {
+//  // Sends a greeting
+//  rpc HandleRecord (RecordReq) returns (RecordRes) {}
+//}
+//
+//enum RecordOP {
+//  RECORD_OP_INVALID = 0;               // 非法操作
+//  RECORD_OP_ADD = 1;                   // 新增
+//  RECORD_OP_DELETE = 2;                // 删除
+//}
+//
+//message RecordReq {
+//  RecordOP op = 1;
+//  string id = 2;
+//  int64 time = 3;
+//}
+//
+//message RecordRes {
+//  int32 code = 1;
+//  string id = 2;
+//}

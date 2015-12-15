@@ -6,7 +6,7 @@
 #include <sstream>
 #include "proto/CgiReq.pb.h"
 #include "common/redis_utils/RedisPb.h"
-#include "proto/CacheData.pb.h"
+#include "proto/user.pb.h"
 
 class Account{
   public:
@@ -21,11 +21,14 @@ class Account{
     int VerifyCode(const VerifyCodeReq &verify_code);
     int CheckLogin();
 
+#if 0
     int Read(AccountInfo &account_info);
     int Del();
+#endif
 
   private:
-    std::string GetUserId(const std::string &phone);
+    RedisCode GetUser(const std::string &phone, std::string *user);
+    RedisCode CreateUser(const std::string &phone, std::string *user);
     std::string CreateCode();
     std::string CreateToken();
 

@@ -19,14 +19,6 @@ cc_binary(
 )
 
 cc_binary(
-  name = 'test_pb2json',
-  srcs = 'test_pb2json.cc',
-  deps = [
-    '//proto/hello_proto:hello_proto',
-  ]
-)
-
-cc_binary(
   name = 'GLogTest',
   srcs = 'GLogTest.cc',
   deps = [

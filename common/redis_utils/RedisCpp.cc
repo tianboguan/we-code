@@ -32,7 +32,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key) {
 // cmd input 1 param, return a int value
 // such as: EXISTS key
 // return RedisCodeOK on sucess, other on error
-RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int *value) {
+RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int64_t *value) {
   if (Connect()) {
     return RedisCodeError;
   }
@@ -46,7 +46,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int *value) {
     return RedisCodeError;
   }
 
-  *value = int(reply->integer);
+  *value = int64_t(reply->integer);
   freeReplyObject(reply);
   return RedisCodeOK;
 }
@@ -334,3 +334,23 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int start,
   }
 }
 
+RedisCode RedisCpp::Query(std::string cmd, const std::string &key, int start,
+        int stop) {
+  if (Connect()) {
+    return RedisCodeError;
+  }
+
+  std::string format = cmd + " %b %s %s ";
+  redisReply *reply = (redisReply *)redisCommand(c_, format.c_str(),
+      key.data(), key.size(), value_to_string(start).c_str(),
+      value_to_string(stop).c_str());
+  if (reply->type == REDIS_REPLY_ERROR) {
+    LOG_ERROR << cmd << " " << key << " "<< start << " " << stop << ", info: "
+      << reply->str;
+    freeReplyObject(reply);
+    return RedisCodeError;
+  }
+
+  freeReplyObject(reply);
+  return RedisCodeOK;
+}

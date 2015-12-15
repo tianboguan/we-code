@@ -1,1 +1,1 @@
-all rpc message locate here
+all rpc message and cache data struct are locate here

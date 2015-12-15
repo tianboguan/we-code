@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import 'proto/user.proto';
+import 'proto/profile.proto';
 import 'proto/record.proto';
 
 enum InterType {
@@ -10,66 +11,53 @@ enum InterType {
 }
 
 // 一条互动记录的原始信息
-message InteractRoughData {
+message RoughInteract {
   string id = 1;                      // 互动id
   string user = 2;                    // 用户
   int64 time = 3;                     // 互动时间
   InterType type = 4;                 // 互动类型
-  string comment = 5;                 // 互动内容,只对评论有效
+  string text = 5;                    // 互动内容,只对评论有效
   string record_id = 6;               // 互动记录id
   string target_interact_id = 7;      // 互动对象互动id
   bool is_delete = 8;                 // 是否删除
 }
 
-// 记录下的单条互动cache数据
-message InteractBaseData {
+// 精减互动数据
+message StripInteract {
   string id = 1;                      // 互动id
   InterType type = 2;                 // 互动类型
   int64 time = 3;                     // 互动时间 
-  string comment = 4;                 // 评论内容
+  string text = 4;                    // 评论内容
   string target_nickname = 5;         // 回复目标用户的昵称
-  UserBaseInfo user_info = 6;         // 用户信息
 }
 
-// 单条互动cache数据,需包含互动和互动对象
-message InteractExtendData {
-  string type = 1;
-  InteractBaseData interact = 2;
-  RecordBaseInfo record = 3;
+// 扩展互动数据
+message ExtInteract {
+  StripInteract interact = 1;        // 互动
+  StripUserProfile user = 2;         // 用户
+  StripRecord record = 3;            // 记录
 }
 
 
 // 互动远程服务
-service Interact {
-  rpc HandleInteract (InteractReq) returns (InteractRes) {}
-}
-
-enum InterOP {
-  INTER_OP_INVALID = 0;               // 非法操作
-  INTER_OP_ADD = 1;                   // 新增
-  INTER_OP_DELETE = 2;                // 删除
-}
-
-message InteractReq {
-  InterOP op = 1;
-  string id = 2;
-  int64 time = 3;
-}
-
-message InteractRes {
-  int32 code = 1;
-  string id = 2;
-}
-
-//message RecordBaseInfo {
-//  string id = 1;                       // 记录id
-//  string picture = 2;                  // 记录图片
-//  string text = 3;                     // 记录文本内容
+//service Interact {
+//  rpc HandleInteract (InteractReq) returns (InteractRes) {}
 //}
-
-// message InterElement {                 // 一条互动详细数据
-//  string type = 1;                     // 互动数据类型
-//  InterData inter_data = 2;            // 互动数据
-//  RecordBaseInfo record_info = 3;      // 互动记录数据
-// }
-
+//
+//enum InterOP {
+//  INTER_OP_INVALID = 0;               // 非法操作
+//  INTER_OP_ADD = 1;                   // 新增
+//  INTER_OP_DELETE = 2;                // 删除
+//}
+//
+//message InteractReq {
+//  InterOP op = 1;
+//  string id = 2;
+//  int64 time = 3;
+//}
+//
+//message InteractRes {
+//  int32 code = 1;
+//  string id = 2;
+//}
+//

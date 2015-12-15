@@ -16,4 +16,5 @@ message InteractConf {
   IneractQueueConf queue = 1;
   InteractDirConf dir = 2;
   int32 port = 3;
+  int32 concurrent = 4;
 }

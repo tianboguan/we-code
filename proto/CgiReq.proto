@@ -2,8 +2,9 @@
 syntax = "proto3";
 
 import 'proto/user.proto';
-// import 'proto/record.proto';
-// import 'proto/interact.proto';
+import 'proto/profile.proto';
+import 'proto/record.proto';
+import 'proto/interact.proto';
 
 // cgi公共信息
 message CgiBaseInfo {
@@ -48,19 +49,24 @@ message AccountRes {
   string token = 2;
 }
 
-// //-------------- 关系链相关接口 -------------
-// message FollowReq {
-//   string target_user = 1;
-// }
-// 
-// message FollowListRes {
-//   repeated UserProfile users = 1;
-// }
-// 
-// message FollowStatusRes {
-//   bool follow = 1;
-// }
-// 
+//-------------- 关系链相关接口 -------------
+message FollowReq {
+  string target_user = 1;
+}
+
+message FollowNode {
+  StripUserProfile user = 1;       // 用户基础信息
+  bool follow = 2;                 // 'yes' | 'no'
+}
+
+message FollowListRes {
+  repeated FollowNode node = 1;
+}
+
+message FollowStatusRes {
+  bool follow = 1;                // 'yes' | 'no'
+}
+
 // //-------------- 记录处理相关接口 --------------
 // // message CreateRecordReq {
 // //   string weather = 1;          // 天气
@@ -152,45 +158,45 @@ message AccountRes {
 // //  int32 page = 1;                      // 页号
 // //  repeated InterElement interacts = 2; // 互动列表
 // //}
-// 
-// 
-// //------------ 用户资料管理 -----------------
-// // 个人资料profile见CacheData.proto里的 UserProfile
-// message QueryProfileReq {
-//   string target_user = 1;        // 目标用户
-// }
-// 
-// message AltProfileReq {
-//   string profile = 1;            // profile jason串
-// }
-// 
-// // alt head response 
-// message ImgRes {
-//   string appid = 1;              // 应用
-//   string bucket = 2;             // 空间
-//   string fileid = 3;             // 图片id
-//   string sign = 4;               // 上传签名
-//   string callback = 5;           // 回调数据
-// }
-// 
-// // --------- 业务数据管理 ----------------
-// // 疾病相关 
-// message ElementList {
-//   repeated string elements = 1;              // 数据列表
-// }
-// 
-// // 地址相关
-// message AddressReq {
-//   string address_code = 1;                   // 待查行政区域编码
-// }
-// message AddressRes {
-//   map<string, string> address = 1;           // 地址编码到名称的映射表
-// }
-// 
-// // tag 相关
-// message TagReq {
-//   string tag_class = 1;                      // 标签类型名
-// }
-// message TagRes {
-//   map<string, ElementList> tags = 1;        // 标签数据列表
-// }
+
+
+//------------ 用户资料管理 -----------------
+message QueryProfileReq {
+  string target_user = 1;        // 目标用户
+}
+
+message AltProfileReq {
+  string profile = 1;            // profile jason串
+}
+
+// alt head response 
+message ImgRes {
+  string appid = 1;              // 应用
+  string bucket = 2;             // 空间
+  string fileid = 3;             // 图片id
+  string sign = 4;               // 上传签名
+  string callback = 5;           // 回调数据
+}
+
+
+// --------- 业务数据管理 ----------------
+// 疾病相关 
+message ElementList {
+  repeated string elements = 1;              // 数据列表
+}
+
+// 地址相关
+message AddressReq {
+  string address_code = 1;                   // 待查行政区域编码
+}
+message AddressRes {
+  map<string, string> address = 1;           // 地址编码到名称的映射表
+}
+
+// tag 相关
+message TagReq {
+  string tag_class = 1;                      // 标签类型名
+}
+message TagRes {
+  map<string, ElementList> tags = 1;        // 标签数据列表
+}

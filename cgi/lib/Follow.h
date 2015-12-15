@@ -2,16 +2,12 @@
 #define CGI_LIB_FOLLOW_H_
 
 #include <string>
-#include <map>
-#include <sstream>
-#include "common/redis_utils/RedisCpp.h"
-#include "common/redis_utils/RedisPb.h"
 #include "proto/CgiReq.pb.h"
-#include "proto/CacheData.pb.h"
+#include "common/app/FollowApi.h"
 
 class Follow {
   public:
-    Follow(const std::string &user) : user_(user) {}; 
+    Follow(const std::string &user) : follow_api_(user) {}; 
 
     int Add(const FollowReq &req);
     int Del(const FollowReq &req);
@@ -20,17 +16,13 @@ class Follow {
     int FollowStatus(const FollowReq &req, FollowStatusRes *res);
     int Block(const FollowReq &req);
     int DeBlock(const FollowReq &req);
-    int IsBlocked(const std::string &target_user, bool *blocked);
 
   private:
     int BuildFollowListRes(const std::vector<std::string> &users,
-        std::string key_prefix, FollowListRes *res);
+        FollowListRes *res);
 
   private:
-    std::string user_;
-    std::ostringstream err_oss_;
-    RedisCpp redis_;
-    RedisStr2Pb<UserProfile> profile_redis_;
+    FollowApi follow_api_;
 };
 
 #endif // CGI_LIB_FOLLOW_H_

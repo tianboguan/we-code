@@ -6,6 +6,10 @@
 #include "common/redis_utils/RedisCpp.h"
 #include "proto/CgiReq.pb.h"
 
+const std::string kTagWeather = "weather";
+const std::string kTagMood = "mood";
+const std::string kTagStatus = "status";
+
 class Business {
   public:
     Business() {}; 
@@ -18,7 +22,7 @@ class Business {
     int GetTags(const std::string &key, std::vector<std::string> *values);
 
   private:
-    int i_;
+    // int i_;
     RedisCpp redis_;
 };
 

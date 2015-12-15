@@ -41,20 +41,20 @@ cc_binary(
     'business_cgi.cc',
   ],
   deps = [
+    '//cgi/lib:cgi',
     '//thirdparty/glog:glog',
     '//common/cgi_utils:CgiUtils',
-    '//cgi/lib:cgi',
   ]
 )
 
-cc_binary(
-  name = 'interact.cgi',
-  srcs = [
-    'interact_cgi.cc',
-  ],
-  deps = [
-    '//thirdparty/glog:glog',
-    '//common/cgi_utils:CgiUtils',
-    '//cgi/lib:cgi',
-  ]
-)
+#cc_binary(
+#  name = 'interact.cgi',
+#  srcs = [
+#    'interact_cgi.cc',
+#  ],
+#  deps = [
+#    '//thirdparty/glog:glog',
+#    '//common/cgi_utils:CgiUtils',
+#    '//cgi/lib:cgi',
+#  ]
+#)

@@ -6,7 +6,6 @@
 #include "cgi/lib/Login.h"
 #include "cgi/lib/ParseCgiReq.h"
 #include "cgi/lib/BuildCgiRes.h"
-#include "common/utils/PbJsonUtil.h"
 
 using namespace std;
 
@@ -42,17 +41,7 @@ int main(int argc, char *argv[]) {
       SendPostResWithoutData(ret);
       return 0;
     }
-
-    PbJsonUtil<UserProfile> util;
-    UserProfile user_profile;
-    if (util.Json2Pb(req.profile(), &user_profile)) {
-      LOG_ERROR << "json param parse failed! input: "
-        << req.profile() << ", err: " << util.error();
-      SendPostResWithoutData(kCgiCodeParamError);
-      return 0;
-    }
-
-    ret = profile.Alt(user_profile);
+    ret = profile.Alt(req);
     SendPostResWithoutData(ret);
     return 0;
   } else if (action == "alt_head") {
@@ -73,13 +62,14 @@ int main(int argc, char *argv[]) {
       return 0;
     }
     UserProfile user_profile;
-    ret = profile.Query(req.target_user(), &user_profile);
+    ret = profile.Query(req, &user_profile);
     if (ret == kCgiCodeOk) {
       SendPostResWithData(ret, user_profile);
     } else {
       SendPostResWithoutData(ret);
     }
     return 0;
+#if 0
   } else if (action == "stat") {
     QueryProfileReq req;
     ret = parser.Parse(req);
@@ -96,6 +86,7 @@ int main(int argc, char *argv[]) {
       SendPostResWithoutData(ret);
     }
     return 0;
+#endif
   } else {
     LOG_ERROR << "invalid action info: " << action;
     SendPostResWithoutData(kCgiCodeParamError);

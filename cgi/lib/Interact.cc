@@ -1,10 +1,22 @@
 #include "cgi/lib/Interact.h"
 #include <time.h>
 #include "common/utils/string_utils.h"
-#include "cgi/lib/CacheKeys.h"
+// #include "cgi/lib/CacheKeys.h"
+#include "common/app/RedisKeys.h"
 #include "cgi/lib/CgiCode.h"
 #include "thirdparty/plog/Log.h"
+#include "proto/interact.pb.h"
 
+message InteractRoughData {
+  string id = 1;                      // 互动id
+  string user = 2;                    // 用户
+  int64 time = 3;                     // 互动时间
+  InterType type = 4;                 // 互动类型
+  string comment = 5;                 // 互动内容,只对评论有效
+  string record_id = 6;               // 互动记录id
+  string target_interact_id = 7;      // 互动对象互动id
+  bool is_delete = 8;                 // 是否删除
+}
 int Interact::Like(const LikeReq &req) {
   UserProfile profile;
   std::string key = kProfilePrefix + user_;

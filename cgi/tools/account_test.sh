@@ -1,7 +1,8 @@
 #!/bin/bash
 method=$1
 url="http://182.254.220.116/cgi-bin/account.cgi"
-phone="18127813634"
+#phone="18127813634"
+phone="13800138004"
 user="1"
 passwd="222222"
 new_passwd="222222"
@@ -48,7 +49,8 @@ fi
 if [ $method = "reset_pass" ];
 then
   echo "---------------------------reset_pass start -------------------------------"
-  curl -d"action=${method}&user=${user}&phone=${phone}&token=&n_pass=$new_passwd"  $url --trace-ascii post.trace --output post.res
+  #curl -d"action=${method}&user=${user}&phone=${phone}&token=&n_pass=$new_passwd"  $url --trace-ascii post.trace --output post.res
+  curl -d"action=${method}&phone=${phone}&n_pass=$new_passwd"  $url --trace-ascii post.trace --output post.res
   cat post.res
   $read_bin -phone=${phone} -action=get;
   echo "---------------------------reset_pass end-------------------------------"

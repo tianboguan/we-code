@@ -1,52 +1,30 @@
 #include "cgi/lib/Profile.h"
 #include "thirdparty/plog/Log.h"
-#include "cgi/lib/CacheKeys.h"
-#include "cgi/lib/CgiCode.h"
+#include "common/app/CgiCode.h"
 #include "common/tencent_img/TencentImg.h"
+#include "common/app/ProfileApi.h"
+//#include "common/utils/PbJsonUtil.h"
+#include "common/pbjson/pbjson.h"
 
-int Profile::Add(const UserProfile &profile) {
-  RedisCode ret;
-  int value;
-  std::string key = kProfilePrefix + user_;
-  ret = redis_.Query("EXISTS", key, &value);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "check profile exit or not failed! user: " << user_;
-    return kCgiCodeSystemError;
+
+int Profile::Alt(const AltProfileReq &req) {
+  UserProfile profile;
+  std::string err;
+  int ret = pbjson::json2pb(req.profile(), &profile, err);
+  if (ret != 0) {
+    LOG_ERROR << "json param parse failed! input: "
+      << req.profile() << ", err: " << err;
+    return kCgiCodeParamError;
+  }
+  if (user_ != profile.user()) {
+    LOG_ERROR << "user name not valid, user: " << user_ << ", profile:"
+      << profile.DebugString();
+    return kCgiCodeParamError;
   }
 
-  if (value) {
-    LOG_ERROR << user_ << "'s profile is exist, can't to create new one";
-    return kCgiCodeRecreateUserProfile;
-  }
-
-  ret = profile_redis_.Query("SET", key, profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "set user profile failed! user: " << user_;
-    return kCgiCodeSystemError;
-  }
-
-  return kCgiCodeOk;
-}
-
-int Profile::Alt(const UserProfile &profile) {
-  RedisCode ret;
-  UserProfile old_profile;
-  std::string key = kProfilePrefix + user_;
-  ret = profile_redis_.Query("GET", key, &old_profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "get user profile failed! user: " << user_; 
-    return kCgiCodeSystemError;
-  }
-
-  old_profile.MergeFrom(profile);
-
-  ret = profile_redis_.Query("SET", key, old_profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "update user profile failed! user: " << user_; 
-    return kCgiCodeSystemError;
-  }
-
-  return kCgiCodeOk;
+  LOG_ERROR << "alt profile: \n" << profile.DebugString();
+  ProfileApi profile_api;
+  return profile_api.Update(user_, profile);
 }
 
 int Profile::AltHead(ImgRes *res) {
@@ -60,44 +38,40 @@ int Profile::AltHead(ImgRes *res) {
   res->set_sign(tencent_img.GetPrivateSign(file_id));
   res->set_callback("patientsclub");
 
-  RedisCode ret;
   UserProfile profile;
-  std::string key = kProfilePrefix + user_;
-  ret = profile_redis_.Query("GET", key, &profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "get user profile failed! user: " << user_;
-    return kCgiCodeSystemError;
-  }
-
-  profile.set_new_head_url(download_url);
-  ret = profile_redis_.Query("SET", key, profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "update user profile failed! user: " << user_; 
-    return kCgiCodeSystemError;
-  }
-
-  return kCgiCodeOk;
+  profile.set_head(download_url);
+  ProfileApi profile_api;
+  return profile_api.Update(user_, profile);
 }
 
-int Profile::Query(const std::string &target_user, UserProfile *profile) {
-  RedisCode ret;
-  std::string key = kProfilePrefix + target_user;
-  ret = profile_redis_.Query("GET", key, profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "read user profile failed! user: " << user_;
-    return kCgiCodeSystemError;
-  }
-  return kCgiCodeOk;
+// int Profile::Query(const std::string &target_user, UserProfile *profile) {
+int Profile::Query(const QueryProfileReq &req, UserProfile *profile) {
+  ProfileApi profile_api;
+  return profile_api.Get(req.target_user(), profile);
 }
 
+#if 0
 int Profile::Query(const std::string &target_user, UserStat *stat) {
-  RedisCode ret;
-  std::string key = kStatPrefix + target_user;
-  ret = stat_redis_.Query("GET", key, stat);
+  std::string key = GetUserStatKey(user_);
+    RedisCode Query(std::string cmd, const std::string &key, 
+                const std::string &param1, const std::string &param2);
+  RedisCpp redis;
+  std::map<std::string, std::string> stat_kv;
+  RedisCode ret = redis.Query("HGETALL", key, &stat_kv);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "get user stat failed! user: " << user_; 
     return kCgiCodeSystemError;
   }
+  stat->set_user(target_user);
+  stat->set_login(atoi(stat_kv["login"].c_str()));
+  stat->set_follow(atoi(stat_kv["follow"].c_str()));
+  stat->set_followed(atoi(stat_kv["followed"].c_str()));
+  stat->set_record(atoi(stat_kv["record"].c_str()));
+  stat->set_comment(atoi(stat_kv["comment"].c_str()));
+  stat->set_commented(atoi(stat_kv["commented"].c_str()));
+  stat->set_like(atoi(stat_kv["like"].c_str()));
+  stat->set_liked(atoi(stat_kv["liked"].c_str()));
+
   return kCgiCodeOk;
 }
-
+#endif

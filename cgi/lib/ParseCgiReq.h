@@ -6,11 +6,17 @@
 #include <sstream>
 #include "proto/CgiReq.pb.h"
 
-// using namespace std;
-
 class ParseCgiReq {
   public:
-    ParseCgiReq(const std::map<std::string, std::string> &params) : params_(params) {}
+    ParseCgiReq(const std::map<std::string, std::string> &params) {
+      params_ = params;
+      if (params_.find("user") == params_.end()) {
+        params_["user"] = "patientsclub";
+      }
+      if (params_.find("token") == params_.end()) {
+        params_["token"] = "patientsclub";
+      }
+    }
 
     // base info
     int Parse(CgiBaseInfo &base);
@@ -33,13 +39,13 @@ class ParseCgiReq {
     int Parse(AddressReq &address);
     int Parse(TagReq &tag);
 
-    // interact related
-    int Parse(LikeReq &like);
-    int Parse(UnlikeReq &unlike);
-    int Parse(CommentReq &comment);
-    int Parse(UncommentReq &uncomment);
-    int Parse(InteractDetailReq &interact_detail);
-    int Parse(InteractListReq &interact_list);
+    // // interact related
+    // int Parse(LikeReq &like);
+    // int Parse(UnlikeReq &unlike);
+    // int Parse(CommentReq &comment);
+    // int Parse(UncommentReq &uncomment);
+    // int Parse(InteractDetailReq &interact_detail);
+    // int Parse(InteractListReq &interact_list);
 
     std::string Error();
 

@@ -7,19 +7,17 @@
 #include "thirdparty/cgicc/Cgicc.h"
 #include "thirdparty/cgicc/CgiEnvironment.h"
 
-using namespace std;
-
 class CgiHandle{
   public:
     CgiHandle();
-    string operator [] (const string& key);
-    string GetMethod();
-    const map<string, string> &GetParams();
+    std::string operator [] (const std::string& key);
+    std::string GetMethod();
+    const std::map<std::string, std::string> &GetParams();
 
   private:
     cgicc::Cgicc form_data_;
-    map<string, string> query_kv_;
-    string method_;
+    std::map<std::string, std::string> query_kv_;
+    std::string method_;
 };
 
 #endif // COMMON_CGI_UTILS_CGIHANDLE_H_

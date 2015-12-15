@@ -5,7 +5,8 @@
 #include "common/redis_utils/RedisCpp.h"
 #include "common/redis_utils/RedisPb.h"
 #include "proto/CgiReq.pb.h"
-#include "proto/CacheData.pb.h"
+// #include "proto/interact.pb.h"
+//#include "proto/CacheData.pb.h"
 
 class Interact {
   public:
