@@ -18,7 +18,7 @@ std::string value_to_string(const T &v) {
 
 //convert string to a arbitrary type
 template<typename T>
-void string_to_value(const std::string &strInput, T&v) {
+void string_to_value(const std::string &strInput, T &v) {
   std::istringstream ss(strInput);
   ss >> v;
   return ;

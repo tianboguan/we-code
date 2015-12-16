@@ -120,45 +120,45 @@ message FollowStatusRes {
 // //   int32 page = 1;
 // //   repeated QueryRecordDetailRes records = 2;
 // // }
-// 
-// // --------------互动处理相关接口--------------
-// message LikeReq {
-//   string record_id = 1;
-// }
-// 
-// message UnlikeReq {
-//   string record_id = 1;
-// }
-// 
-// message CommentReq {
-//   string record_id = 1;
-//   string comment_id = 2;
-//   string comment = 3;
-// }
-// 
-// message UncommentReq {
-//   string record_id = 1;
-//   string comment_id = 2;
-// }
-// 
-// message InteractDetailReq {
-//   string record_id = 1;
-// }
-// 
-// message InteractDetailRes {
-//   repeated InteractRecordData likes = 1;        // 赞明细
-//   repeated InteractRecordData comments = 2;     // 评论明细
-// }
-// 
-// //message InteractListReq {
-// //  int32 page = 1;                      // 页号
-// //}
-// //
-// //message InteractListRes {
-// //  int32 page = 1;                      // 页号
-// //  repeated InterElement interacts = 2; // 互动列表
-// //}
 
+
+// --------------互动处理相关接口--------------
+message LikeReq {
+  string record_id = 1;
+}
+
+message UnlikeReq {
+  string record_id = 1;
+}
+
+message CommentReq {
+  string record_id = 1;
+  string target_interact_id = 2;
+  string text = 3;
+}
+
+message UncommentReq {
+  string record_id = 1;
+  string interact_id = 2;
+}
+
+message RecordInteractReq {
+  string record_id = 1;
+}
+
+message RecordInteractRes {
+  repeated ExtInteract likes = 1;
+  repeated ExtInteract comments = 2;
+}
+
+message UserInteractReq {
+  int32 page = 2;
+}
+
+message UserInteractRes {
+  int32 page = 1;
+  repeated ExtInteract interacts = 2;
+}
 
 //------------ 用户资料管理 -----------------
 message QueryProfileReq {
