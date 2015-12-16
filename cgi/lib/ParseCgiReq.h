@@ -39,18 +39,18 @@ class ParseCgiReq {
     int Parse(AddressReq &address);
     int Parse(TagReq &tag);
 
-    // // interact related
-    // int Parse(LikeReq &like);
-    // int Parse(UnlikeReq &unlike);
-    // int Parse(CommentReq &comment);
-    // int Parse(UncommentReq &uncomment);
-    // int Parse(InteractDetailReq &interact_detail);
-    // int Parse(InteractListReq &interact_list);
+    // interact related
+    int Parse(LikeReq &like);
+    int Parse(UnlikeReq &unlike);
+    int Parse(CommentReq &comment);
+    int Parse(UncommentReq &uncomment);
+    int Parse(RecordInteractReq &record_interact);
+    int Parse(UserInteractReq &user_interact);
 
     std::string Error();
 
   private:
-    bool Check(std::string key, bool escape = false);
+    bool Check(std::string key, bool need = false);
     std::map<std::string, std::string> params_;
     std::ostringstream err_oss;
     int ret_;

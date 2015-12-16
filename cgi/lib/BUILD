@@ -7,12 +7,11 @@ cc_library(
     'Profile.cc',
     'Business.cc',
     #'CgiCode.cc',
-    #'Interact.cc',
+    'Interact.cc',
     #'Record.cc',
   ],
   deps = [
     '//proto:CgiReqProto',
-    #'//proto:cache_data_proto',
     '//proto:UserProto',
     '//proto:FollowProto',
     '//common/redis_utils:RedisUtils',

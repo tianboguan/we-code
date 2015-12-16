@@ -2,16 +2,16 @@
 #include "common/app/CgiCode.h"
 #include "common/utils/StringUtils.h"
 
-#define CHECK(key, escape)      \
-  ret_ = Check(key, escape);      \
+#define CHECK(key, need)      \
+  ret_ = Check(key, need);      \
 if (!ret_) {                    \
   return kCgiCodeParamError;   \
 }
 
 int ParseCgiReq::Parse(CgiBaseInfo &base) {
   CHECK("user", true);
-  CHECK("token", false);
-  CHECK("action", false);
+  CHECK("token", true);
+  CHECK("action", true);
   base.set_user(params_["user"]);
   base.set_token(params_["token"]);
   base.set_action(params_["action"]);
@@ -87,62 +87,59 @@ int ParseCgiReq::Parse(TagReq &tag) {
   return kCgiCodeOk;
 }
 
-// int ParseCgiReq::Parse(LikeReq &like) {
-//   CHECK("record_id", true);
-//   like.set_record_id(params_["record_id"]);
-//   return kCgiCodeOk;
-// }
-// 
-// int ParseCgiReq::Parse(UnlikeReq &unlike) {
-//   CHECK("record_id", true);
-//   unlike.set_record_id(params_["record_id"]);
-//   return kCgiCodeOk;
-// }
-// 
-// int ParseCgiReq::Parse(CommentReq &comment) {
-//   CHECK("record_id", true);
-//   CHECK("comment_id", true);
-//   CHECK("comment", true);
-//   comment.set_record_id(params_["record_id"]);
-//   comment.set_comment_id(params_["comment_id"]);
-//   comment.set_comment(params_["comment"]);
-//   return kCgiCodeOk;
-// }
-// 
-// int ParseCgiReq::Parse(UncommentReq &uncomment) {
-//   CHECK("record_id", true);
-//   CHECK("comment_id", true);
-//   uncomment.set_record_id(params_["record_id"]);
-//   uncomment.set_comment_id(params_["comment_id"]);
-//   return kCgiCodeOk;
-// }
-// 
-// int ParseCgiReq::Parse(InteractDetailReq &interact_detail) {
-//   CHECK("record_id", true);
-//   interact_detail.set_record_id(params_["record_id"]);
-//   return kCgiCodeOk;
-// }
-// 
-// int ParseCgiReq::Parse(InteractListReq &interact_list) {
-//   CHECK("page", true);
-//   int page;
-//   string_to_value(params_["page"], page);
-//   interact_list.set_page(page);
-//   return kCgiCodeOk;
-// }
-// 
+int ParseCgiReq::Parse(LikeReq &like) {
+  CHECK("record_id", true);
+  like.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(UnlikeReq &unlike) {
+  CHECK("record_id", true);
+  unlike.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(CommentReq &comment) {
+  CHECK("record_id", true);
+  CHECK("target_interact_id", false);
+  CHECK("text", true);
+  comment.set_record_id(params_["record_id"]);
+  comment.set_target_interact_id(params_["target_interact_id"]);
+  comment.set_text(params_["text"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(UncommentReq &uncomment) {
+  CHECK("record_id", true);
+  CHECK("interact_id", true);
+  uncomment.set_record_id(params_["record_id"]);
+  uncomment.set_interact_id(params_["interact_id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(RecordInteractReq &record_interact) {
+  CHECK("record_id", true);
+  record_interact.set_record_id(params_["record_id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(UserInteractReq &user_interact) {
+  CHECK("page", true);
+  int32_t page = 1;
+  string_to_value(params_["page"], page);
+  user_interact.set_page(page);
+  return kCgiCodeOk;
+}
+
 std::string ParseCgiReq::Error() {
   return err_oss.str();
 }
 
-bool ParseCgiReq::Check(std::string key, bool escape) {
-  if (params_.find(key) == params_.end()) {
-    err_oss << "not find: " << key << std::endl;
-    return false;
+bool ParseCgiReq::Check(std::string key, bool need) {
+  if (params_.find(key) == params_.end() && need) {
+    if (need) {
+      err_oss << "not find: " << key << std::endl;
+      return false;
+    } else {
+      return true;
+    }
   }
-  if (escape) {
-    // do escape
-  }
+
   return true;
 }
 

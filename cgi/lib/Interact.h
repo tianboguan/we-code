@@ -2,33 +2,34 @@
 #define CGI_LIB_INTERACT_H_
 
 #include <string>
-#include "common/redis_utils/RedisCpp.h"
-#include "common/redis_utils/RedisPb.h"
 #include "proto/CgiReq.pb.h"
+#include "common/app/InteractApi.h"
 // #include "proto/interact.pb.h"
 //#include "proto/CacheData.pb.h"
 
 class Interact {
   public:
-    Interact(const std::string &user) : user_(user) {}; 
+    Interact(const std::string &user) : api_(user) {}; 
 
     int Like(const LikeReq &req);
     int Unlike(const UnlikeReq &req);
     int Comment(const CommentReq &req);
     int Uncomment(const UncommentReq &req);
-    int InteractDetail(const InteractDetailReq &req, InteractDetailRes *res);
-    int InteractNotice(const InteractListReq &req, InteractListRes *res);
-    int InteractHistory(const InteractListReq &req, InteractListRes *res);
+    int GetRecordInteracts(const RecordInteractReq &req,
+        RecordInteractRes *res);
+    int GetNoticeInteracts(const UserInteractReq &req,
+        UserInteractRes *res);
+    int GetSendedInteracts(const UserInteractReq &req,
+        UserInteractRes *res);
+    int GetReceivedInteracts(const UserInteractReq &req,
+        UserInteractRes *res);
 
   private:
-    std::string CreateInterId();
-    int GetInteracts(const std::string &key, InteractListRes *res);
+    void BuildUserInteracts(const std::vector<ExtInteract> &interacts,
+        int32_t page, UserInteractRes *res);
 
   private:
-    std::string user_;
-    RedisCpp redis_;
-    RedisStr2Pb<UserProfile> profile_redis_;
-    RedisStr2Pb<InterData> inter_redis_;
+    InteractApi api_;
 };
 
 #endif // CGI_LIB_INTERACT_H_

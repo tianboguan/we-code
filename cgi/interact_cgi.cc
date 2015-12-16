@@ -77,42 +77,44 @@ int main(int argc, char *argv[]) {
     ret = interact.Uncomment(uncomment_req);
     SendPostResWithoutData(ret);
     return 0;
-  } else if (action == "detail") {
-    InteractDetailReq detail_req;
-    ret = parser.Parse(detail_req);
+  } else if (action == "record") {
+    RecordInteractReq req;
+    ret = parser.Parse(req);
     if (ret != kCgiCodeOk) {
       LOG_ERROR << parser.Error();
       SendPostResWithoutData(ret);
       return 0;
     }
 
-    InteractDetailRes res;
-    ret = interact.InteractDetail(detail_req, &res);
+    RecordInteractRes res;
+    ret = interact.GetRecordInteracts(req, &res);
     if (ret != kCgiCodeOk) {
       SendPostResWithoutData(ret);
     } else {
       SendPostResWithData(ret, res);
     }
     return 0;
-  } else if (action == "notice" || action == "history") {
-    InteractListReq list_req;
-    ret = parser.Parse(list_req);
+  } else if (action == "notice" || action == "sended" || action == "received") {
+    UserInteractReq req;
+    ret = parser.Parse(req);
     if (ret != kCgiCodeOk) {
       LOG_ERROR << parser.Error();
       SendPostResWithoutData(ret);
       return 0;
     }
 
-    InteractListRes res;
+    UserInteractRes res;
     if (action == "notice") {
-      ret = interact.InteractNotice(list_req, &res);
-    } else {
-      ret = interact.InteractHistory(list_req, &res);
+      ret = interact.GetNoticeInteracts(req, &res);
+    } else if (action == "sended"){
+      ret = interact.GetSendedInteracts(req, &res);
+    } else if (action == "received"){
+      ret = interact.GetSendedInteracts(req, &res);
     }
-    if (ret != kCgiCodeOk) {
-      SendPostResWithoutData(ret);
-    } else {
+    if (ret != kCgiCodeSystemError) {
       SendPostResWithData(ret, res);
+    } else {
+      SendPostResWithoutData(ret);
     }
     return 0;
   } else {
