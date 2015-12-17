@@ -24,6 +24,7 @@
 #define kCgiCodeMoreData            11
 #define kCgiCodeNoMoreData          12
 
+#define kCgiCodeSetUserProfile      13
 extern std::string GetErrMsg(int code);
 
 #endif // CGI_LIB_CGICODE_H_

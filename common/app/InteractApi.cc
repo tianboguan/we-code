@@ -145,7 +145,7 @@ int InteractApi::GetUserSendedInteracts(int32_t page,
   int start = (page - 1) * page_count_;
   int stop = start + page_count_ - 1;
   std::vector<std::string> interact_ids;
-  if (GetInteracts(GetUserSendedInteracKey(user_), start, stop,  &interact_ids)
+  if (GetInteracts(GetUserSendedInteracKey(user_), start, stop, &interact_ids)
       != kCgiCodeOk) {
     LOG_ERROR << "read user history interact ids failed! user:" << user_;
     return kCgiCodeSystemError;
@@ -245,7 +245,7 @@ int InteractApi::DispatchInteract(const RoughInteract &interact) {
       << "interact to list failed!";
   }
   std::string user;
-  RecordApi api(user_);
+  RecordApi api;
   if (api.GetRecordOwner(interact.record_id(), &user) != kCgiCodeOk) {
     LOG_ERROR << "get record owner failed! interact: " << interact.id() <<
       "record: " << interact.record_id();
@@ -335,7 +335,7 @@ int InteractApi::ExtInteractUser(const std::string &user,
 int InteractApi::ExtInteractRecord(const std::string &record_id,
     ExtInteract *interact) {
   StripRecord record;
-  RecordApi api(user_);
+  RecordApi api;
   return api.Get(record_id, interact->mutable_record());
 }
 

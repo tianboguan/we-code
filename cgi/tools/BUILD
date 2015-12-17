@@ -21,5 +21,6 @@ cc_binary(
     '//common/app:AppComm',
     '//thirdparty/gflags:gflags',
     '//common/redis_utils:RedisUtils',
+    '//common/pbjson:pbjson',
   ]
 )

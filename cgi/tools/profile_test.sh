@@ -1,22 +1,25 @@
 #!/bin/bash
 method=$1
 url="http://182.254.220.116/cgi-bin/profile.cgi"
-user="1"
-target_user="1"
+user="4"
+target_user="4"
 token=""
-read_bin="/home/joshua/project/we-code/build64_release/cgi/tools/profile_tool -action=get -user=${user}"
+read_bin="/home/joshua/project/we-code/build64_release/cgi/tools/profile_tool -action=get -user=${target_user}"
 
+#profile="{
+#  'user': '1',
+#  'nickname': '田伯光',
+#  'head': 'http://xxxxxxx/田伯光_head.jpg',
+#  'agender': 'male',
+#  'birthday': 1447988674,
+#  'address': '国家/省/市',
+#  'signature': '快乐田伯光，万里独行田伯光',
+#  'disease': '癌症',
+#  'role': '家属',
+#  'enrolltime': 1447988674,
+#  }"
 profile="{
-  'user': '1',
-  'nickname': '田伯光',
-  'head': 'http://xxxxxxx/田伯光_head.jpg',
-  'agender': 'male',
-  'birthday': 1447988674,
-  'address': '国家/省/市',
-  'signature': '快乐田伯光，万里独行田伯光',
-  'disease': '癌症',
-  'role': '家属',
-  'start_time': 1447988674,
+  \"user\": \"4\"
   }"
 
 #{"code":0,"message":"处理成功","data":{"user":"1","nickname":"","head":"","agender":"","birthday":"0","address":"","signature":"","disease":"","role":"","enrollTime":"1450094097"}}

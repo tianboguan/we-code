@@ -7,19 +7,35 @@
 
 class RecordApi {
   public:
-    RecordApi(const std::string &user) : user_(user), page_count_(12) {}; 
+    RecordApi() : page_count_(12) {}; 
 
     int Get(const std::string &id, Record *record);
     int Get(const std::string &id, StripRecord *record);
-
     int GetRecordOwner(const std::string &id, std::string *user);
+    int Set(const Record &record);
+    int CreateRecordId(std::string *id);
+    int SetRecordPrivate(const std::string &id, bool is_private);
+    int GetHomeRecord(const std::string &user,int page,
+        std::vector<ExtRecord> *records);
+    int GetActiveRecord(const std::string &user, int page,
+        std::vector<ExtRecord> *records);
+    int GetRecentRecord(const std::string &user, int page,
+        std::vector<ExtRecord> *records);
+
+    int LinkRecordToUserHome(const std::string &id, const std::string &user);
+    int UnlinkRecordToUserHome(const std::string &id, const std::string &user);
+    int LinkRecordToUserActive(const std::string &id, const std::string &user);
+    int UnlinkRecordToUserActive(const std::string &id, const std::string &user);
+    // int LinkRecordToUserRecent(const std::string &id, const std::string &user);
 
   private:
-    std::string user_;
-    int32_t page_count_;
-    // RedisCpp redis_;
-    // RedisStr2Pb<UserProfile> profile_redis_;
-    // RedisStr2Pb<InterData> inter_redis_;
+    int GetRecords(const std::string &key, int index_start,
+        int index_stop, std::vector<std::string> *ids);
+    int GetRecords(const std::vector<std::string> &keys,
+        std::vector<ExtRecord> *records);
+
+  private:
+    int page_count_;
 };
 
 #endif // COMMON_APP_RECORDAPI_H_

@@ -13,7 +13,7 @@ int Profile::Alt(const AltProfileReq &req) {
   int ret = pbjson::json2pb(req.profile(), &profile, err);
   if (ret != 0) {
     LOG_ERROR << "json param parse failed! input: "
-      << req.profile() << ", err: " << err;
+      << req.profile() << ", err: " << err << ", profile: " << profile.Utf8DebugString();
     return kCgiCodeParamError;
   }
   if (user_ != profile.user()) {
@@ -35,7 +35,7 @@ int Profile::AltHead(ImgRes *res) {
   res->set_appid(tencent_img.GetAppId());
   res->set_bucket(tencent_img.GetBucket());
   res->set_fileid(file_id);
-  res->set_sign(tencent_img.GetPrivateSign(file_id));
+  res->set_sign(tencent_img.GetPublicSign());
   res->set_callback("patientsclub");
 
   UserProfile profile;

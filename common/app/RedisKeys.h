@@ -10,12 +10,16 @@ std::string GetAccountSequenceNoKey();
 std::string GetAccountUserKey(const std::string &user);
 std::string GetAccountPhoneKey(const std::string &phone);
 
-// ------- profile info cache key --------------
+// ------- user info cache key --------------
 std::string GetUserProfileKey(std::string user);
 std::string GetUserStatKey(std::string user);
 std::string GetUserSendedInteracKey(std::string user);
 std::string GetUserReceivedInteractKey(std::string user);
 std::string GetUserNoticeInteractKey(std::string user);
+
+std::string GetUserHomeRecordKey(std::string user);
+std::string GetUserActiveRecordKey(std::string user);
+std::string GetUserRecentRecordKey(std::string user);
 
 // ---------- follow info cache key -----------
 std::string GetFollowActionKey(std::string user);
@@ -24,8 +28,10 @@ std::string GetFollowFromKey(std::string user);
 std::string GetFollowBlockKey(std::string user);
 
 // ------ record info cache key -----------------
+std::string GetRecordSequenceNoKey();
 std::string GetRecordRoughDataKey(std::string id);
 std::string GetRecordInteractDataKey(std::string id);
+std::string GetRecordExtDataKey(std::string id);
 
 
 // -------- interact info cache key -------------

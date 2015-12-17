@@ -30,6 +30,15 @@ std::string GetUserReceivedInteractKey(std::string user) {
 std::string GetUserNoticeInteractKey(std::string user) {
   return "uni_" + user;
 }
+std::string GetUserHomeRecordKey(std::string user) {
+  return "uhr_" + user;
+}
+std::string GetUserActiveRecordKey(std::string user) {
+  return "uar_" + user;
+}
+std::string GetUserRecentRecordKey(std::string user) {
+  return "urr_" + user;
+}
 
 // follow info cache key 
 std::string GetFollowActionKey(std::string user) {
@@ -46,12 +55,17 @@ std::string GetFollowBlockKey(std::string user) {
 }
 
 // record info key
-std::string GetRecordRoughDataKey(std::string id) {
-  return "rc_" + id;
+std::string GetRecordSequenceNoKey() {
+  return "RecordSequenceNo";
 }
-
+std::string GetRecordRoughDataKey(std::string id) {
+  return "rr_" + id;
+}
 std::string GetRecordInteractDataKey(std::string id) {
   return "ri_" + id;
+}
+std::string GetRecordExtDataKey(std::string id) {
+  return "re_" + id;
 }
 
 // interact info key

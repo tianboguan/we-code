@@ -63,9 +63,12 @@ int ProfileApi::Update(const std::string &user, const UserProfile &profile) {
 int ProfileApi::Get(const std::string &user, UserProfile *profile) {
   RedisStr2Pb<UserProfile> redis_pb;
   RedisCode ret = redis_pb.Query("GET", GetUserProfileKey(user), profile);
-  if (ret != RedisCodeOK) {
+  if (ret != RedisCodeError) {
     LOG_ERROR << "get user profile failed! user: " << user; 
     return kCgiCodeSystemError;
+  } else if (ret == RedisCodeNil) {
+    LOG_ERROR << "please set user profile first! user: " << user; 
+    return kCgiCodeSetUserProfile;
   }
 
   return kCgiCodeOk;

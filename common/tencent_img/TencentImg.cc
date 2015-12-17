@@ -28,7 +28,7 @@ std::string TencentImg::GetPublicSign() {
   oss << "a=" << app_id_
     << "&b=" << bucket_
     << "&k=" << secret_id_
-    << "&e=" << time(NULL) + 864000
+    << "&e=" << time(NULL) + 600
     << "&t=" << time(NULL)
     << "&r=" << rand() % 100000
     << "&u=0&f=";
@@ -76,12 +76,12 @@ std::string TencentImg::GetUrl(const std::string &file_id, ImgUrlType type) {
 std::string TencentImg::CreateSign(std::string orignal) {
   CHMAC_SHA1 chmac_sha1; 
   BYTE digest[20];
-  chmac_sha1.HMAC_SHA1(orignal.c_str(), orignal.length(),
-      secret_key_.c_str(), secret_key_.length(),
+  chmac_sha1.HMAC_SHA1((unsigned char *)(orignal.c_str()), orignal.length(),
+      (unsigned char *)(secret_key_.c_str()), secret_key_.length(),
       digest);
   char  base64_orignal[1024] = {0};
   memcpy(base64_orignal, digest, 20);
   memcpy(base64_orignal + 20, orignal.c_str(), orignal.length());
-  return base64_encode(base64_orignal, orignal.length() + 20);
+  return base64_encode((unsigned char *)base64_orignal, orignal.length() + 20);
 }
 

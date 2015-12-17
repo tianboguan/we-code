@@ -265,7 +265,7 @@ int Account::VerifyCode(const VerifyCodeReq &verify_code) {
 }
 
 int Account::CheckLogin() {
-  if (user_ == "1") {
+  if (user_ == "1" || user_ == "4") {
     return kCgiCodeOk;
   }
 
