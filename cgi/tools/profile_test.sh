@@ -2,7 +2,7 @@
 method=$1
 url="http://182.254.220.116/cgi-bin/profile.cgi"
 user="4"
-target_user="4"
+target_user="31"
 token=""
 read_bin="/home/joshua/project/we-code/build64_release/cgi/tools/profile_tool -action=get -user=${target_user}"
 

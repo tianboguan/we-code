@@ -126,6 +126,52 @@ int ParseCgiReq::Parse(UserInteractReq &user_interact) {
   return kCgiCodeOk;
 }
 
+int ParseCgiReq::Parse(CreateRecordReq &req) {
+  CHECK("weather", true);
+  CHECK("mood", true);
+  CHECK("status", true);
+  CHECK("text", true);
+  CHECK("picture", true);
+  CHECK("is_public", true);
+  CHECK("address", true);
+  req.set_weather(params_["weather"]);
+  req.set_mood(params_["mood"]);
+  req.set_status(params_["status"]);
+  req.set_text(params_["text"]);
+  int picture;
+  string_to_value(params_["picture"], picture);
+  req.set_picture(picture);
+  req.set_is_public(params_["is_public"]);
+  req.set_address(params_["address"]);
+
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(DelRecordReq &req) {
+  CHECK("id", true);
+  req.set_id(params_["id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(QueryRecordReq &req) {
+  CHECK("id", true);
+  req.set_id(params_["id"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(QueryRecordListReq &req) {
+  CHECK("page", true);
+  int page;
+  string_to_value(params_["page"], page);
+  req.set_page(page);
+  req.set_target_user(params_["target_user"]);
+  return kCgiCodeOk;
+}
+int ParseCgiReq::Parse(AltRecordQrivateReq &req) {
+  CHECK("id", true);
+  CHECK("public", true);
+  req.set_id(params_["id"]);
+  req.set_is_public(params_["public"]);
+  return kCgiCodeOk;
+}
+
 std::string ParseCgiReq::Error() {
   return err_oss.str();
 }

@@ -6,9 +6,8 @@ cc_library(
     'Follow.cc',
     'Profile.cc',
     'Business.cc',
-    #'CgiCode.cc',
     'Interact.cc',
-    #'Record.cc',
+    'Record.cc',
   ],
   deps = [
     '//proto:CgiReqProto',
