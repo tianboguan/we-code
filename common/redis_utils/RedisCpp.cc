@@ -234,11 +234,12 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key,
   return RedisCodeOK;
 }
 
-// cmd input a set of params, return a set of values
+// cmd input a set of params, return values with map
 // such as MGET key1 key2 key3 ...
 // return RedisCodeOK on success, other on error
+// if a key return NIL then this key no contaned in map
 RedisCode RedisCpp::Query(std::string cmd, const std::vector<std::string> &keys,
-    std::vector<std::string> *values) {
+    std::map<std::string, std::string> *values) {
   if (keys.empty()) {
     return RedisCodeOK;
   }
@@ -247,8 +248,10 @@ RedisCode RedisCpp::Query(std::string cmd, const std::vector<std::string> &keys,
     return RedisCodeError;
   }
 
-  char **argv = new char*[keys.size() + 1];
-  size_t *argv_len = new size_t[keys.size() + 1];
+  int token_count = keys.size() + 1;      // cmd + params
+
+  char **argv = new char*[token_count];
+  size_t *argv_len = new size_t[token_count];
 
   // cmd
   argv[0] = new char[cmd.size()];
@@ -261,12 +264,20 @@ RedisCode RedisCpp::Query(std::string cmd, const std::vector<std::string> &keys,
     size_t size = keys[i].size();
     argv_len[j] = size;
     argv[j] = new char[size];
-    memcpy(argv[i], keys[i].data(), size);
+    memcpy(argv[j], keys[i].data(), size);
     j++;
   }
 
   redisReply *reply = (redisReply *)redisCommandArgv(c_, keys.size() + 1,
       const_cast<const char**>(argv), argv_len);
+  // ------------ free memory start ---------------
+  for (int i = 0;  i < token_count; i++) {
+    delete [] argv[i];
+  }
+  delete [] argv;
+  delete [] argv_len;
+  // ------------ free memory end ------------------
+
   if (reply == NULL) {
     LOG_ERROR << cmd << " invoke redisCommandArgv(...) return NULL";
     return RedisCodeError;
@@ -277,24 +288,23 @@ RedisCode RedisCpp::Query(std::string cmd, const std::vector<std::string> &keys,
   } 
 
   if (reply->type == REDIS_REPLY_ARRAY) {
+    if (reply->elements != keys.size()) {
+      LOG_ERROR << cmd << " return value not match keys count";
+      freeReplyObject(reply);
+      return RedisCodeError;
+    }
+
     for (uint64_t i = 0; i < reply->elements; i++) {
       if (reply->element[i]->type == REDIS_REPLY_NIL) {
         continue;
       }
       std::string temp;
       temp.assign(reply->element[i]->str, reply->element[i]->len);
-      values->push_back(temp);
+      // set to empty string when return NIL
+      (*values)[keys[i]] = temp;
     }
   }
   freeReplyObject(reply);
-
-  // free memory
-  for (size_t i = 0;  i < keys.size() + 1; i++) {
-    delete [] argv[i];
-  }
-  delete [] argv;
-  delete [] argv_len;
-
   return RedisCodeOK;
 }
 

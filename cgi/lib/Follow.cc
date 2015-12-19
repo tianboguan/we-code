@@ -50,29 +50,29 @@ int Follow::DeBlock(const FollowReq &req) {
   return follow_api_.UnBlock(req.target_user());
 }
 
-#if 0
-int Follow::IsBlocked(const std::string &target_user, bool *blocked) {
-  return follow_api_.IsBlocked(target_user, blocked);
-}
-#endif
-
-int Follow::BuildFollowListRes(const std::vector<std::string> &users, FollowListRes *res) {
-
-  std::vector<StripUserProfile> bases;
+int Follow::BuildFollowListRes(const std::vector<std::string> &users,
+    FollowListRes *res) {
+  std::set<std::string> user_set;
+  for (std::vector<std::string>::const_iterator iter = users.begin();
+      iter != users.end(); ++iter) {
+    user_set.insert(*iter);
+  }
+  
+  std::map<std::string, StripUserProfile> strips;
   ProfileApi profile_api;
-  int ret = profile_api.MGet(users, &bases);
+  int ret = profile_api.MGet(user_set, &strips);
   if (ret != kCgiCodeOk) {
     return ret;
   }
 
-  for (std::vector<StripUserProfile>::const_iterator iter = bases.begin();
-      iter != bases.end(); ++iter) {
+  for (std::vector<std::string>::const_iterator iter = users.begin();
+      iter != users.end(); ++iter) {
     FollowNode* node = res->add_node();
     StripUserProfile *user = node->mutable_user();
-    *user = *iter;
+    *user = strips[*iter];
 
     bool follow_status;
-    follow_api_.IsFollowed(iter->user(), &follow_status);
+    follow_api_.IsFollowed(*iter, &follow_status);
     node->set_follow(follow_status);
   }
 

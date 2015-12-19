@@ -13,17 +13,17 @@ message UserProfile {
   int64 enrolltime = 10;
 }
 
-message UserStat {
-  string user = 1;
-  int32 login = 2;
-  int32 follow = 3;
-  int32 followed = 4;
-  int32 record = 5;
-  int32 comment = 6;
-  int32 commented = 7;
-  int32 like = 8;
-  int32 liked = 9;
-}
+// message UserStat {
+//   string user = 1;
+//   int32 login = 2;
+//   int32 follow = 3;
+//   int32 followed = 4;
+//   int32 record = 5;
+//   int32 comment = 6;
+//   int32 commented = 7;
+//   int32 like = 8;
+//   int32 liked = 9;
+// }
 
 
 message StripUserProfile {
@@ -32,7 +32,7 @@ message StripUserProfile {
   string head = 3;                    // 头像
 }
 
-message TUtf8 {
-  string test = 1;
-}
+// message TUtf8 {
+//  string test = 1;
+// }
 

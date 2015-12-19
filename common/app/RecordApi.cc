@@ -8,8 +8,8 @@
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
 
-int RecordApi::Get(const std::string &id, Record *record) {
-  RedisStr2Pb<Record> redis;
+int RecordApi::Get(const std::string &id, RoughRecord *record) {
+  RedisStr2Pb<RoughRecord> redis;
   if (redis.Query("GET", GetRecordRoughDataKey(id), record) != RedisCodeOK) {
     LOG_ERROR << "get record rough info failed! record: " << id ;
     return kCgiCodeSystemError;
@@ -18,20 +18,42 @@ int RecordApi::Get(const std::string &id, Record *record) {
 }
 
 int RecordApi::Get(const std::string &id, StripRecord *striped) {
-  Record record;
+  RoughRecord record;
   if (Get(id, &record) != kCgiCodeOk) {
     return kCgiCodeSystemError;
   }
   striped->set_id(record.id());
   striped->set_text(record.text());
-  if (record.picture_size() > 0) {
-    striped->set_picture(record.picture(0));
+  if (record.pictures_size() > 0) {
+    striped->set_picture(record.pictures(0));
   }
   return kCgiCodeOk;
 }
 
+int RecordApi::Del(const std::string &id) {
+  RoughRecord record;
+  int ret = Get(id, &record);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get record rough info failed! record: " << id ;
+    return kCgiCodeSystemError;
+  }
+  record.set_is_delete(true);
+  return Set(record);
+}
+
+int RecordApi::SetRecordPublic(const std::string &id, bool is_public) {
+  RoughRecord record;
+  int ret = Get(id, &record);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get record rough info failed! record: " << id ;
+    return kCgiCodeSystemError;
+  }
+  record.set_is_public(is_public);
+  return Set(record);
+}
+
 int RecordApi::GetRecordOwner(const std::string &id, std::string *user) {
-  Record record;
+  RoughRecord record;
   if (Get(id, &record) != kCgiCodeOk) {
     return kCgiCodeSystemError;
   } else {
@@ -40,8 +62,8 @@ int RecordApi::GetRecordOwner(const std::string &id, std::string *user) {
   }
 }
 
-int RecordApi::Set(const Record &record) {
-  RedisStr2Pb<Record> redis;
+int RecordApi::Set(const RoughRecord &record) {
+  RedisStr2Pb<RoughRecord> redis;
   if (redis.Query("SET", GetRecordRoughDataKey(record.id()), record)
       != RedisCodeOK) {
     LOG_ERROR << "set record rough info failed! record: " << record.id() ;
@@ -57,7 +79,7 @@ int RecordApi::CreateRecordId(std::string *id) {
 }
 
 int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
-    std::vector<ExtRecord> *records) {
+    std::map<std::string, RoughRecord> *records) {
   int start = (page - 1) * page_count_;
   int stop = start + page_count_ - 1;
   std::vector<std::string> record_ids;
@@ -67,13 +89,7 @@ int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
     return kCgiCodeSystemError;
   }
 
-  std::vector<std::string> keys;
-  for (std::vector<std::string>::iterator iter = record_ids.begin(); 
-      iter != record_ids.end(); ++iter) {
-    keys.push_back(GetRecordExtDataKey(*iter));
-  }
-
-  if (GetRecords(keys, records) != kCgiCodeOk) {
+  if (GetRecords(record_ids, records) != kCgiCodeOk) {
     LOG_ERROR << "read user home records failed! user:" << user;
     return kCgiCodeSystemError;
   }
@@ -83,18 +99,53 @@ int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
   } else {
     return kCgiCodeMoreData;
   }
-
-  return kCgiCodeOk;
 }
 
 int RecordApi::GetActiveRecord(const std::string &user, int32_t page,
-    std::vector<ExtRecord> *records) {
-  return kCgiCodeOk;
+    std::map<std::string, RoughRecord> *records) {
+  int start = (page - 1) * page_count_;
+  int stop = start + page_count_ - 1;
+  std::vector<std::string> record_ids;
+  if (GetRecords(GetUserActiveRecordKey(user), start, stop, &record_ids)
+      != kCgiCodeOk ) {
+    LOG_ERROR << "read user active record ids failed! user:" << user;
+    return kCgiCodeSystemError;
+  }
+
+  if (GetRecords(record_ids, records) != kCgiCodeOk) {
+    LOG_ERROR << "read user active records failed! user:" << user;
+    return kCgiCodeSystemError;
+  }
+
+  if (record_ids.size() < size_t(page_count_)) {
+    return kCgiCodeNoMoreData;
+  } else {
+    return kCgiCodeMoreData;
+  }
 }
 
 int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
-    std::vector<ExtRecord> *records) {
-  return kCgiCodeOk;
+    std::map<std::string, RoughRecord> *records) {
+  int start = (page - 1) * page_count_;
+  int stop = start + page_count_ - 1;
+  std::vector<std::string> record_ids;
+  // TODO get record list base user disease now get active key instead
+  if (GetRecords(GetUserActiveRecordKey(user), start, stop, &record_ids)
+      != kCgiCodeOk ) {
+    LOG_ERROR << "read user active record ids failed! user:" << user;
+    return kCgiCodeSystemError;
+  }
+
+  if (GetRecords(record_ids, records) != kCgiCodeOk) {
+    LOG_ERROR << "read user active records failed! user:" << user;
+    return kCgiCodeSystemError;
+  }
+
+  if (record_ids.size() < size_t(page_count_)) {
+    return kCgiCodeNoMoreData;
+  } else {
+    return kCgiCodeMoreData;
+  }
 }
 
 int RecordApi::LinkRecordToUserHome(const std::string &id,
@@ -132,12 +183,34 @@ int RecordApi::GetRecords(const std::string &key, int index_start,
   }
   return kCgiCodeOk;
 }
-int RecordApi::GetRecords(const std::vector<std::string> &keys,
-    std::vector<ExtRecord> *records) {
-  RedisStr2Pb<ExtRecord> redis;
-  if (redis.Query("MGET", keys, records) == RedisCodeError) {
+
+int RecordApi::GetRecords(const std::vector<std::string> &ids,
+    std::map<std::string, RoughRecord> *records) {
+  if (ids.empty()) {
+    return kCgiCodeOk;
+  }
+
+  std::vector<std::string> keys;
+  for (std::vector<std::string>::const_iterator iter = ids.begin(); 
+      iter != ids.end(); ++iter) {
+    keys.push_back(GetRecordRoughDataKey(*iter));
+  }
+
+  RedisStr2Pb<RoughRecord> redis;
+  std::map<std::string, RoughRecord> tmp_records;
+  if (redis.Query("MGET", keys, &tmp_records) == RedisCodeError) {
     LOG_ERROR << "Mget interacts failed!"; 
     return kCgiCodeSystemError;
   }
+
+  for (std::map<std::string, RoughRecord>::iterator iter = tmp_records.begin();
+      iter != tmp_records.end(); ++iter) {
+    if (iter->second.is_delete()) {
+      continue;
+    }
+    (*records)[iter->first] = iter->second;
+  }
+  
   return kCgiCodeOk;
 }
+

@@ -74,7 +74,7 @@ message CreateRecordReq {
   string status = 3;           // 状态
   string text = 4;             // 内容
   int32 picture = 5;           // 图片个数
-  string public = 6;           // 是否公开
+  string is_public = 6;        // 是否公开
   string address = 7;          // 地址
 }
 
@@ -94,7 +94,7 @@ message DelRecordReq {
   string id = 1;
 }
 
-message QueryRecordlReq {
+message QueryRecordReq {
   string id = 1;
 }
 
@@ -109,6 +109,11 @@ message QueryRecordListReq {
 message QueryRecordListRes {
   int32 page = 1;
   repeated ExtRecord records = 2;
+}
+
+message AltRecordQrivateReq {
+  string id = 1;                   // 记录id
+  string is_public = 2;            // 是否公开
 }
 
 

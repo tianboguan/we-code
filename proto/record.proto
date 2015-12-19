@@ -4,7 +4,7 @@ import 'proto/profile.proto';
 
 // 记录相关数据
 // 单条记录内容
-message Record {
+message RoughRecord {
   string id = 1;
   string user = 2;
   int64 time = 3;
@@ -13,9 +13,10 @@ message Record {
   string status = 6;
   string text = 7;
   string address = 8;
-  bool public = 9;
-  int32 img_count = 10;
-  repeated string picture = 11;
+  bool is_public = 9;
+  bool is_delete = 10;
+  int32 picture_count = 11;
+  repeated string pictures = 12;
 }
 
 // 记录概要内容
@@ -32,30 +33,31 @@ message InterStat {
   int32 comment = 3;
 }
 
+
 message ExtRecord {
-  Record record = 1;                // 记录
-  StripUserProfile user = 2;        // 用户
-  InterStat interact = 3;           // 互动数据，不cache，需单独拉取
+ RoughRecord record = 1;                // 记录
+ StripUserProfile user = 2;             // 用户
+ InterStat interact = 3;                // 互动数据，不cache，需单独拉取
 }
 
-//service Record {
-//  // Sends a greeting
-//  rpc HandleRecord (RecordReq) returns (RecordRes) {}
-//}
-//
-//enum RecordOP {
-//  RECORD_OP_INVALID = 0;               // 非法操作
-//  RECORD_OP_ADD = 1;                   // 新增
-//  RECORD_OP_DELETE = 2;                // 删除
-//}
-//
-//message RecordReq {
-//  RecordOP op = 1;
-//  string id = 2;
-//  int64 time = 3;
-//}
-//
-//message RecordRes {
-//  int32 code = 1;
-//  string id = 2;
-//}
+service RecordServer {
+  // Sends a greeting
+  rpc HandleRecord (RecordReq) returns (RecordRes) {}
+}
+
+enum RecordOP {
+  RECORD_OP_INVALID = 0;               // 非法操作
+  RECORD_OP_ADD = 1;                   // 新增
+  RECORD_OP_DELETE = 2;                // 删除
+}
+
+message RecordReq {
+  RecordOP op = 1;
+  string id = 2;
+  int64 time = 3;
+}
+
+message RecordRes {
+  int32 code = 1;
+  string id = 2;
+}

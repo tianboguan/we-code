@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+// 记录互动统计
+message RecordStat {
+  int32 view = 1;
+  int32 like = 2;
+  int32 comment = 3;
+}
+
+message UserStat {
+  string user = 1;
+  int32 login = 2;
+  int32 follow = 3;
+  int32 followed = 4;
+  int32 record = 5;
+  int32 comment = 6;
+  int32 commented = 7;
+  int32 like = 8;
+  int32 liked = 9;
+}
+
+service StatisticServer {
+  rpc HandleStatistic (StatReq) returns (StatRes) {}
+}
+
+enum StatisticCmd {
+  STAT_CMD_INVALID= 0;               // 非法操作
+  STAT_CMD_LOGIN = 1;
+  STAT_CMD_VIEW_RECORD = 2;
+  STAT_CMD_LIKE_RECORD = 3;
+  STAT_CMD_COMMENT_RECORD = 4;
+  STAT_CMD_CREATE_RECORD = 5;
+  STAT_CMD_FOLLOW = 6;
+  STAT_CMD_UNFOLLOW = 7;
+}
+
+message StatReq {
+  StatisticCmd cmd = 1;
+  LoginStatReq login = 2;
+  RecordStatReq record = 3;
+  FollowStatReq follow = 4;
+}
+
+message LoginStatReq {
+  string user = 1;
+}
+
+message RecordStatReq {
+  string user = 1;
+  repeated string target_records = 2;
+}
+
+message FollowStatReq {
+  string user = 1;
+  repeated string target_users = 2;
+}
+
+message StatRes {
+  int32 code = 1;
+}
+

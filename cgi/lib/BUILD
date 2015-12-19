@@ -18,5 +18,13 @@ cc_library(
     '//common/encode:encode',
     '//common/sms:sms',
     '//common/pbjson:pbjson',
+    #'//thirdparty/grpc++:grpc++_unsecure',
+    #'//thirdparty/grpc:grpc',
+    #'//thirdparty/grpc:gpr',
+    #'//thirdparty/protobuf:protobuf',   
+    #'//thirdparty/glog:glog',
+    #'#pthread',
+    #'#dl',
+    #'#rt'
   ]
 )

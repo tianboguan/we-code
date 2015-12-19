@@ -11,10 +11,10 @@ class ProfileApi {
     int Update(const std::string &user, const UserProfile &profile);
     int Get(const std::string &user, UserProfile *profile);
     int Get(const std::string &user, StripUserProfile *strip);
-    int MGet(const std::vector<std::string> &users,
-        std::vector<UserProfile> *profiles);
-    int MGet(const std::vector<std::string> &users,
-        std::vector<StripUserProfile> *strips);
+    int MGet(const std::set<std::string> &users,
+        std::map<std::string, UserProfile> *profiles);
+    int MGet(const std::set<std::string> &users,
+        std::map<std::string, StripUserProfile> *strips);
     int Del(const std::string &user);
 
     void Profile2Base(const UserProfile &profile, StripUserProfile *strip);

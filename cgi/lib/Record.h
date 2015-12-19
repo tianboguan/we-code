@@ -4,6 +4,7 @@
 #include <string>
 #include "proto/CgiReq.pb.h"
 #include "common/app/RecordApi.h"
+#include <map>
 
 class Record {
   public:
@@ -18,6 +19,8 @@ class Record {
     int AltPrivate(const AltRecordQrivateReq &req);
 
   private:
+    int BuildRecordListRes(std::map<std::string, RoughRecord> &records,
+        QueryRecordListRes *res, bool filter_private = false);
     void GetImgConf(int count, std::string record_id, std::vector<ImgConf> *confs);
 
   private:

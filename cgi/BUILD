@@ -68,6 +68,6 @@ cc_binary(
     '//cgi/lib:cgi',
     '//thirdparty/glog:glog',
     '//common/cgi_utils:CgiUtils',
-    '//common/tencent_img:TencentImg'
+    '//common/tencent_img:TencentImg',
   ]
 )

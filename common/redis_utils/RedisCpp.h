@@ -63,11 +63,11 @@ class RedisCpp : public RedisBase {
     RedisCode Query(std::string cmd, const std::string &key,
         std::map<std::string, std::string> *values);
 
-    // cmd input a set of params, return a set of values
+    // cmd input a set of params, return a map of values
     // such as MGET key1 key2 key3 ...
     // return RedisCodeOK on success, other on error
     RedisCode Query(std::string cmd, const std::vector<std::string> &keys,
-        std::vector<std::string> *values);
+        std::map<std::string, std::string> *values);
 
     // cmd input a key and a range, return a set of values
     // such as LRANGE key start stop

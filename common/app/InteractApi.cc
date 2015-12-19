@@ -295,9 +295,14 @@ int InteractApi::GetInteracts(const std::string &key, int index_start,
 int InteractApi::GetInteracts(const std::vector<std::string> &keys,
     std::vector<ExtInteract> *interacts) {
   RedisStr2Pb<ExtInteract> redis;
-  if (redis.Query("MGET", keys, interacts) == RedisCodeError) {
+  std::map<std::string, ExtInteract> result;
+  if (redis.Query("MGET", keys, &result) == RedisCodeError) {
     LOG_ERROR << "Mget interacts failed!"; 
     return kCgiCodeSystemError;
+  }
+  for (std::map<std::string, ExtInteract>::iterator iter = result.begin();
+      iter != result.end(); ++iter) {
+    interacts->push_back(iter->second);
   }
   return kCgiCodeOk;
 }

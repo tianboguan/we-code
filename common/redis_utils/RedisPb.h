@@ -59,17 +59,17 @@ class RedisStr2Pb: public RedisCpp{
 
     // such as MGET
     RedisCode Query(std::string cmd, const std::vector<std::string> &keys,
-        std::vector<V> *values) {
-      std::vector<std::string> vs;
+        std::map<std::string, V> *values) {
+      std::map<std::string, std::string> vs;
       RedisCode ret = RedisCpp::Query(cmd, keys, &vs);
       if (ret != RedisCodeOK) {
         return ret;
       }
-      std::vector<std::string>::const_iterator iter;
+      std::map<std::string, std::string>::const_iterator iter;
       for (iter = vs.begin(); iter != vs.end(); ++iter) {
         V value;
-        value.ParseFromString(*iter);
-        values->push_back(value);
+        value.ParseFromString(iter->second);
+        (*values)[iter->first] = value;
       }
       return ret;
     }

@@ -63,7 +63,7 @@ int ProfileApi::Update(const std::string &user, const UserProfile &profile) {
 int ProfileApi::Get(const std::string &user, UserProfile *profile) {
   RedisStr2Pb<UserProfile> redis_pb;
   RedisCode ret = redis_pb.Query("GET", GetUserProfileKey(user), profile);
-  if (ret != RedisCodeError) {
+  if (ret == RedisCodeError) {
     LOG_ERROR << "get user profile failed! user: " << user; 
     return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
@@ -105,33 +105,34 @@ for (std::vector<UserProfile>::const_iterator iter = values.begin();
 }
 #endif
 
-int ProfileApi::MGet(const std::vector<std::string> &users,
-    std::vector<UserProfile> *profiles) {
+int ProfileApi::MGet(const std::set<std::string> &users,
+    std::map<std::string, UserProfile> *profiles) {
   std::vector<std::string> keys;
-  for (std::vector<std::string>::const_iterator iter = users.begin();
+  for (std::set<std::string>::const_iterator iter = users.begin();
       iter != users.end(); ++iter) {
     keys.push_back(GetUserProfileKey(*iter));
   }
 
   RedisStr2Pb<UserProfile> redis_pb;
-  return redis_pb.Query("MGET", keys, profiles) == RedisCodeOK?
-    kCgiCodeOk : kCgiCodeSystemError;
+  if (redis_pb.Query("MGET", keys, profiles) != RedisCodeOK) {
+    return kCgiCodeSystemError;
+  }
+
+  return kCgiCodeOk;
 }
 
-int ProfileApi::MGet(const std::vector<std::string> &users,
-    std::vector<StripUserProfile> *bases) {
-  std::vector<UserProfile> profiles;
+int ProfileApi::MGet(const std::set<std::string> &users,
+    std::map<std::string, StripUserProfile> *strips) {
+  std::map<std::string, UserProfile> profiles;
   int ret  = MGet(users, &profiles);
   if (ret != kCgiCodeOk) {
     return ret;
   }
 
-  for (std::vector<UserProfile>::iterator iter = profiles.begin();
+  for (std::map<std::string, UserProfile>::iterator iter = profiles.begin();
       iter != profiles.end(); ++iter) {
-    StripUserProfile base;
-    Profile2Base(*iter, &base);
-    bases->push_back(base);
-
+    StripUserProfile strip;
+    Profile2Base(iter->second, &((*strips)[iter->first]));
   }
   return kCgiCodeOk;
 }
