@@ -5,6 +5,7 @@
 #include "common/app/ProfileApi.h"
 #include "common/tencent_img/TencentImg.h"
 #include "thirdparty/plog/Log.h"
+#include "service/record/client/RecordClient.h"
 
 int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
   std::string record_id;
@@ -47,8 +48,17 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
     *pconf = *iter;
   }
 
-  // TODO send to server dispatch
-  
+  RecordReq dispatch_req;
+  dispatch_req.set_cmd(RECORD_CMD_ADD);
+  dispatch_req.set_time(time(NULL));
+  dispatch_req.set_id(record_id);
+  RecordRes dispatch_res;
+  RecordClient client;
+  if (!(client.Send(dispatch_req, &dispatch_res))) {
+    LOG_ERROR << "send record to dispatch server failed! user: " << user_
+      << "record id: " << record_id << " error: " << client.Error();
+  }
+
   return kCgiCodeOk;
 }
 
@@ -115,7 +125,7 @@ void Record::GetImgConf(int count, std::string record_id,
 }
 
 int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
-        QueryRecordListRes *res, bool filter_private) {
+    QueryRecordListRes *res, bool filter_private) {
   std::map<std::string, RoughRecord>::iterator iter;
   std::set<std::string> users;
 
@@ -132,7 +142,7 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   for (iter = records.begin(); iter != records.end(); ++iter) {
     users.insert((iter->second).user());
   }
-  
+
   // Get user info
   ProfileApi profile_api;
   std::map<std::string, StripUserProfile> profiles;
@@ -142,7 +152,7 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   }
 
   // Get record stat info
-  std::map<std::string, InterStat> stats;
+  std::map<std::string, RecordStat> stats;
   // TODO get each record stats
 
   for (iter = records.begin(); iter != records.end(); ++iter) {
