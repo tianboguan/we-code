@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message RecordQueueConf {
+  string queue_path = 1;
+  int64 shm_size = 2;
+}
+
+message RecordConf {
+  RecordQueueConf queue = 1;
+  string host = 2;
+  int32 port = 3;
+  int32 concurrent = 4;
+}

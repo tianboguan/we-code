@@ -40,12 +40,23 @@ proto_library(
 )
 
 proto_library(
+  name = 'BusinessProto',
+  srcs = [ 
+    'business.proto'
+  ],  
+  deps = [ 
+  ]   
+)
+
+proto_library(
   name = 'InteractProto',
   srcs = [ 
     'interact.proto'
   ],  
   deps = [ 
-    '//proto:RecordProto'
+    #'//proto:ProfileProto',
+    '//proto:RecordProto',
+    #'//thirdparty/protobuf:protobuf',   
   ]   
 )
 
@@ -55,10 +66,12 @@ proto_library(
     'record.proto'
   ],  
   deps = [ 
+    '//proto:ProfileProto',
+    '//proto:StatisticProto',
     '//thirdparty/grpc++:grpc++_unsecure',
     '//thirdparty/grpc:grpc',
     '//thirdparty/grpc:gpr',
-    #'//thirdparty/protobuf:protobuf',   
+    '//thirdparty/protobuf:protobuf',   
     #'//thirdparty/glog:glog',
     #'#pthread',
     #'#dl',

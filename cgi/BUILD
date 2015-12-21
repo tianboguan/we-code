@@ -42,6 +42,7 @@ cc_binary(
   ],
   deps = [
     '//cgi/lib:cgi',
+    '//proto:BusinessProto',
     '//thirdparty/glog:glog',
     '//common/cgi_utils:CgiUtils',
   ]

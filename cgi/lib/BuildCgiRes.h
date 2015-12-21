@@ -42,5 +42,29 @@ void SendPostResWithoutData(int code) {
   cout << oss.str();
 }
 
+void SendAddressRes(int code, const AddressRes &res) {
+  // string json;
+  // pbjson::pb2json(&data, json);
+
+  string result;
+  ::google::protobuf::Map<::std::string, ::std::string>::const_iterator iter;
+  for (iter = res.address().begin(); iter != res.address().end(); ++iter) {
+    result += "\"" + iter->first + "\":\"" + iter->second + "\"," ;
+  }
+  
+  ostringstream oss;
+  oss << "Content-type: text/script\n\n"
+      << "{\"code\":" << code << ","
+      << "\"message\":\"" << GetErrMsg(code) << "\","
+      // << "\"data\":" << json << "}\n";
+      << "\"data\": {" << result << "}}\n";
+
+  LOG_ERROR << "cgi response";
+  LOG_ERROR << "------------------------";
+  LOG_ERROR << oss.str();
+
+  cout << oss.str();
+
+}
 
 #endif // CGI_LIB_BUILDCGIRES_H_

@@ -14,8 +14,11 @@ class Business {
   public:
     Business() {}; 
 
-    int Disease(ElementList *res);
+    // int Disease(ElementList *res);
+    int Disease(DiseaseRes *res);
     int Address(const AddressReq &req,AddressRes *res);
+    // int Address(const AddressReq &req,
+    //    ::google::protobuf::Map<::std::string, ::std::string> *res_map);
     int Tag(const TagReq &req, TagRes *res);
 
   private:

@@ -27,7 +27,7 @@ class RecordApi {
     int UnlinkRecordToUserHome(const std::string &id, const std::string &user);
     int LinkRecordToUserActive(const std::string &id, const std::string &user);
     int UnlinkRecordToUserActive(const std::string &id, const std::string &user);
-    // int LinkRecordToUserRecent(const std::string &id, const std::string &user);
+    int LinkRecordToRecent(const std::string &id);
 
   private:
     int GetRecords(const std::string &key, int index_start,

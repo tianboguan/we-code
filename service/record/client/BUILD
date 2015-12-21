@@ -10,9 +10,7 @@ cc_binary(
   name = 'test_proto',
   srcs = 'test_proto.cc',
   deps = [
-    #'//proto/hello_proto:hello_proto',
-    '//proto:BusinessProto',
-    '//thirdparty/glog:glog',
+    '//proto/hello_proto:hello_proto',
   ]
 )
 
@@ -55,13 +53,13 @@ cc_binary(
   incs = '../common/rapidjson/',
 )
 
-#cc_binary(
-#  name = 'test_pb2json',
-#  srcs = 'test_pb2json.cc',
-#  deps = [
-#    '//proto/hello_proto:hello_proto',
-#  ]
-#)
+cc_binary(
+  name = 'test_pb2json',
+  srcs = 'test_pb2json.cc',
+  deps = [
+    '//proto/hello_proto:hello_proto',
+  ]
+)
 
 cc_binary(
   name = 'test_glog',

@@ -18,7 +18,8 @@ cc_library(
     '//proto:InteractProto',
     '//proto:RecordProto',
     '//proto:ProfileProto',
-    #'//common/redis_utils:RedisUtils',
+    '//common/redis_utils:RedisUtils',
+    '//common/utils:Utils',
     #'//common/encode:encode',
     #'//common/sms:sms',
   ]

@@ -19,7 +19,7 @@ std::string GetUserNoticeInteractKey(std::string user);
 
 std::string GetUserHomeRecordKey(std::string user);
 std::string GetUserActiveRecordKey(std::string user);
-std::string GetUserRecentRecordKey(std::string user);
+// std::string GetUserRecentRecordKey(std::string user);
 
 // ---------- follow info cache key -----------
 std::string GetFollowActionKey(std::string user);
@@ -31,7 +31,7 @@ std::string GetFollowBlockKey(std::string user);
 std::string GetRecordSequenceNoKey();
 std::string GetRecordRoughDataKey(std::string id);
 std::string GetRecordInteractDataKey(std::string id);
-
+std::string GetRecordRecentKey();
 
 // -------- interact info cache key -------------
 std::string GetInteractSequenceNoKey();

@@ -1,0 +1,60 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Add	src/cache.cc	/^bool InteractCache::Add(const InteractReq &req) {$/;"	f	class:InteractCache	signature:(const InteractReq &req)
+Add	src/cache.h	/^    bool Add(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+Add	src/notice.h	/^    bool Add(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+AddToRecord	src/cache.cc	/^bool InteractCache::AddToRecord(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToRecord	src/cache.h	/^    bool AddToRecord(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToRecord	src/notice.h	/^    bool AddToRecord(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUser	src/cache.cc	/^bool InteractCache::AddToUser(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUser	src/cache.h	/^    bool AddToUser(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUser	src/notice.h	/^    bool AddToUser(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUserInterList	src/cache.cc	/^bool InteractCache::AddToUserInterList(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUserInterList	src/cache.h	/^    bool AddToUserInterList(const InteractRoughData &inter);$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+AddToUserInterList	src/notice.h	/^    bool AddToUserInterList(const InteractRoughData &inter);$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+Delete	src/cache.cc	/^bool InteractCache::Delete(const InteractReq &req) {$/;"	f	class:InteractCache	signature:(const InteractReq &req)
+Delete	src/cache.h	/^    bool Delete(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+Delete	src/notice.h	/^    bool Delete(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+DeleteFromRecord	src/cache.cc	/^bool InteractCache::DeleteFromRecord(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromRecord	src/cache.h	/^    bool DeleteFromRecord(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromRecord	src/notice.h	/^    bool DeleteFromRecord(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUser	src/cache.cc	/^bool InteractCache::DeleteFromUser(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUser	src/cache.h	/^    bool DeleteFromUser(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUser	src/notice.h	/^    bool DeleteFromUser(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUserInterList	src/cache.cc	/^bool InteractCache::DeleteFromUserInterList(const InteractRoughData &inter) {$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUserInterList	src/cache.h	/^    bool DeleteFromUserInterList(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+DeleteFromUserInterList	src/notice.h	/^    bool DeleteFromUserInterList(const InteractRoughData &inter); $/;"	p	class:InteractCache	signature:(const InteractRoughData &inter)
+GetInteractBaseInfo	src/cache.cc	/^bool InteractCache::GetInteractBaseInfo(const InteractRoughData &inter,$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter, InteractBaseData *base)
+GetInteractBaseInfo	src/cache.h	/^    bool GetInteractBaseInfo(const InteractRoughData &inter,$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter, InteractBaseData *base)
+GetInteractBaseInfo	src/notice.h	/^    bool GetInteractBaseInfo(const InteractRoughData &inter,$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter, InteractBaseData *base)
+GetInteractExtInfo	src/cache.cc	/^bool InteractCache::GetInteractExtInfo(const InteractRoughData &inter,$/;"	f	class:InteractCache	signature:(const InteractRoughData &inter, InteractExtendData *ext)
+GetInteractExtInfo	src/cache.h	/^    bool GetInteractExtInfo(const InteractRoughData &inter,$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter, InteractExtendData *ext)
+GetInteractExtInfo	src/notice.h	/^    bool GetInteractExtInfo(const InteractRoughData &inter,$/;"	p	class:InteractCache	signature:(const InteractRoughData &inter, InteractExtendData *ext)
+GetRecordOwnerInfo	src/cache.cc	/^bool InteractCache::GetRecordOwnerInfo(std::string id, UserProfile *user) {$/;"	f	class:InteractCache	signature:(std::string id, UserProfile *user)
+GetRecordOwnerInfo	src/cache.h	/^    bool GetRecordOwnerInfo(std::string id, UserProfile *user);$/;"	p	class:InteractCache	signature:(std::string id, UserProfile *user)
+GetRecordOwnerInfo	src/notice.h	/^    bool GetRecordOwnerInfo(std::string id, UserProfile *user);$/;"	p	class:InteractCache	signature:(std::string id, UserProfile *user)
+GetUserBaseInfo	src/cache.cc	/^bool InteractCache::GetUserBaseInfo(std::string user_id, UserBaseInfo *info) {$/;"	f	class:InteractCache	signature:(std::string user_id, UserBaseInfo *info)
+GetUserBaseInfo	src/cache.h	/^    bool GetUserBaseInfo(std::string user_id, UserBaseInfo *info);$/;"	p	class:InteractCache	signature:(std::string user_id, UserBaseInfo *info)
+GetUserBaseInfo	src/notice.h	/^    bool GetUserBaseInfo(std::string user_id, UserBaseInfo *info);$/;"	p	class:InteractCache	signature:(std::string user_id, UserBaseInfo *info)
+HandleInteract	src/main.cc	/^  Status HandleInteract(ServerContext* context, const InteractReq* req,$/;"	f	class:final	signature:(ServerContext* context, const InteractReq* req, InteractRes *res)
+Init	src/main.cc	/^  bool Init() {$/;"	f	class:final	signature:()
+InteractCache	src/cache.h	/^    InteractCache(const std::string &cache_dir) : dir_(cache_dir) {}$/;"	f	class:InteractCache	signature:(const std::string &cache_dir)
+InteractCache	src/cache.h	/^class InteractCache {$/;"	c
+InteractCache	src/notice.h	/^    InteractCache(const std::string &cache_dir) : dir_(cache_dir) {}$/;"	f	class:InteractCache	signature:(const std::string &cache_dir)
+InteractCache	src/notice.h	/^class InteractCache {$/;"	c
+InteractProxy	src/main.cc	/^  InteractProxy(const InteractConf &conf) : conf_(conf) {};$/;"	f	class:final	signature:(const InteractConf &conf)
+SERVICE_INTERACT_SRC_CACHE_H_	src/cache.h	2;"	d
+SERVICE_INTERACT_SRC_CACHE_H_	src/notice.h	2;"	d
+Work	src/cache.cc	/^bool InteractCache::Work(const InteractReq &req) {$/;"	f	class:InteractCache	signature:(const InteractReq &req)
+Work	src/cache.h	/^    bool Work(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+Work	src/notice.h	/^    bool Work(const InteractReq &req);$/;"	p	class:InteractCache	signature:(const InteractReq &req)
+conf_	src/main.cc	/^    InteractConf conf_;$/;"	m	class:final	file:
+dir_	src/cache.h	/^    std::string dir_;$/;"	m	class:InteractCache
+dir_	src/notice.h	/^    std::string dir_;$/;"	m	class:InteractCache
+final	src/main.cc	/^class InteractProxy final : public Interact::Service  {$/;"	c	file:
+main	src/main.cc	/^int main(int argc, char** argv) {$/;"	f	signature:(int argc, char** argv)
+queue_	src/main.cc	/^    imque::SupperQueue<InteractReq> *queue_;$/;"	m	class:final	file:

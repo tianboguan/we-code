@@ -64,9 +64,12 @@ std::string GetRecordRoughDataKey(std::string id) {
 std::string GetRecordInteractDataKey(std::string id) {
   return "ri_" + id;
 }
-std::string GetRecordExtDataKey(std::string id) {
-  return "re_" + id;
+std::string GetRecordRecentKey() {
+  return "RecentRecord";
 }
+//std::string GetRecordExtDataKey(std::string id) {
+//  return "re_" + id;
+//}
 
 // interact info key
 std::string GetInteractSequenceNoKey() {

@@ -1,7 +1,7 @@
 proto_library(
-    name = 'InteractConf',
+    name = 'RecordConf',
     srcs = [ 
-        'InteractConf.proto'
+        'RecordConf.proto'
     ],  
     deps = [ 
       #'//common/rpc:qzone_rpc_service_proto',

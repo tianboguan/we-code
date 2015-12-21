@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import 'proto/user.proto';
 import 'proto/profile.proto';
 import 'proto/record.proto';
 
@@ -38,26 +37,3 @@ message ExtInteract {
   StripRecord record = 3;            // 记录
 }
 
-
-// 互动远程服务
-//service Interact {
-//  rpc HandleInteract (InteractReq) returns (InteractRes) {}
-//}
-//
-//enum InterOP {
-//  INTER_OP_INVALID = 0;               // 非法操作
-//  INTER_OP_ADD = 1;                   // 新增
-//  INTER_OP_DELETE = 2;                // 删除
-//}
-//
-//message InteractReq {
-//  InterOP op = 1;
-//  string id = 2;
-//  int64 time = 3;
-//}
-//
-//message InteractRes {
-//  int32 code = 1;
-//  string id = 2;
-//}
-//

@@ -172,6 +172,11 @@ int RecordApi::UnlinkRecordToUserActive(const std::string &id,
   return redis.Query("LREM", GetUserActiveRecordKey(user), id) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
+int RecordApi::LinkRecordToRecent(const std::string &id) {
+  RedisCpp redis;
+  return redis.Query("LPUSH", GetRecordRecentKey(), id) ==
+    RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
+}
 
 int RecordApi::GetRecords(const std::string &key, int index_start,
     int index_stop, std::vector<std::string> *ids) {

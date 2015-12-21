@@ -34,7 +34,8 @@ int main(int argc, char *argv[]) {
   Business business;
   string action = base.action();
   if (action == "disease" ) {
-    ElementList res;
+    // ElementList res;
+    DiseaseRes res;
     ret = business.Disease(&res);
     if (ret != kCgiCodeOk) {
       SendPostResWithoutData(ret);
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]) {
     if (ret != kCgiCodeOk) {
       SendPostResWithoutData(ret);
     } else {
-      SendPostResWithData(ret, res);
+      SendAddressRes(ret, res);
     }
     return 0;
   } else if (action == "tag") {

@@ -176,8 +176,8 @@ message ImgRes {
 
 // --------- 业务数据管理 ----------------
 // 疾病相关 
-message ElementList {
-  repeated string elements = 1;              // 数据列表
+message DiseaseRes {
+  repeated string disease = 1;              // 数据列表
 }
 
 // 地址相关
@@ -192,6 +192,9 @@ message AddressRes {
 message TagReq {
   string tag_class = 1;                      // 标签类型名
 }
+
 message TagRes {
-  map<string, ElementList> tags = 1;        // 标签数据列表
+  repeated string weather = 1;
+  repeated string mood = 2;
+  repeated string status = 3;
 }

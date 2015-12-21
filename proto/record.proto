@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import 'proto/profile.proto';
+import 'proto/statistic.proto';
 
 // 记录相关数据
 // 单条记录内容
@@ -37,22 +38,21 @@ message InterStat {
 message ExtRecord {
  RoughRecord record = 1;                // 记录
  StripUserProfile user = 2;             // 用户
- InterStat interact = 3;                // 互动数据，不cache，需单独拉取
+ RecordStat interact = 3;               // 互动数据，不cache，需单独拉取
 }
 
 service RecordServer {
-  // Sends a greeting
   rpc HandleRecord (RecordReq) returns (RecordRes) {}
 }
 
-enum RecordOP {
-  RECORD_OP_INVALID = 0;               // 非法操作
-  RECORD_OP_ADD = 1;                   // 新增
-  RECORD_OP_DELETE = 2;                // 删除
+enum RecordCmd{
+  RECORD_CMD_INVALID = 0;               // 非法操作
+  RECORD_CMD_ADD = 1;                   // 新增
+  RECORD_CMD_DELETE = 2;                // 删除
 }
 
 message RecordReq {
-  RecordOP op = 1;
+  RecordCmd cmd = 1;
   string id = 2;
   int64 time = 3;
 }
