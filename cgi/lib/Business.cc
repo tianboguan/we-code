@@ -43,7 +43,7 @@ int Business::Address(const AddressReq &req, AddressRes *res) {
   iter = addr_conf.code2addr().find(req.address_code());
   if (iter == addr_conf.code2addr().end()) {
     LOG_ERROR << "invalid address code!" << req.address_code();
-    return kCgiCodeSystemError;
+    return kCgiCodeInvalidAddressCode;
   }
 
   ::google::protobuf::Map<::std::string, ::std::string> *res_map;

@@ -21,7 +21,8 @@ class FollowApi {
     int IsFollowed(const std::string &target_user, bool *followed);
     int Block(const std::string &target_user);
     int UnBlock(const std::string &target_user);
-    int IsBlocked(const std::string &target_user, bool *blocked);
+    int IsBlocked(const std::string &from, const std::string &to,
+        bool *blocked);
 
   private:
     RedisCode AddFollowAction(const FollowAction &follow_action);

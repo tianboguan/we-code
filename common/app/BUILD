@@ -1,27 +1,37 @@
 cc_library(
   name = 'AppComm',
   srcs = [
-    #'ParseCgiReq.cc',
     'RedisKeys.cc',
     'FollowApi.cc',
     'ProfileApi.cc',
     'InteractApi.cc',
     'RecordApi.cc',
     'CgiCode.cc',
-    #'Account.cc',
-    #'Business.cc',
   ],
   deps = [
-    #'//proto:CgiReqProto',
-    #'//proto:cache_data_proto',
     '//proto:FollowProto',
     '//proto:InteractProto',
     '//proto:RecordProto',
     '//proto:ProfileProto',
     '//common/redis_utils:RedisUtils',
     '//common/utils:Utils',
-    #'//common/encode:encode',
-    #'//common/sms:sms',
   ]
 )
 
+cc_test(
+  name = 'FollowApi_test',    
+  srcs = 'FollowApi_test.cc',
+  deps = [
+    '//common/app:AppComm',
+    '//thirdparty/glog:glog',
+  ]
+)   
+
+cc_test(
+  name = 'RecordApi_test',    
+  srcs = 'RecordApi_test.cc',
+  deps = [
+    '//common/app:AppComm',
+    '//thirdparty/glog:glog',
+  ]
+)   

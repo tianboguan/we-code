@@ -10,11 +10,9 @@
 
 class RecordWorker {
   public:
-    RecordWorker(const RecordQueueConf &conf) : conf_(conf){}
-    bool Init();
-    void Run();
-
-  private:
+    // RecordWorker(const RecordQueueConf &conf) : conf_(conf){}
+    // bool Init();
+    // void Run();
     bool Handle(const RecordReq &req);
     bool Add(const std::string &id);
     bool LinkToHome(const RoughRecord &record);
@@ -22,8 +20,8 @@ class RecordWorker {
     bool LinkToRecent(const RoughRecord &record);
 
   private:
-    RecordQueueConf conf_;
-    std::unique_ptr<imque::SupperQueue<RecordReq> > queue_;
+    // RecordQueueConf conf_;
+    // std::unique_ptr<imque::SupperQueue<RecordReq> > queue_;
     RecordApi api_;
 };
 

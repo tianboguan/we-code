@@ -19,51 +19,66 @@ using namespace std;
 
 class RecordService final : public RecordServer::Service  {
   public:
-    RecordService(const RecordQueueConf &conf) : conf_(conf) {}
+    // RecordService(const RecordQueueConf &conf) : conf_(conf) {}
 
+#if 0
     bool Init() {
       std::unique_ptr<imque::SupperQueue<RecordReq> > queue(
           new imque::SupperQueue<RecordReq>(conf_.shm_size(), conf_.queue_path()));
       queue_ = std::move(queue);
       return queue_.get() != NULL;
     }
+#endif
 
     Status HandleRecord(ServerContext* context, const RecordReq* req,
         RecordRes *res) {
-      bool  ret;
-      ret = queue_->enq(*req);
-      LOG_IF(ERROR, !ret) << "push msg to queue failed!";
-      if (ret) {
-        res->set_code(0);
-      } else {
+      LOG(ERROR) << "got a request:\n-------------------\n" << req->Utf8DebugString();
+      pid_t pid = fork();
+      if (pid == 0) {
+        RecordWorker worker;
+        worker.Handle(*req);
+        exit(0);
+      } else if (pid < 0) {
+        LOG(ERROR) << "create record work task failed! error: "
+          << strerror(errno);
         res->set_code(-1);
+      } else {
+        res->set_code(0);
       }
       res->set_id(req->id());
       return Status::OK;
     }
 
   private:
+#if 0
     RecordQueueConf conf_;
     std::unique_ptr<imque::SupperQueue<RecordReq> > queue_;
+#endif
 };
 
-void RecordProxy (const RecordConf &conf) {
-  string server_address(conf.host() + value_to_string(conf.port()));
-  RecordService service(conf.queue());
+void RecordProxy(const RecordConf &conf) {
+  string server_address(conf.host() + ":" + value_to_string(conf.port()));
+  // RecordService service(conf.queue());
+  RecordService service;
+#if 0
   if (!service.Init()) {
     LOG(ERROR) << "init record service failed!";
     return;
   }
+#endif
 
+  LOG(ERROR) << "init record service failed!";
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);
   unique_ptr<Server> server(builder.BuildAndStart());
   server->Wait();
+  LOG(ERROR) << "why enter here!";
 
   return;
 }
 
+#if 0
 void Worker(const RecordConf &conf) {
   RecordWorker worker(conf.queue());
   if (!worker.Init()) {
@@ -72,6 +87,7 @@ void Worker(const RecordConf &conf) {
   }
   worker.Run();
 }
+#endif
 
 int main(int argc, char** argv) {
   if(!InitGlog(argv[0], "../log")) {
@@ -83,6 +99,7 @@ int main(int argc, char** argv) {
   CHECK(ParsePbConfigFromFile("../conf/record.conf", &conf) == 0)
     << "parse task config file error!";
 
+#if 0
   // create work task
   for (int i = 0; i < conf.concurrent(); i++) {
     pid_t pid = fork();
@@ -94,6 +111,7 @@ int main(int argc, char** argv) {
         << strerror(errno);
     }
   }
+#endif
 
   // create req proxy
   RecordProxy(conf);

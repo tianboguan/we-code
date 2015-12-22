@@ -4,12 +4,13 @@
 #include <sstream>
 #include <vector>
 #include <map>
+// #include <iostream>
 #include "common/utils/StringUtils.h"
 #include "thirdparty/plog/Log.h"
 #include "thirdparty/hiredis-master/hiredis.h"
 
 // cmd input 1 param, test cmd exec status 
-// such as: INCR key
+// such as: INCR key ERROR cmd
 // return RedisCodeOK on sucess, other on error
 RedisCode RedisCpp::Query(std::string cmd, const std::string &key) {
   if (Connect()) {
@@ -74,7 +75,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key, const std::st
 }
 
 // cmd input 3 param, test cmd exec status
-// such as HSET key field field_value
+// such as HSET key field field_value, LREM
 // return RedisCodeOK on success, other on error
 RedisCode RedisCpp::Query(std::string cmd, const std::string &key, 
     const std::string &param1, const std::string &param2) {
@@ -117,7 +118,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key,
 
   *integer = int(reply->integer);
   freeReplyObject(reply);
-  return RedisCodeError;
+  return RedisCodeOK;
 }
 
 // cmd input 1 param, return a string value

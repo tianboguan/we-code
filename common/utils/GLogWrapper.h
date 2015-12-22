@@ -9,6 +9,7 @@
 #include "thirdparty/gflags/gflags.h"
 #include "common/utils/FileUtils.h"
 #include <iostream>
+#include <string.h>
 
 inline bool InitGlog(const char *log_file,
     const char *log_dir,
@@ -18,6 +19,8 @@ inline bool InitGlog(const char *log_file,
   bool ret;
   ret = FileUtils::RecursivelyCreateDir(log_dir, S_IRWXO |  S_IRWXU | S_IRWXG);
   if (!ret) {
+    std::cout << "create log dir error: " << strerror(errno) << std::endl;
+    std::cout << errno << std::endl;
     return false;
   }
 

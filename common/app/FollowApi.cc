@@ -4,6 +4,20 @@
 #include "thirdparty/plog/Log.h"
 
 int FollowApi::Follow(const std::string &target_user) {
+  if (target_user == user_) {
+    LOG_ERROR << "user can't follow himself, user: " << user_;
+    return kCgiCodeFollowOperatorSelf;
+  }
+
+  // check block status
+  bool blocked = false;
+  if(IsBlocked(target_user, user_,  &blocked) != kCgiCodeOk) {
+    LOG_ERROR << "add user " << user_ << " follow " << target_user << " failed";
+    return kCgiCodeSystemError;
+  } else if (blocked) {
+    return kCgiCodeBlocked;
+  }
+
   // add action
   FollowAction action;
   action.set_type(FOLLOW_TYPE_FOLLOW);
@@ -15,15 +29,6 @@ int FollowApi::Follow(const std::string &target_user) {
     LOG_ERROR << "add user " << user_ << " follow " << target_user
       << " action failed";
     return kCgiCodeSystemError;
-  }
-
-  // check block status
-  bool blocked = false;
-  if(!IsBlocked(target_user, &blocked)) {
-    LOG_ERROR << "add user " << user_ << " follow " << target_user << " failed";
-    return kCgiCodeSystemError;
-  } else if (blocked) {
-    return kCgiCodeBlocked;
   }
 
   // add target_user to user follow to list
@@ -90,7 +95,7 @@ int FollowApi::GetFollowTo(const std::string &target_user,
 int FollowApi::GetFollowFrom(const std::string &target_user,
         std::vector<std::string> *users) {
   RedisCpp redis;
-  return redis.Query("SMEMBERS", GetFollowToKey(target_user), users)
+  return redis.Query("SMEMBERS", GetFollowFromKey(target_user), users)
     == RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 
@@ -100,7 +105,7 @@ int FollowApi::IsFollowed(const std::string &target_user, bool *followed) {
   RedisCode ret = redis.Query("SISMEMBER", GetFollowToKey(user_),
       target_user, &test);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "get user " << user_ << "follow " << target_user
+    LOG_ERROR << "get user " << user_ << " follow " << target_user
       << " status falied!"; 
     return kCgiCodeSystemError;
   }
@@ -110,6 +115,10 @@ int FollowApi::IsFollowed(const std::string &target_user, bool *followed) {
 }
 
 int FollowApi::Block(const std::string &target_user) {
+  if (target_user == user_) {
+    LOG_ERROR << "user can't block himself, user: " << user_;
+    return kCgiCodeFollowOperatorSelf;
+  }
   // add action
   FollowAction action;
   action.set_type(FOLLOW_TYPE_BLOCK);
@@ -170,19 +179,19 @@ int FollowApi::UnBlock(const std::string &target_user) {
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 
-int FollowApi::IsBlocked(const std::string &target_user, bool *blocked) {
+int FollowApi::IsBlocked(const std::string &from, const std::string &to,
+    bool *blocked) {
   int test = 0;
   RedisCpp redis;
-  RedisCode ret = redis.Query("SISMEMBER", GetFollowBlockKey(user_),
-      target_user, &test);
+  RedisCode ret = redis.Query("SISMEMBER", GetFollowBlockKey(from),
+      to, &test);
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "get user " << user_ << "block " << target_user
-      << " status falied!";
+    LOG_ERROR << "get user " << from << "block " << to << " status falied!";
     return kCgiCodeSystemError;
   }
 
   *blocked = (test == 0 ? false : true);
-  return 0;
+  return kCgiCodeOk;
 }
 
 RedisCode FollowApi::AddFollowAction(const FollowAction &follow_action) {

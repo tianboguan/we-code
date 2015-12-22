@@ -5,6 +5,7 @@
 #include "common/app/CgiCode.h"
 #include "common/app/FollowApi.h"
 
+#if 0
 bool RecordWorker::Init() {
   std::unique_ptr<imque::SupperQueue<RecordReq> > queue(
       new imque::SupperQueue<RecordReq>(conf_.shm_size(), conf_.queue_path()));
@@ -29,6 +30,7 @@ void RecordWorker::Run() {
     }
   }
 }
+#endif
 
 bool RecordWorker::Handle(const RecordReq &req) {
   switch (req.cmd()) {

@@ -77,10 +77,10 @@ int main(int argc, char *argv[]) {
     } else {
       ret = record.GetHome(req, &res); 
     }
-    if (ret == kCgiCodeOk) {
-      SendPostResWithData(ret, res);
-    } else {
+    if (ret == kCgiCodeSystemError) {
       SendPostResWithoutData(ret);
+    } else {
+      SendPostResWithData(ret, res);
     }
     return 0;
   } else if (action == "alt_privacy") {

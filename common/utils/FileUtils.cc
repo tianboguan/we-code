@@ -84,7 +84,8 @@ bool FileUtils::CreateDir(const std::string& name, int mode) {
 bool FileUtils::RecursivelyCreateDir(const std::string& path, int mode) {
   if (CreateDir(path, mode)) return true;
 
-  if (Exists(path)) return false;
+  // if (Exists(path)) return false;
+  if (Exists(path)) return true;
 
   // Try creating the parent.
   std::string::size_type slashpos = path.find_last_of('/');

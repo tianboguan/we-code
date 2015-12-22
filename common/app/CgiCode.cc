@@ -4,6 +4,7 @@
 
 std::string GetErrMsg(int code) {
   std::map<int, std::string> code2msg;
+  code2msg[kCgiCodeFollowOperatorSelf] = "不能操作自己";
   code2msg[kCgiCodeParamError] = "参数错误";
   code2msg[kCgiCodeSystemError] = "系统异常";
   code2msg[kCgiCodeOk] = "处理成功";
@@ -19,6 +20,7 @@ std::string GetErrMsg(int code) {
   code2msg[kCgiCodeMoreData] = "有更多数据";
   code2msg[kCgiCodeNoMoreData] = "没有更多数据";
   code2msg[kCgiCodeSetUserProfile] = "请先设置个人资料";
+  code2msg[kCgiCodeInvalidAddressCode] = "未知地址码";
 
   std::map<int, std::string>::iterator iter;
   iter = code2msg.find(code);

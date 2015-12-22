@@ -12,7 +12,7 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
   if (record_api_.CreateRecordId(&record_id) != kCgiCodeOk) {
     LOG_ERROR << "get record id failed! user: " << user_;
     return kCgiCodeSystemError;
-  };
+  }
 
   RoughRecord record;
   record.set_id(record_id);
@@ -31,11 +31,6 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
     record.set_is_public(false);
   }
 
-  if (record_api_.Set(record) != kCgiCodeOk) {
-    LOG_ERROR << "Set record info failed! user: " << user_;
-    return kCgiCodeSystemError;
-  }
-
   TencentImg tencent_img;
   res->set_appid(tencent_img.GetAppId());
   res->set_bucket(tencent_img.GetBucket());
@@ -46,6 +41,13 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
       iter != img_confs.end(); ++iter) {
     ImgConf *pconf = res->add_img_conf();
     *pconf = *iter;
+    std::string *download_url = record.add_pictures();
+    *download_url = tencent_img.GetUrl(iter->fileid(), DownloadImgUrl);
+  }
+
+  if (record_api_.Set(record) != kCgiCodeOk) {
+    LOG_ERROR << "Set record info failed! user: " << user_;
+    return kCgiCodeSystemError;
   }
 
   RecordReq dispatch_req;
@@ -94,8 +96,9 @@ int Record::GetRecent(const QueryRecordListReq &req, QueryRecordListRes *res) {
 
 int Record::GetHome(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
-  if (record_api_.GetHomeRecord(req.target_user(), req.page(), &records) != 
-      kCgiCodeOk) {
+    LOG_ERROR << "enter GetHome";
+  if (record_api_.GetHomeRecord(req.target_user(), req.page(), &records) == 
+      kCgiCodeSystemError) {
     LOG_ERROR << "get home record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
@@ -162,5 +165,5 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     *(ext_record.mutable_interact()) = stats[iter->first];
   }
 
-  return kCgiCodeSystemError;
+  return kCgiCodeOk;
 }

@@ -3,6 +3,8 @@
 
 #include <string>
 
+#define kCgiCodeFollowOperatorSelf   -4
+#define kCgiCodeInvalidAddressCode   -3
 #define kCgiCodeParamError           -2
 #define kCgiCodeSystemError          -1
 
@@ -25,6 +27,7 @@
 #define kCgiCodeNoMoreData          12
 
 #define kCgiCodeSetUserProfile      13
+
 extern std::string GetErrMsg(int code);
 
 #endif // CGI_LIB_CGICODE_H_

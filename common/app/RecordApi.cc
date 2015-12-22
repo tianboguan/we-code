@@ -7,6 +7,7 @@
 #include "common/app/ProfileApi.h"
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
+// #include <iostream>
 
 int RecordApi::Get(const std::string &id, RoughRecord *record) {
   RedisStr2Pb<RoughRecord> redis;
@@ -74,8 +75,13 @@ int RecordApi::Set(const RoughRecord &record) {
 
 int RecordApi::CreateRecordId(std::string *id) {
   RedisCpp redis;
-  return (redis.Query("INCR", GetRecordSequenceNoKey(), id) == RedisCodeOK
-      ? kCgiCodeOk : kCgiCodeSystemError);
+  int64_t record_id;
+  if (redis.Query("INCR", GetRecordSequenceNoKey(), &record_id) == RedisCodeOK) {
+    *id = value_to_string(record_id);
+    return kCgiCodeOk;
+  } else {
+    return kCgiCodeSystemError;
+  }
 }
 
 int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
@@ -157,7 +163,7 @@ int RecordApi::LinkRecordToUserHome(const std::string &id,
 int RecordApi::UnlinkRecordToUserHome(const std::string &id,
     const std::string &user) {
   RedisCpp redis;
-  return redis.Query("LREM", GetUserHomeRecordKey(user), id) ==
+  return redis.Query("LREM", GetUserHomeRecordKey(user), "0", id) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 int RecordApi::LinkRecordToUserActive(const std::string &id,
@@ -169,7 +175,7 @@ int RecordApi::LinkRecordToUserActive(const std::string &id,
 int RecordApi::UnlinkRecordToUserActive(const std::string &id,
     const std::string &user) {
   RedisCpp redis;
-  return redis.Query("LREM", GetUserActiveRecordKey(user), id) ==
+  return redis.Query("LREM", GetUserActiveRecordKey(user), "0", id) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 int RecordApi::LinkRecordToRecent(const std::string &id) {
@@ -181,6 +187,7 @@ int RecordApi::LinkRecordToRecent(const std::string &id) {
 int RecordApi::GetRecords(const std::string &key, int index_start,
     int index_stop, std::vector<std::string> *ids) {
   RedisCpp redis;
+  // std::cout << "start: " << index_start << " stop: " << index_stop << std::endl;
   if (redis.Query("LRANGE", key, index_start, index_stop, ids)
       == RedisCodeError) {
     LOG_ERROR << "read record ids failed! key: " << key;
@@ -213,7 +220,7 @@ int RecordApi::GetRecords(const std::vector<std::string> &ids,
     if (iter->second.is_delete()) {
       continue;
     }
-    (*records)[iter->first] = iter->second;
+    (*records)[(iter->second).id()] = iter->second;
   }
   
   return kCgiCodeOk;
