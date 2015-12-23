@@ -23,6 +23,10 @@ class InteractApi {
         std::vector<ExtInteract> *interacts);
     int GetUserSendedInteracts(int32_t page,
         std::vector<ExtInteract> *interacts);
+    int ClearRecordInteracts(const std::string &id);
+    int ClearUserNoticeInteracts();
+    int ClearUserReceivedInteracts();
+    int ClearUserSendedInteracts();
 
   private:
     int CreateInterId(std::string *id);

@@ -1,6 +1,5 @@
 #include "thirdparty/gtest/gtest.h"
 #include <string>
-#include "common/app/FollowApi.h"
 #include "common/app/RecordApi.h"
 #include "common/app/CgiCode.h"
 #include "common/utils/StringUtils.h"

@@ -35,3 +35,12 @@ cc_test(
     '//thirdparty/glog:glog',
   ]
 )   
+
+cc_test(
+  name = 'InteractApi_test',    
+  srcs = 'InteractApi_test.cc',
+  deps = [
+    '//common/app:AppComm',
+    '//thirdparty/glog:glog',
+  ]
+)   

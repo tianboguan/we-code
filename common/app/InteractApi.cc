@@ -9,6 +9,8 @@
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
 
+// #include <iostream>
+
 int InteractApi::Like(const std::string &record_id) {
   std::string id;
   int ret = CreateInterId(&id);
@@ -73,6 +75,7 @@ int InteractApi::Comment(const std::string &record_id,
   interact.set_record_id(record_id);
   interact.set_target_interact_id(target_interact_id);
   interact.set_is_delete(false);
+
   return DispatchInteract(interact);
 }
 
@@ -114,6 +117,9 @@ int InteractApi::GetUserNoticeInteracts(int32_t page,
     LOG_ERROR << "read user notice interact ids failed! user:" << user_;
     return kCgiCodeSystemError;
   }
+  if (interact_ids.empty()) {
+    return kCgiCodeNoMoreData;
+  }
 
   std::vector<std::string> keys;
   for (std::vector<std::string>::iterator iter = interact_ids.begin(); 
@@ -128,7 +134,7 @@ int InteractApi::GetUserNoticeInteracts(int32_t page,
 
   // trim readed notice
   RedisCpp redis;
-  if (redis.Query("LTRIM", GetUserNoticeInteractKey(user_), 0, stop)
+  if (redis.Query("LTRIM", GetUserNoticeInteractKey(user_), stop + 1, -1)
       != RedisCodeOK) {
     LOG_ERROR << "delete readed interact from notice failed! user:" << user_;
   }
@@ -168,6 +174,26 @@ int InteractApi::GetUserSendedInteracts(int32_t page,
     return kCgiCodeMoreData;
   }
 }
+int InteractApi::ClearRecordInteracts(const std::string &id) {
+  RedisCpp redis;
+  return redis.Query("DEL", GetRecordInteractDataKey(id)) == RedisCodeOK ?
+    kCgiCodeOk : kCgiCodeSystemError;
+}
+int InteractApi::ClearUserNoticeInteracts() {
+  RedisCpp redis;
+  return redis.Query("DEL", GetUserNoticeInteractKey(user_)) == RedisCodeOK ?
+    kCgiCodeOk : kCgiCodeSystemError;
+}
+int InteractApi::ClearUserReceivedInteracts() {
+  RedisCpp redis;
+  return redis.Query("DEL", GetUserReceivedInteractKey(user_)) == RedisCodeOK ?
+    kCgiCodeOk : kCgiCodeSystemError;
+}
+int InteractApi::ClearUserSendedInteracts() {
+  RedisCpp redis;
+  return redis.Query("DEL", GetUserSendedInteracKey(user_)) == RedisCodeOK ? 
+    kCgiCodeOk : kCgiCodeSystemError;
+}
 
 int InteractApi::GetUserReceivedInteracts(int32_t page,
     std::vector<ExtInteract> *interacts) {
@@ -200,8 +226,14 @@ int InteractApi::GetUserReceivedInteracts(int32_t page,
 
 int InteractApi::CreateInterId(std::string *id) {
   RedisCpp redis;
-  return (redis.Query("INCR", GetInteractSequenceNoKey(), id) == RedisCodeOK
-      ? kCgiCodeOk : kCgiCodeSystemError);
+  int64_t interact_id;
+  if (redis.Query("INCR", GetInteractSequenceNoKey(), &interact_id)
+      != RedisCodeOK) {
+    return kCgiCodeSystemError;
+  } else {
+    *id = value_to_string(interact_id);
+    return kCgiCodeOk;
+  }
 }
 
 int InteractApi::DispatchInteract(const RoughInteract &interact) {
@@ -250,6 +282,10 @@ int InteractApi::DispatchInteract(const RoughInteract &interact) {
     LOG_ERROR << "get record owner failed! interact: " << interact.id() <<
       "record: " << interact.record_id();
     return kCgiCodeSystemError;
+  }
+  // interact self not need link to notice and interact from list
+  if (user == user_) {
+    return kCgiCodeOk;
   }
   if (LinkInteractToUserInteractFrom(interact.id(), user) != kCgiCodeOk) {
     LOG_ERROR << "link interact " << interact.id() << " to " << user
@@ -300,8 +336,8 @@ int InteractApi::GetInteracts(const std::vector<std::string> &keys,
     LOG_ERROR << "Mget interacts failed!"; 
     return kCgiCodeSystemError;
   }
-  for (std::map<std::string, ExtInteract>::iterator iter = result.begin();
-      iter != result.end(); ++iter) {
+  for (std::map<std::string, ExtInteract>::reverse_iterator iter = result.rbegin();
+      iter != result.rend(); ++iter) {
     interacts->push_back(iter->second);
   }
   return kCgiCodeOk;
@@ -315,20 +351,24 @@ int InteractApi::Convert(const RoughInteract &from, ExtInteract *to){
   interact->set_text(from.text());
 
   RoughInteract target;
-  if (GetRoughInteract(from.target_interact_id(), &target) != kCgiCodeOk) {
-    LOG_ERROR << "read interact failed! interact: " << from.target_interact_id();
-    return kCgiCodeSystemError;
-  }
-  UserProfile profile;
-  RedisStr2Pb<UserProfile> profile_redis;
-  if (profile_redis.Query("GET", GetUserProfileKey(target.user()), &profile)
-      != kCgiCodeOk) {
-    LOG_ERROR << "read user profile failed! user: " << target.user();
-    return kCgiCodeSystemError;
-  }
+  if (from.target_interact_id().empty()) {
+    return kCgiCodeOk;
+  } else {
+    if (GetRoughInteract(from.target_interact_id(), &target) != kCgiCodeOk) {
+      LOG_ERROR << "read interact failed! id: " << from.target_interact_id();
+      return kCgiCodeSystemError;
+    }
+    UserProfile profile;
+    RedisStr2Pb<UserProfile> profile_redis;
+    if (profile_redis.Query("GET", GetUserProfileKey(target.user()), &profile)
+        != kCgiCodeOk) {
+      LOG_ERROR << "read user profile failed! user: " << target.user();
+      return kCgiCodeSystemError;
+    }
 
-  interact->set_target_nickname(profile.nickname());
-  return kCgiCodeOk;
+    interact->set_target_nickname(profile.nickname());
+    return kCgiCodeOk;
+  }
 }
 
 int InteractApi::ExtInteractUser(const std::string &user,
@@ -391,7 +431,7 @@ int InteractApi::LinkInteractToRecord(const std::string &interact,
 int InteractApi::UnlinkInteractFromRecord(const std::string &interact,
     const std::string &record) {
   RedisCpp redis;
-  return redis.Query("LREM", GetRecordInteractDataKey(record), value_to_string(0), interact) ==
+  return redis.Query("LREM", GetRecordInteractDataKey(record), "0", interact) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 
@@ -402,7 +442,7 @@ int InteractApi::LinkInteractToUserInteractTo(const std::string &interact, const
 }
 int InteractApi::UnlinkInteractFromUserInteractTo(const std::string &interact, const std::string &user) {
   RedisCpp redis;
-  return redis.Query("LREM", GetUserSendedInteracKey(user), interact) ==
+  return redis.Query("LREM", GetUserSendedInteracKey(user), "0", interact) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 int InteractApi::LinkInteractToUserInteractFrom(const std::string &interact, const std::string &user) {
@@ -412,7 +452,7 @@ int InteractApi::LinkInteractToUserInteractFrom(const std::string &interact, con
 }
 int InteractApi::UnlinkInteractFromUserInteractFrom(const std::string &interact, const std::string &user) {
   RedisCpp redis;
-  return redis.Query("LREM", GetUserReceivedInteractKey(user), interact) ==
+  return redis.Query("LREM", GetUserReceivedInteractKey(user), "0", interact) ==
     RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 int InteractApi::LinkInteractToUserInteractNotice(const std::string &interact, const std::string &user) {

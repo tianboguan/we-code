@@ -7,7 +7,8 @@
 
 class ProfileApi {
   public:
-    int Create(const std::string &user);
+    int Create(const std::string &user, bool check = true);
+    int Create(const UserProfile &profile, bool check = true);
     int Update(const std::string &user, const UserProfile &profile);
     int Get(const std::string &user, UserProfile *profile);
     int Get(const std::string &user, StripUserProfile *strip);

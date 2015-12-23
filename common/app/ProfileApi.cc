@@ -5,31 +5,43 @@
 #include "common/redis_utils/RedisPb.h"
 #include "common/redis_utils/RedisCpp.h"
 
-int ProfileApi::Create(const std::string &user) {
+int ProfileApi::Create(const std::string &user, bool check) {
   std::string key = GetUserProfileKey(user);
   RedisCpp redis;
-  int64_t value;
-  RedisCode ret = redis.Query("EXISTS", key, &value);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "check profile exit or not failed! user: " << user;
-    return kCgiCodeSystemError;
-  } 
-  if (value != 0) {
-    LOG_ERROR << user << "'s profile is exist, can't to create new one";
-    return kCgiCodeRecreateUserProfile;
+  if (check) {
+    int64_t value;
+    RedisCode ret = redis.Query("EXISTS", key, &value);
+    if (ret != RedisCodeOK) {
+      LOG_ERROR << "check profile exit or not failed! user: " << user;
+      return kCgiCodeSystemError;
+    } 
+    if (value != 0) {
+      LOG_ERROR << user << "'s profile is exist, can't to create new one";
+      return kCgiCodeRecreateUserProfile;
+    }
   }
 
   RedisStr2Pb<UserProfile> redis_pb;
   UserProfile profile;
   profile.set_user(user);
   profile.set_enrolltime(time(NULL));
-  ret = redis_pb.Query("SET", key, profile);
+  RedisCode ret = redis_pb.Query("SET", key, profile);
   if (ret != RedisCodeOK) {
     LOG_ERROR << "set user profile failed! user: " << user;
     return kCgiCodeSystemError;
   }
 
   return kCgiCodeOk;
+}
+
+int ProfileApi::Create(const UserProfile &profile, bool check) {
+  int ret = Create(profile.user(), check);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "create user failed! user: " << profile.user();
+    return ret;
+  }
+
+  return Update(profile.user(), profile);
 }
 
 int ProfileApi::Update(const std::string &user, const UserProfile &profile) {
