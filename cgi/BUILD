@@ -72,3 +72,15 @@ cc_binary(
     '//common/tencent_img:TencentImg',
   ]
 )
+
+cc_binary(
+  name = 'recommand.cgi',
+  srcs = [
+    'recommand_cgi.cc',
+  ],
+  deps = [
+    '//cgi/lib:cgi',
+    '//thirdparty/glog:glog',
+    '//common/cgi_utils:CgiUtils',
+  ]
+)

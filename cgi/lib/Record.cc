@@ -76,33 +76,48 @@ int Record::Get(const QueryRecordReq &req, ExtRecord *record) {
 
 int Record::GetActive(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
-  if (record_api_.GetActiveRecord(req.target_user(), req.page(), &records) != 
-      kCgiCodeOk) {
+  int ret = record_api_.GetActiveRecord(req.target_user(), req.page(), &records);
+  if (ret == kCgiCodeSystemError) {
     LOG_ERROR << "get home record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
-  return BuildRecordListRes(records, res, true);
+
+  if (BuildRecordListRes(records, req.page(), res, true)
+      == kCgiCodeSystemError) {
+    return kCgiCodeSystemError;
+  }
+
+  return ret;
 }
 
 int Record::GetRecent(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
-  if (record_api_.GetRecentRecord(req.target_user(), req.page(), &records) != 
-      kCgiCodeOk) {
+  int ret = record_api_.GetRecentRecord(req.target_user(), req.page(), &records);
+  if (ret == kCgiCodeSystemError) {
     LOG_ERROR << "get home record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
-  return BuildRecordListRes(records, res, true);
+  if (BuildRecordListRes(records, req.page(), res, true)
+      == kCgiCodeSystemError) {
+    return kCgiCodeSystemError;
+  }
+
+  return ret;
 }
 
 int Record::GetHome(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
-    LOG_ERROR << "enter GetHome";
-  if (record_api_.GetHomeRecord(req.target_user(), req.page(), &records) == 
-      kCgiCodeSystemError) {
+  int ret = record_api_.GetHomeRecord(req.target_user(), req.page(), &records);
+  if (ret == kCgiCodeSystemError) {
     LOG_ERROR << "get home record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
-  return BuildRecordListRes(records, res);
+  if (BuildRecordListRes(records, req.page(), res, false)
+      == kCgiCodeSystemError) {
+    return kCgiCodeSystemError;
+  }
+
+  return ret;
 }
 
 int Record::AltPrivate(const AltRecordQrivateReq &req) {
@@ -127,8 +142,10 @@ void Record::GetImgConf(int count, std::string record_id,
   }
 }
 
+// int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
+//    QueryRecordListRes *res, bool filter_private) {
 int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
-    QueryRecordListRes *res, bool filter_private) {
+    int page, QueryRecordListRes *res, bool filter_private) {
   std::map<std::string, RoughRecord>::iterator iter;
   std::set<std::string> users;
 
@@ -163,7 +180,9 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     *(ext_record.mutable_record()) = iter->second;
     *(ext_record.mutable_user()) = profiles[(iter->second).user()];
     *(ext_record.mutable_interact()) = stats[iter->first];
+    *(res->add_records()) = ext_record;
   }
 
+  res->set_page(page);
   return kCgiCodeOk;
 }

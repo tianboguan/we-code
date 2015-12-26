@@ -50,7 +50,9 @@ void SendAddressRes(int code, const AddressRes &res) {
   ::google::protobuf::Map<::std::string, ::std::string>::const_iterator iter;
   for (iter = res.address().begin(); iter != res.address().end(); ++iter) {
     result += "\"" + iter->first + "\":\"" + iter->second + "\"," ;
-  }
+  } 
+  // erase last ","
+  result.pop_back();
   
   ostringstream oss;
   oss << "Content-type: text/script\n\n"

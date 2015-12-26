@@ -20,7 +20,7 @@ class Record {
 
   private:
     int BuildRecordListRes(std::map<std::string, RoughRecord> &records,
-        QueryRecordListRes *res, bool filter_private = false);
+        int page, QueryRecordListRes *res, bool filter_private = false);
     void GetImgConf(int count, std::string record_id, std::vector<ImgConf> *confs);
 
   private:

@@ -171,6 +171,13 @@ int ParseCgiReq::Parse(AltRecordQrivateReq &req) {
   req.set_is_public(params_["public"]);
   return kCgiCodeOk;
 }
+int ParseCgiReq::Parse(RecommandReq &req) {
+  CHECK("page", true);
+  int page;
+  string_to_value(params_["page"], page);
+  req.set_page(page);
+  return kCgiCodeOk;
+}
 
 std::string ParseCgiReq::Error() {
   return err_oss.str();

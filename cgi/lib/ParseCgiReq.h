@@ -47,12 +47,15 @@ class ParseCgiReq {
     int Parse(RecordInteractReq &record_interact);
     int Parse(UserInteractReq &user_interact);
 
-    // record releted
+    // record related
     int Parse(CreateRecordReq &req);
     int Parse(DelRecordReq &req);
     int Parse(QueryRecordReq &req);
     int Parse(QueryRecordListReq &req);
     int Parse(AltRecordQrivateReq &req);
+
+    // recommand related
+    int Parse(RecommandReq &req);
 
     std::string Error();
 
