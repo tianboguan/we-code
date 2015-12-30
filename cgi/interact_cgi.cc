@@ -23,16 +23,18 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  Account account(base.user(), base.token()); 
-  ret = account.CheckLogin();
-  if (ret != kCgiCodeOk) {
-    LOG_ERROR << "check login status for user " << base.user() << " failed!";
-    SendPostResWithoutData(ret);
-    return 0;
+  string action = base.action();
+  if (action != "record") {
+    Account account(base.user(), base.token()); 
+    ret = account.CheckLogin();
+    if (ret != kCgiCodeOk) {
+      LOG_ERROR << "check login status for user " << base.user() << " failed!";
+      SendPostResWithoutData(ret);
+      return 0;
+    }
   }
 
   Interact interact(base.user());
-  string action = base.action();
   if (action == "like") {
     LikeReq like_req;
     ret = parser.Parse(like_req);

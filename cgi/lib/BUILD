@@ -9,6 +9,7 @@ cc_library(
     'Interact.cc',
     'Record.cc',
     'Recommand.cc',
+    'Feedback.cc',
   ],
   deps = [
     '//proto:CgiReqProto',

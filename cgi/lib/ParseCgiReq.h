@@ -57,6 +57,9 @@ class ParseCgiReq {
     // recommand related
     int Parse(RecommandReq &req);
 
+    // feedback related
+    int Parse(FeedbackReq &req);
+
     std::string Error();
 
   private:

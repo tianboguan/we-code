@@ -23,16 +23,18 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  Account account(base.user(), base.token()); 
-  ret = account.CheckLogin();
-  if (ret != kCgiCodeOk) {
-    LOG_ERROR << "check login status for user " << base.user() << " failed!";
-    SendPostResWithoutData(ret);
-    return 0;
+  string action = base.action();
+  if (action != "query_detail") {
+    Account account(base.user(), base.token()); 
+    ret = account.CheckLogin();
+    if (ret != kCgiCodeOk) {
+      LOG_ERROR << "check login status for user " << base.user() << " failed!";
+      SendPostResWithoutData(ret);
+      return 0;
+    }
   }
 
   Record record(base.user());
-  string action = base.action();
   if (action == "create") {
     CreateRecordReq req;
     ret = parser.Parse(req);
@@ -95,7 +97,6 @@ int main(int argc, char *argv[]) {
     SendPostResWithoutData(ret);
     return 0;
   } else if (action == "query_detail") {
-    int Get(const QueryRecordReq &req, ExtRecord *record);
     QueryRecordReq req;
     ret = parser.Parse(req);
     if (ret != kCgiCodeOk) {

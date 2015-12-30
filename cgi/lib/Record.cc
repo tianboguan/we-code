@@ -70,7 +70,24 @@ int Record::Delete(const DelRecordReq &req) {
 }
 
 int Record::Get(const QueryRecordReq &req, ExtRecord *record) {
-  // TODO
+  RoughRecord rough_record;
+  int ret = record_api_.Get(req.id(), &rough_record);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get record info failed! record id: " << req.id(); 
+    return ret;
+  }
+  std::map<std::string, RoughRecord> records;
+  records[req.id()] = rough_record;
+  QueryRecordListRes res;
+  if (BuildRecordListRes(records, 0, &res, true)
+      == kCgiCodeSystemError) {
+    return kCgiCodeSystemError;
+  }
+
+  if (res.records_size() > 0) {
+    *record = res.records(0);
+  }
+
   return kCgiCodeOk;
 }
 
@@ -136,14 +153,12 @@ void Record::GetImgConf(int count, std::string record_id,
     conf.set_fileid(*iter);
     std::string callback;
     callback += ("record=" + record_id);
-    callback += ("fileid=" + *iter);
+    callback += (";fileid=" + *iter);
     conf.set_callback(callback);
     confs->push_back(conf);
   }
 }
 
-// int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
-//    QueryRecordListRes *res, bool filter_private) {
 int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     int page, QueryRecordListRes *res, bool filter_private) {
   std::map<std::string, RoughRecord>::iterator iter;

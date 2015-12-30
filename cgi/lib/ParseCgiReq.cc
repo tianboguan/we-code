@@ -178,6 +178,15 @@ int ParseCgiReq::Parse(RecommandReq &req) {
   req.set_page(page);
   return kCgiCodeOk;
 }
+int ParseCgiReq::Parse(FeedbackReq &req) {
+  CHECK("content", true);
+  CHECK("img_count", true);
+  int img_count;
+  string_to_value(params_["img_count"], img_count);
+  req.set_content(params_["content"]);
+  req.set_img_count(img_count);
+  return kCgiCodeOk;
+}
 
 std::string ParseCgiReq::Error() {
   return err_oss.str();

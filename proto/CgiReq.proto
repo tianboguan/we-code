@@ -220,3 +220,18 @@ message RecommandRes {
   int32 page = 1;
   repeated RecommandUser users = 2;
 }
+
+// ------- feedback ----------------
+message FeedbackReq {
+  string content = 1;
+  int32 img_count = 2;
+}
+
+// FeedbackRes same with CreateRecordRes
+
+// message CreateRecordRes {
+//  string sign = 1;
+//  string appid = 2;
+//  string bucket = 3;
+//  repeated ImgConf img_conf = 4;
+//}
