@@ -10,7 +10,7 @@
 #include "thirdparty/hiredis-master/hiredis.h"
 
 // cmd input 1 param, test cmd exec status 
-// such as: INCR key ERROR cmd
+// such as: DEL key
 // return RedisCodeOK on sucess, other on error
 RedisCode RedisCpp::Query(std::string cmd, const std::string &key) {
   if (Connect()) {
@@ -122,7 +122,7 @@ RedisCode RedisCpp::Query(std::string cmd, const std::string &key,
 }
 
 // cmd input 1 param, return a string value
-// such as GET key
+// such as GET key INCR
 // return RedisCodeOK on sucess, RedisCodeNil on key not found, other on error
 RedisCode RedisCpp::Query(std::string cmd, const std::string &key, std::string *value) {
   if (Connect()) {

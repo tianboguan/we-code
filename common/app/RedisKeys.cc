@@ -16,6 +16,9 @@ std::string GetAccountPhoneKey(const std::string &phone) {
 std::string GetUserProfileKey(std::string user) {
   return "uuf_" + user;
 }
+std::string GetUserFromProfileKey(std::string key) {
+  return key.substr(4);
+}
 std::string GetUserStatKey(std::string user) {
   return "uus_" + user;
 }
@@ -67,9 +70,6 @@ std::string GetRecordInteractDataKey(std::string id) {
 std::string GetRecordRecentKey() {
   return "RecentRecord";
 }
-//std::string GetRecordExtDataKey(std::string id) {
-//  return "re_" + id;
-//}
 
 // interact info key
 std::string GetInteractSequenceNoKey() {
@@ -85,15 +85,6 @@ std::string GetInteractRecordDataKey(std::string id) {
   return "ir_" + id;
 }
 
-#if 0
-std::string GetInteractNoticeDataKey(std::string id) {
-  return "in_" + id;
-}
-std::string GetInteractHistoryDataKey(std::string id) {
-  return "ih_" + id;
-}
-#endif
-
 
 // business data key 
 std::string GetDiseaseKey() {
@@ -107,3 +98,6 @@ std::string GetAddressKey(const std::string &address_code) {
   return "address_" + address_code;
 }
 
+std::string GetRecommandKey(const std::string &user) {
+  return GetRecordRecentKey();
+}

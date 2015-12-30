@@ -126,10 +126,15 @@ int ProfileApi::MGet(const std::set<std::string> &users,
   }
 
   RedisStr2Pb<UserProfile> redis_pb;
-  if (redis_pb.Query("MGET", keys, profiles) != RedisCodeOK) {
+  std::map<std::string, UserProfile> tmp;
+  if (redis_pb.Query("MGET", keys, &tmp) != RedisCodeOK) {
     return kCgiCodeSystemError;
   }
 
+  for (std::map<std::string, UserProfile>::iterator iter = tmp.begin();
+      iter != tmp.end(); ++iter) {
+    (*profiles)[GetUserFromProfileKey(iter->first)] = iter->second;
+  }
   return kCgiCodeOk;
 }
 

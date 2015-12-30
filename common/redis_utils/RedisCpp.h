@@ -14,7 +14,7 @@ class RedisCpp : public RedisBase {
     RedisCpp(int time_out = 500) : RedisBase(time_out) {};
 
     // cmd input 1 param, test cmd exec status 
-    // such as: INCR key
+    // such as: DEL key
     // return RedisCodeOK on sucess, other on error
     RedisCode Query(std::string cmd, const std::string &key);
 

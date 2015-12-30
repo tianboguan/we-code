@@ -198,3 +198,25 @@ message TagRes {
   repeated string mood = 2;
   repeated string status = 3;
 }
+
+
+// -------- 推荐页 ----------------
+message RecommandReq {
+  int32 page = 1;
+}
+
+message RecommandUser {
+  string user = 1;
+  string nickname = 2;
+  string head = 3;
+  string disease = 4;
+  string role = 5;
+  string img = 6;
+  string text = 7;
+  string follow = 8;
+}
+
+message RecommandRes {
+  int32 page = 1;
+  repeated RecommandUser users = 2;
+}

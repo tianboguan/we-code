@@ -136,7 +136,7 @@ int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
   int stop = start + page_count_ - 1;
   std::vector<std::string> record_ids;
   // TODO get record list base user disease now get active key instead
-  if (GetRecords(GetUserActiveRecordKey(user), start, stop, &record_ids)
+  if (GetRecords(GetRecordRecentKey(), start, stop, &record_ids)
       != kCgiCodeOk ) {
     LOG_ERROR << "read user active record ids failed! user:" << user;
     return kCgiCodeSystemError;

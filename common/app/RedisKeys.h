@@ -12,6 +12,7 @@ std::string GetAccountPhoneKey(const std::string &phone);
 
 // ------- user info cache key --------------
 std::string GetUserProfileKey(std::string user);
+std::string GetUserFromProfileKey(std::string key);
 std::string GetUserStatKey(std::string user);
 std::string GetUserSendedInteracKey(std::string user);
 std::string GetUserReceivedInteractKey(std::string user);
@@ -39,18 +40,12 @@ std::string GetRoughInteractKey(std::string id);
 std::string GetInteractUserDataKey(std::string id);
 std::string GetInteractRecordDataKey(std::string id);
 
-#if 0
-std::string GetRoughInteractKey(std::string id);
-std::string GetInteractUserDataKey(std::string id);
-std::string GetInteractRecordDataKey(std::string id);
-std::string GetInteractRecordDataKey(std::string id);
-std::string GetInteractNoticeDataKey(std::string id);
-std::string GetInteractHistoryDataKey(std::string id);
-#endif
-
 // ------ business data cache key ------------
 std::string GetDiseaseKey();
 std::string GetTagKey(const std::string &tag_name);
 std::string GetAddressKey(const std::string &address_code);
+
+// ------ recommand data cache key ------------
+std::string GetRecommandKey(const std::string &user);
 
 #endif // COMMON_APP_REDISKEYS_H_ 
