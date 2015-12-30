@@ -84,3 +84,16 @@ cc_binary(
     '//common/cgi_utils:CgiUtils',
   ]
 )
+
+cc_binary(
+  name = 'feedback.cgi',
+  srcs = [
+    'feedback_cgi.cc',
+  ],
+  deps = [
+    '//cgi/lib:cgi',
+    '//thirdparty/glog:glog',
+    '//common/cgi_utils:CgiUtils',
+    '//common/tencent_img:TencentImg',
+  ]
+)
