@@ -2,10 +2,8 @@
 #include <vector>
 #include <iterator>
 #include "common/app/CgiCode.h"
-//#include "common/app/ProfileApi.h"
 #include "common/tencent_img/TencentImg.h"
 #include "thirdparty/plog/Log.h"
-//#include "service/record/client/RecordClient.h"
 
 int Feedback::Supply(const FeedbackReq &req, CreateRecordRes *res) {
   TencentImg tencent_img;
@@ -23,23 +21,6 @@ int Feedback::Supply(const FeedbackReq &req, CreateRecordRes *res) {
   }
 
   // TODO store feedback
-#if 0
-  if (record_api_.Set(record) != kCgiCodeOk) {
-    LOG_ERROR << "Set record info failed! user: " << user_;
-    return kCgiCodeSystemError;
-  }
-
-  RecordReq dispatch_req;
-  dispatch_req.set_cmd(RECORD_CMD_ADD);
-  dispatch_req.set_time(time(NULL));
-  dispatch_req.set_id(record_id);
-  RecordRes dispatch_res;
-  RecordClient client;
-  if (!(client.Send(dispatch_req, &dispatch_res))) {
-    LOG_ERROR << "send record to dispatch server failed! user: " << user_
-      << "record id: " << record_id << " error: " << client.Error();
-  }
-#endif
 
   return kCgiCodeOk;
 }

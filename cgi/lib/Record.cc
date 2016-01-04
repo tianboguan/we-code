@@ -187,15 +187,20 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   }
 
   // Get record stat info
-  std::map<std::string, RecordStat> stats;
+  // std::map<std::string, RecordStat> stats;
   // TODO get each record stats
+  RecordStat stat;
+  stat.set_view(28);
+  stat.set_like(6);
+  stat.set_comment(1);
 
   std::map<std::string, RoughRecord>::reverse_iterator riter;
   for (riter = records.rbegin(); riter != records.rend(); ++riter) {
     ExtRecord ext_record;
     *(ext_record.mutable_record()) = riter->second;
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
-    *(ext_record.mutable_interact()) = stats[riter->first];
+    //*(ext_record.mutable_interact()) = stats[riter->first];
+    *(ext_record.mutable_interact()) = stat;
     *(res->add_records()) = ext_record;
   }
 

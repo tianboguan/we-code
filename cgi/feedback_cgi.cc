@@ -33,6 +33,12 @@ int main(int argc, char *argv[]) {
 
   FeedbackReq req;
   CreateRecordRes res;
+  ret = parser.Parse(req);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << parser.Error();
+    SendPostResWithoutData(ret);
+    return 0;
+  }
   Feedback feedback(base.user());
   ret = feedback.Supply(req, &res);
   if (ret == kCgiCodeOk) {
