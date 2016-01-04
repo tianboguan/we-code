@@ -95,7 +95,7 @@ int Record::GetActive(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
   int ret = record_api_.GetActiveRecord(req.target_user(), req.page(), &records);
   if (ret == kCgiCodeSystemError) {
-    LOG_ERROR << "get home record failed! user: " << user_;
+    LOG_ERROR << "get active record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
 
@@ -111,7 +111,7 @@ int Record::GetRecent(const QueryRecordListReq &req, QueryRecordListRes *res) {
   std::map<std::string, RoughRecord> records;
   int ret = record_api_.GetRecentRecord(req.target_user(), req.page(), &records);
   if (ret == kCgiCodeSystemError) {
-    LOG_ERROR << "get home record failed! user: " << user_;
+    LOG_ERROR << "get recent record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
   if (BuildRecordListRes(records, req.page(), res, true)
@@ -190,11 +190,12 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   std::map<std::string, RecordStat> stats;
   // TODO get each record stats
 
-  for (iter = records.begin(); iter != records.end(); ++iter) {
+  std::map<std::string, RoughRecord>::reverse_iterator riter;
+  for (riter = records.rbegin(); riter != records.rend(); ++riter) {
     ExtRecord ext_record;
-    *(ext_record.mutable_record()) = iter->second;
-    *(ext_record.mutable_user()) = profiles[(iter->second).user()];
-    *(ext_record.mutable_interact()) = stats[iter->first];
+    *(ext_record.mutable_record()) = riter->second;
+    *(ext_record.mutable_user()) = profiles[(riter->second).user()];
+    *(ext_record.mutable_interact()) = stats[riter->first];
     *(res->add_records()) = ext_record;
   }
 
