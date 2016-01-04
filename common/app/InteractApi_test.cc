@@ -181,7 +181,7 @@ TEST_F(InteractApiTest, GetUserNoticeInteractsTest) {
     ASSERT_EQ(api.Comment("1", "comment1"), kCgiCodeOk);
   }
   interacts.clear();
-  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeMoreData);
+  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 28u);
   interacts.clear();
   ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeNoMoreData);

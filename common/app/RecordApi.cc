@@ -103,7 +103,7 @@ int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
   if (record_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 
@@ -126,7 +126,7 @@ int RecordApi::GetActiveRecord(const std::string &user, int32_t page,
   if (record_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 
@@ -150,7 +150,7 @@ int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
   if (record_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 

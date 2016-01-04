@@ -139,7 +139,7 @@ TEST(RecordApi, HomeRecordPageTest) {
   }
 
   records.clear();
-  ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeMoreData);
+  ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 12u);
   ASSERT_EQ(api.GetHomeRecord("1", 2, &records), kCgiCodeNoMoreData);
   EXPECT_EQ(records.size(), 20u);
@@ -195,7 +195,7 @@ TEST(RecordApi, ActiveRecordPageTest) {
   }
 
   records.clear();
-  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeMoreData);
+  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 12u);
   ASSERT_EQ(api.GetActiveRecord("1", 2, &records), kCgiCodeNoMoreData);
   EXPECT_EQ(records.size(), 20u);

@@ -142,7 +142,7 @@ int InteractApi::GetUserNoticeInteracts(int32_t page,
   if (interact_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 
@@ -171,7 +171,7 @@ int InteractApi::GetUserSendedInteracts(int32_t page,
   if (interact_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 int InteractApi::ClearRecordInteracts(const std::string &id) {
@@ -220,7 +220,7 @@ int InteractApi::GetUserReceivedInteracts(int32_t page,
   if (interact_ids.size() < size_t(page_count_)) {
     return kCgiCodeNoMoreData;
   } else {
-    return kCgiCodeMoreData;
+    return kCgiCodeOk;
   }
 }
 
