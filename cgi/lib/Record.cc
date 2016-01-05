@@ -201,6 +201,8 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
     //*(ext_record.mutable_interact()) = stats[riter->first];
     *(ext_record.mutable_interact()) = stat;
+    ext_record.set_web_url("http://182.254.220.116/h5/record.html?record_id="
+        + riter->second.id());
     *(res->add_records()) = ext_record;
   }
 
