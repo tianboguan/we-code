@@ -35,6 +35,8 @@ bool XGPush::PushSingleAccount(const std::string &account, const std::string &ms
   std::string query_string = BuildQueryString();
 
   bool ret = false;
+  // curl example:
+  // http://curl.haxx.se/libcurl/c/http-post.html
   CURL *curl;
   CURLcode res;
 
@@ -73,7 +75,7 @@ std::string XGPush::ErrorMsg() {
 std::string XGPush::BuildSign() {
   std::string build_string;
   build_string += "POST";
-  build_string += "api_url_";
+  build_string += api_url_;
   for (std::map<std::string, std::string>::const_iterator iter = params_.begin();
       iter != params_.end(); ++iter) {
     build_string += iter->first + "=" + iter->second;
@@ -81,7 +83,6 @@ std::string XGPush::BuildSign() {
   build_string += secret_key_;
 
   MD5 md5(build_string);
-
   return md5.toStr();
 }
 

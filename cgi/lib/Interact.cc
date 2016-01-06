@@ -1,11 +1,7 @@
 #include "cgi/lib/Interact.h"
 #include <vector>
-// #include <time.h>
-// #include "common/utils/string_utils.h"
-// #include "cgi/lib/CacheKeys.h"
 #include "common/app/CgiCode.h"
 #include "thirdparty/plog/Log.h"
-//#include "proto/interact.pb.h"
 
 
 int Interact::Like(const LikeReq &req) {

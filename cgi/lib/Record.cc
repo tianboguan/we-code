@@ -164,6 +164,10 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   std::map<std::string, RoughRecord>::iterator iter;
   std::set<std::string> users;
 
+  for (iter = records.begin(); iter != records.end(); ++iter) {
+    (iter->second).set_web_url("http://182.254.220.116/h5/record.html?record_id=" + iter->first);
+  }
+
   if (filter_private) {
     for (iter = records.begin(); iter != records.end();) {
       if ((iter->second).is_delete()) {
@@ -201,8 +205,6 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
     //*(ext_record.mutable_interact()) = stats[riter->first];
     *(ext_record.mutable_interact()) = stat;
-    ext_record.set_web_url("http://182.254.220.116/h5/record.html?record_id="
-        + riter->second.id());
     *(res->add_records()) = ext_record;
   }
 

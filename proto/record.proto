@@ -18,6 +18,7 @@ message RoughRecord {
   bool is_delete = 10;
   int32 picture_count = 11;
   repeated string pictures = 12;
+  string web_url = 13;                // web分享访问地址
 }
 
 // 记录概要内容
@@ -39,7 +40,7 @@ message ExtRecord {
  RoughRecord record = 1;                // 记录
  StripUserProfile user = 2;             // 用户
  RecordStat interact = 3;               // 互动数据，不cache，需单独拉取
- string web_url = 4;                    // h5分享页访问地址
+ // string web_url = 4;                    // h5分享页访问地址
 }
 
 service RecordServer {
