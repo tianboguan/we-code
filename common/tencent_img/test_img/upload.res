@@ -1,2 +1,0 @@
-{"code":0,"message":"成功","data":{"download_url":"http://feelings-10010517.image.myqcloud.com/google.jpg","fileid":"google.jpg","info":[{"0":{"height":166,"width":303}}],"url":"http://web.image.myqcloud.com/photos/v2/10010517/feelings/0/google.jpg"}
-}
