@@ -7,11 +7,12 @@
 
 class RecordApi {
   public:
-    RecordApi() : page_count_(12) {}; 
+    RecordApi(int page_count = 12) : page_count_(page_count) {}; 
 
     int Get(const std::string &id, RoughRecord *record);
     int Get(const std::string &id, StripRecord *record);
     int Del(const std::string &id);
+    int HardDel(const std::string &id);
     int Set(const RoughRecord &record);
     int SetRecordPublic(const std::string &id, bool is_public);
     int GetRecordOwner(const std::string &id, std::string *user);

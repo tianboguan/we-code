@@ -46,31 +46,18 @@ int ProfileApi::Create(const UserProfile &profile, bool check) {
 
 int ProfileApi::Update(const std::string &user, const UserProfile &profile) {
   UserProfile old_profile;
-  RedisStr2Pb<UserProfile> redis_pb;
-  std::string key = GetUserProfileKey(user);
-  RedisCode ret = redis_pb.Query("GET", key, &old_profile);
-  if (ret == RedisCodeError) {
+  int ret = Get(user, &old_profile);
+  if (ret == kCgiCodeSystemError) {
     LOG_ERROR << "get user profile failed! user: " << user; 
     return kCgiCodeSystemError;
-  } else if (ret == RedisCodeNil){
+  } else if (ret == kCgiCodeUserProfileInexist) {
     old_profile.set_user(user);
     old_profile.set_enrolltime(time(NULL));
     old_profile.set_start_time(time(NULL));
-  } 
-
-  old_profile.MergeFrom(profile);
-
-  LOG_ERROR << "set profile: "; 
-  LOG_ERROR << profile.DebugString();
-  LOG_ERROR << "set old profile: "; 
-  LOG_ERROR << old_profile.DebugString();
-  ret = redis_pb.Query("SET", key, old_profile);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "update user profile failed! user: " << user; 
-    return kCgiCodeSystemError;
   }
 
-  return kCgiCodeOk;
+  old_profile.MergeFrom(profile);
+  return Set(user, old_profile);
 }
 
 int ProfileApi::Get(const std::string &user, UserProfile *profile) {
@@ -81,7 +68,18 @@ int ProfileApi::Get(const std::string &user, UserProfile *profile) {
     return kCgiCodeSystemError;
   } else if (ret == RedisCodeNil) {
     LOG_ERROR << "please set user profile first! user: " << user; 
-    return kCgiCodeSetUserProfile;
+    return kCgiCodeUserProfileInexist;
+  }
+
+  return kCgiCodeOk;
+}
+
+int ProfileApi::Set(const std::string &user, const UserProfile &profile) {
+  RedisStr2Pb<UserProfile> redis_pb;
+  RedisCode ret = redis_pb.Query("SET", GetUserProfileKey(user), profile);
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "set user profile failed! user: " << user; 
+    return kCgiCodeSystemError;
   }
 
   return kCgiCodeOk;
@@ -96,27 +94,6 @@ int ProfileApi::Get(const std::string &user, StripUserProfile *base) {
   Profile2Base(profile, base);
   return kCgiCodeOk;
 }
-#if 0
-std::vector<std::string> keys;
-std::vector<UserProfile> values;
-
-for (std::vector<std::string>::const_iterator iter = users.begin();
-    iter != users.end(); ++iter) {
-  keys.push_back(key_prefix + *iter);
-}
-
-RedisCode ret = profile_redis_.Query("MGET", keys, &values);
-if (ret != RedisCodeOK) {
-  LOG_ERROR << "get " << user_ << " follow list failed!";
-  return kCgiCodeSystemError;
-}
-
-for (std::vector<UserProfile>::const_iterator iter = values.begin();
-    iter != values.end(); ++iter) {
-  UserProfile* user = res->add_users();
-  *user = *iter;
-}
-#endif
 
 int ProfileApi::MGet(const std::set<std::string> &users,
     std::map<std::string, UserProfile> *profiles) {
@@ -160,32 +137,6 @@ int ProfileApi::Del(const std::string &user) {
   return (redis.Query("DEL", GetUserProfileKey(user)) == RedisCodeOK)
     ? kCgiCodeOk : kCgiCodeSystemError;
 }
-
-#if 0
-int ProfileApi::Get(const std::string &user, UserStat *stat) {
-  std::string key = GetUserStatKey(user);
-  RedisCode Query(std::string cmd, const std::string &key, 
-      const std::string &param1, const std::string &param2);
-  RedisCpp redis;
-  std::map<std::string, std::string> stat_kv;
-  RedisCode ret = redis.Query("HGETALL", key, &stat_kv);
-  if (ret != RedisCodeOK) {
-    LOG_ERROR << "get user stat failed! user: " << user; 
-    return kCgiCodeSystemError;
-  }
-  stat->set_user(user);
-  stat->set_login(atoi(stat_kv["login"].c_str()));
-  stat->set_follow(atoi(stat_kv["follow"].c_str()));
-  stat->set_followed(atoi(stat_kv["followed"].c_str()));
-  stat->set_record(atoi(stat_kv["record"].c_str()));
-  stat->set_comment(atoi(stat_kv["comment"].c_str()));
-  stat->set_commented(atoi(stat_kv["commented"].c_str()));
-  stat->set_like(atoi(stat_kv["like"].c_str()));
-  stat->set_liked(atoi(stat_kv["liked"].c_str()));
-
-  return kCgiCodeOk;
-}
-#endif
 
 void ProfileApi::Profile2Base(const UserProfile &profile, StripUserProfile *base) {
   base->set_user(profile.user());

@@ -20,6 +20,7 @@ std::string GetErrMsg(int code) {
   code2msg[kCgiCodeMoreData] = "还有更多数据";
   code2msg[kCgiCodeNoMoreData] = "没有更多数据";
   code2msg[kCgiCodeSetUserProfile] = "请先设置个人资料";
+  code2msg[kCgiCodeUserProfileInexist] = "用户信息不存在";
   code2msg[kCgiCodeInvalidAddressCode] = "未知地址码";
 
   std::map<int, std::string>::iterator iter;

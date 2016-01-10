@@ -42,6 +42,11 @@ int RecordApi::Del(const std::string &id) {
   return Set(record);
 }
 
+int RecordApi::HardDel(const std::string &id) {
+  //TODO
+  return 0;
+}
+
 int RecordApi::SetRecordPublic(const std::string &id, bool is_public) {
   RoughRecord record;
   int ret = Get(id, &record);
@@ -187,7 +192,6 @@ int RecordApi::LinkRecordToRecent(const std::string &id) {
 int RecordApi::GetRecords(const std::string &key, int index_start,
     int index_stop, std::vector<std::string> *ids) {
   RedisCpp redis;
-  // std::cout << "start: " << index_start << " stop: " << index_stop << std::endl;
   if (redis.Query("LRANGE", key, index_start, index_stop, ids)
       == RedisCodeError) {
     LOG_ERROR << "read record ids failed! key: " << key;

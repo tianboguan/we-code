@@ -11,6 +11,7 @@ class ProfileApi {
     int Create(const UserProfile &profile, bool check = true);
     int Update(const std::string &user, const UserProfile &profile);
     int Get(const std::string &user, UserProfile *profile);
+    int Set(const std::string &user, const UserProfile &profile);
     int Get(const std::string &user, StripUserProfile *strip);
     int MGet(const std::set<std::string> &users,
         std::map<std::string, UserProfile> *profiles);

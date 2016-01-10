@@ -1,0 +1,9 @@
+upload.sh use for upload picture
+
+upload.sh <user> <picture file>
+
+响应示例如下：
+{"code":0,"message":"成功","data":{"download_url":"http://feelings-10010517.image.myqcloud.com/1_1452433535_fear.png","fileid":"1_1452433535_fear.png","info":[{"0":{"height":42,"width":42}}],"url":"http://web.image.myqcloud.com/photos/v2/10010517/feelings/0/1_1452433535_fear.png"}
+}
+
+使用download_url在浏览器确认是否上传成功，使用download_url写入record_profile造记录数据

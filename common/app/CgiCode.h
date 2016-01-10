@@ -27,6 +27,7 @@
 #define kCgiCodeNoMoreData          12
 
 #define kCgiCodeSetUserProfile      13
+#define kCgiCodeUserProfileInexist  14
 
 extern std::string GetErrMsg(int code);
 
