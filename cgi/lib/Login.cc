@@ -217,8 +217,8 @@ int Account::SendCode() {
     return kCgiCodeUserInvalid;
   }
 
-#if 0
-  if (SetPassSMS(account_info.phone(), code) != 0) {
+#if 1
+  if (SetPassSMS(account_info.phone(), account_info.code()) != 0) {
     LOG_ERROR << "send sms failed! user: " << user_;
     return kCgiCodeSendSmsError;
   }
@@ -291,7 +291,7 @@ int Account::CheckLogin() {
 }
 
 std::string Account::CreateCode() {
-#if 0
+#if 1
   int code = rand() % 10000;
   char buf[6];
   bzero(buf, sizeof(buf));

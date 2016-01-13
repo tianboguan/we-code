@@ -99,17 +99,16 @@ int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
     LOG_ERROR << "read user home record ids failed! user:" << user;
     return kCgiCodeSystemError;
   }
+  if (record_ids.empty()) {
+    return kCgiCodeNoMoreData;
+  }
 
   if (GetRecords(record_ids, records) != kCgiCodeOk) {
     LOG_ERROR << "read user home records failed! user:" << user;
     return kCgiCodeSystemError;
   }
 
-  if (record_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 
 int RecordApi::GetActiveRecord(const std::string &user, int32_t page,
@@ -122,17 +121,16 @@ int RecordApi::GetActiveRecord(const std::string &user, int32_t page,
     LOG_ERROR << "read user active record ids failed! user:" << user;
     return kCgiCodeSystemError;
   }
+  if (record_ids.empty()) {
+    return kCgiCodeNoMoreData;
+  }
 
   if (GetRecords(record_ids, records) != kCgiCodeOk) {
     LOG_ERROR << "read user active records failed! user:" << user;
     return kCgiCodeSystemError;
   }
 
-  if (record_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 
 int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
@@ -146,17 +144,15 @@ int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
     LOG_ERROR << "read user active record ids failed! user:" << user;
     return kCgiCodeSystemError;
   }
+  if (record_ids.empty()) {
+    return kCgiCodeNoMoreData;
+  }
 
   if (GetRecords(record_ids, records) != kCgiCodeOk) {
     LOG_ERROR << "read user active records failed! user:" << user;
     return kCgiCodeSystemError;
   }
-
-  if (record_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 
 int RecordApi::LinkRecordToUserHome(const std::string &id,

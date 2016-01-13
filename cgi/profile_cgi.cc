@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
       SendPostResWithoutData(ret);
     }
     return 0;
-#if 0
   } else if (action == "stat") {
     QueryProfileReq req;
     ret = parser.Parse(req);
@@ -86,7 +85,6 @@ int main(int argc, char *argv[]) {
       SendPostResWithoutData(ret);
     }
     return 0;
-#endif
   } else {
     LOG_ERROR << "invalid action info: " << action;
     SendPostResWithoutData(kCgiCodeParamError);

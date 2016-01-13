@@ -64,7 +64,7 @@ message FollowListRes {
 }
 
 message FollowStatusRes {
-  bool follow = 1;                // 'yes' | 'no'
+  string follow = 1;                // 'yes' | 'no'
 }
 
 //-------------- 记录处理相关接口 --------------
@@ -193,10 +193,15 @@ message TagReq {
   string tag_class = 1;                      // 标签类型名
 }
 
+message TagNode {
+  string name = 1;
+  string icon = 2;
+}
+
 message TagRes {
-  repeated string weather = 1;
-  repeated string mood = 2;
-  repeated string status = 3;
+  repeated TagNode weather = 1;
+  repeated TagNode mood = 2;
+  repeated TagNode status = 3;
 }
 
 

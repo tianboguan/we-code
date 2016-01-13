@@ -9,14 +9,15 @@ message RecordStat {
 
 message UserStat {
   string user = 1;
-  int32 login = 2;
-  int32 follow = 3;
-  int32 followed = 4;
-  int32 record = 5;
-  int32 comment = 6;
-  int32 commented = 7;
-  int32 like = 8;
-  int32 liked = 9;
+  uint32 enroll_time = 2;
+  int32 login_count = 3;
+  int32 follow_count = 4;
+  int32 followed_count = 5;
+  int32 record_count = 6;
+  int32 comment_count = 7;
+  int32 commented_count = 8;
+  int32 like_count = 9;
+  int32 liked_count = 10;
 }
 
 service StatisticServer {

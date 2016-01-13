@@ -14,7 +14,7 @@ class Profile {
     int Alt(const AltProfileReq &req);
     int AltHead(ImgRes *res);
     int Query(const QueryProfileReq &req, UserProfile *profile);
-    //int Query(const std::string &target_user, UserStat *stat);
+    int Query(const std::string &target_user, UserStat *stat);
 
   private:
     // int GetUserProfile(const std::vector<string> &users, FollowListRes *res);

@@ -2,6 +2,7 @@
 #include "common/utils/StringUtils.h"
 #include "common/encode/md5.h"
 #include <curl/curl.h>
+#include <iostream>
 
 XGPush::XGPush() {
   params_["access_id"] = "2100174978";
@@ -28,11 +29,14 @@ bool XGPush::PushSingleAccount(const std::string &account, const std::string &ms
   params_["account"] = account;
   params_["message_type"] = "2";
   params_["message"] = msg;
-  params_["expire_time"] = "86400" ;
-  params_["multi_pkg"] = "1" ;
+  params_["expire_time"] = "86400";
+  //params_["multi_pkg"] = "1" ;
+  params_["multi_pkg"] = "0";
   std::string sign = BuildSign();
   params_["sign"] = sign;
   std::string query_string = BuildQueryString();
+
+  std::cout << "query string:\n-----------------------\n" << query_string << std::endl;
 
   bool ret = false;
   // curl example:

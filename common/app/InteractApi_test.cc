@@ -161,7 +161,7 @@ TEST_F(InteractApiTest, GetUserNoticeInteractsTest) {
   ASSERT_EQ(interacts.size(), 0u);
 
   ASSERT_EQ(api.Comment("1", "comment1"), kCgiCodeOk);
-  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeNoMoreData);
+  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 1u);
   ExtInteract interact = interacts[0];
   EXPECT_EQ(interact.interact().type(),  INTER_TYPE_COMMENT);
@@ -172,6 +172,7 @@ TEST_F(InteractApiTest, GetUserNoticeInteractsTest) {
   EXPECT_EQ(interact.user().head(), "head1");
   EXPECT_EQ(interact.record().id(), "1");
   EXPECT_EQ(interact.record().text(), "text");
+  ASSERT_EQ(api2.GetUserNoticeInteracts(2, &interacts), kCgiCodeNoMoreData);
 
   interacts.clear();
   ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeNoMoreData);
@@ -184,7 +185,7 @@ TEST_F(InteractApiTest, GetUserNoticeInteractsTest) {
   ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 28u);
   interacts.clear();
-  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeNoMoreData);
+  ASSERT_EQ(api2.GetUserNoticeInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 2u);
 }
 
@@ -212,7 +213,7 @@ TEST_F(InteractApiTest, GetUserReceivedInteractsTest) {
   ASSERT_EQ(interacts.size(), 0u);
 
   ASSERT_EQ(api.Comment("1", "comment2"), kCgiCodeOk);
-  ASSERT_EQ(api2.GetUserReceivedInteracts(1, &interacts), kCgiCodeNoMoreData);
+  ASSERT_EQ(api2.GetUserReceivedInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 1u);
   ExtInteract interact = interacts[0];
   EXPECT_EQ(interact.interact().type(),  INTER_TYPE_COMMENT);
@@ -223,6 +224,7 @@ TEST_F(InteractApiTest, GetUserReceivedInteractsTest) {
   EXPECT_EQ(interact.user().head(), "head1");
   EXPECT_EQ(interact.record().id(), "1");
   EXPECT_EQ(interact.record().text(), "text");
+  ASSERT_EQ(api2.GetUserReceivedInteracts(2, &interacts), kCgiCodeNoMoreData);
 }
 
 TEST_F(InteractApiTest, GetUserReceivedInteractsSelfTest) {
@@ -249,13 +251,14 @@ TEST_F(InteractApiTest, GetUserSendedInteractsTest) {
   ASSERT_EQ(interacts.size(), 0u);
 
   ASSERT_EQ(api2.Comment("1", "comment2"), kCgiCodeOk);
-  ASSERT_EQ(api2.GetUserSendedInteracts(1, &interacts), kCgiCodeNoMoreData);
+  ASSERT_EQ(api2.GetUserSendedInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 1u);
+  ASSERT_EQ(api2.GetUserSendedInteracts(2, &interacts), kCgiCodeNoMoreData);
 
   ASSERT_EQ(api.ClearUserSendedInteracts(), kCgiCodeOk);
   interacts.clear();
   ASSERT_EQ(api.Comment("1", "comment1"), kCgiCodeOk);
-  ASSERT_EQ(api.GetUserSendedInteracts(1, &interacts), kCgiCodeNoMoreData);
+  ASSERT_EQ(api.GetUserSendedInteracts(1, &interacts), kCgiCodeOk);
   ASSERT_EQ(interacts.size(), 1u);
   ExtInteract interact = interacts[0];
   EXPECT_EQ(interact.interact().type(),  INTER_TYPE_COMMENT);
@@ -266,15 +269,8 @@ TEST_F(InteractApiTest, GetUserSendedInteractsTest) {
   EXPECT_EQ(interact.user().head(), "head1");
   EXPECT_EQ(interact.record().id(), "1");
   EXPECT_EQ(interact.record().text(), "text");
+  ASSERT_EQ(api.GetUserSendedInteracts(2, &interacts), kCgiCodeNoMoreData);
 }
-#if 0
-    int GetUserNoticeInteracts(int32_t page,
-        std::vector<ExtInteract> *interacts);
-    int GetUserReceivedInteracts(int32_t page,
-        std::vector<ExtInteract> *interacts);
-    int GetUserSendedInteracts(int32_t page,
-        std::vector<ExtInteract> *interacts);
-#endif
 
 int main(int argc, char **argv) {  
   ::testing::InitGoogleTest(&argc, argv);  

@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   RecommandRes res;
   Recommand recommand(base.user());
   ret = recommand.Get(req, &res);
-  if (ret == kCgiCodeOk || ret == kCgiCodeNoMoreData) {
+  if (ret == kCgiCodeOk) {
     SendPostResWithData(ret, res);
   } else {
     SendPostResWithoutData(ret);

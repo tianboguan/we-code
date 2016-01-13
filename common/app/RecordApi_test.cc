@@ -111,11 +111,12 @@ TEST(RecordApi, HomeRecordTest) {
   ASSERT_EQ(api.Set(record), kCgiCodeOk);
   ASSERT_EQ(api.LinkRecordToUserHome(id, "1"), kCgiCodeOk);
   records.clear();
-  ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeNoMoreData);
+  ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 1u);
   EXPECT_EQ(records[id].id(), record.id());
   EXPECT_EQ(records[id].user(), record.user());
   EXPECT_EQ(records[id].time(), record.time());
+  ASSERT_EQ(api.GetHomeRecord("1", 2, &records), kCgiCodeNoMoreData);
   ASSERT_EQ(api.UnlinkRecordToUserHome(id, "1"), kCgiCodeOk);
 }
 
@@ -123,6 +124,7 @@ TEST(RecordApi, HomeRecordPageTest) {
   RecordApi api;
   map<string, RoughRecord> records;
   ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeNoMoreData);
+  // ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeOk);
   for (map<string, RoughRecord>::iterator iter = records.begin();
       iter != records.end(); ++iter) {
     ASSERT_EQ(api.UnlinkRecordToUserHome(iter->first, "1"), kCgiCodeOk);
@@ -141,8 +143,9 @@ TEST(RecordApi, HomeRecordPageTest) {
   records.clear();
   ASSERT_EQ(api.GetHomeRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 12u);
-  ASSERT_EQ(api.GetHomeRecord("1", 2, &records), kCgiCodeNoMoreData);
+  ASSERT_EQ(api.GetHomeRecord("1", 2, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 20u);
+  ASSERT_EQ(api.GetHomeRecord("1", 3, &records), kCgiCodeNoMoreData);
   for (map<string, RoughRecord>::iterator iter = records.begin();
       iter != records.end(); ++iter) {
     ASSERT_EQ(api.UnlinkRecordToUserHome(iter->first, "1"), kCgiCodeOk);
@@ -152,7 +155,7 @@ TEST(RecordApi, HomeRecordPageTest) {
 TEST(RecordApi, ActiveRecordTest) {
   RecordApi api;
   map<string, RoughRecord> records;
-  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeNoMoreData);
+  api.GetActiveRecord("1", 1, &records);
   for (map<string, RoughRecord>::iterator iter = records.begin();
       iter != records.end(); ++iter) {
     ASSERT_EQ(api.UnlinkRecordToUserActive(iter->first, "1"), kCgiCodeOk);
@@ -167,18 +170,19 @@ TEST(RecordApi, ActiveRecordTest) {
   ASSERT_EQ(api.Set(record), kCgiCodeOk);
   ASSERT_EQ(api.LinkRecordToUserActive(id, "1"), kCgiCodeOk);
   records.clear();
-  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeNoMoreData);
+  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 1u);
   EXPECT_EQ(records[id].id(), record.id());
   EXPECT_EQ(records[id].user(), record.user());
   EXPECT_EQ(records[id].time(), record.time());
+  ASSERT_EQ(api.GetActiveRecord("1", 2, &records), kCgiCodeNoMoreData);
   ASSERT_EQ(api.UnlinkRecordToUserActive(id, "1"), kCgiCodeOk);
 }
 
 TEST(RecordApi, ActiveRecordPageTest) {
   RecordApi api;
   map<string, RoughRecord> records;
-  ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeNoMoreData);
+  api.GetActiveRecord("1", 1, &records);
   for (map<string, RoughRecord>::iterator iter = records.begin();
       iter != records.end(); ++iter) {
     ASSERT_EQ(api.UnlinkRecordToUserActive(iter->first, "1"), kCgiCodeOk);
@@ -197,8 +201,9 @@ TEST(RecordApi, ActiveRecordPageTest) {
   records.clear();
   ASSERT_EQ(api.GetActiveRecord("1", 1, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 12u);
-  ASSERT_EQ(api.GetActiveRecord("1", 2, &records), kCgiCodeNoMoreData);
+  ASSERT_EQ(api.GetActiveRecord("1", 2, &records), kCgiCodeOk);
   EXPECT_EQ(records.size(), 20u);
+  ASSERT_EQ(api.GetActiveRecord("1", 3, &records), kCgiCodeNoMoreData);
   for (map<string, RoughRecord>::iterator iter = records.begin();
       iter != records.end(); ++iter) {
     ASSERT_EQ(api.UnlinkRecordToUserActive(iter->first, "1"), kCgiCodeOk);

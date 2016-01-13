@@ -139,11 +139,7 @@ int InteractApi::GetUserNoticeInteracts(int32_t page,
     LOG_ERROR << "delete readed interact from notice failed! user:" << user_;
   }
 
-  if (interact_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 
 int InteractApi::GetUserSendedInteracts(int32_t page,
@@ -155,6 +151,9 @@ int InteractApi::GetUserSendedInteracts(int32_t page,
       != kCgiCodeOk) {
     LOG_ERROR << "read user history interact ids failed! user:" << user_;
     return kCgiCodeSystemError;
+  }
+  if (interact_ids.empty()) {
+    return kCgiCodeNoMoreData;
   }
 
   std::vector<std::string> keys;
@@ -168,11 +167,7 @@ int InteractApi::GetUserSendedInteracts(int32_t page,
     return kCgiCodeSystemError;
   }
 
-  if (interact_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 int InteractApi::ClearRecordInteracts(const std::string &id) {
   RedisCpp redis;
@@ -206,6 +201,10 @@ int InteractApi::GetUserReceivedInteracts(int32_t page,
     return kCgiCodeSystemError;
   }
 
+  if (interact_ids.empty()) {
+    return kCgiCodeNoMoreData;
+  }
+
   std::vector<std::string> keys;
   for (std::vector<std::string>::iterator iter = interact_ids.begin(); 
       iter != interact_ids.end(); ++iter) {
@@ -217,11 +216,7 @@ int InteractApi::GetUserReceivedInteracts(int32_t page,
     return kCgiCodeSystemError;
   }
 
-  if (interact_ids.size() < size_t(page_count_)) {
-    return kCgiCodeNoMoreData;
-  } else {
-    return kCgiCodeOk;
-  }
+  return kCgiCodeOk;
 }
 
 int InteractApi::CreateInterId(std::string *id) {
