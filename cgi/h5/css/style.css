@@ -33,7 +33,7 @@ span{
         .count>span{
             font-size: 10px;
         }
-        ol>li{
+        ul>li{
             list-style-type: none;
             margin-top: 6px;
             display:block;

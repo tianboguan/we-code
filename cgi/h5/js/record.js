@@ -2,6 +2,12 @@
  * Created by fangwenjuan on 2016/1/4/0004.
  */
 $(function(){
+	var width = document.body.clientWidth;
+    if (width > 480){
+        $('.all-content').width(480);
+		$('.all-content').css({'margin-left':'auto','margin-right':'auto'});
+    }
+	
     var parameters = getRequest();
     if(!parameters['record_id']){
         $('.error').show();
@@ -14,6 +20,17 @@ $(function(){
     getComment(parameters['record_id']);
 
 });
+
+function resize(){
+    var width = document.body.clientWidth;
+    if (width > 480) {
+        $('.all-content').width(480);
+        $('.all-content').css('marginLeft', 'auto');
+        $('.all-content').css('marginRight', 'auto');
+    } else {
+        $('.all-content').width('100%');
+    }
+}
 
 //获取url参数
 function getRequest() {
