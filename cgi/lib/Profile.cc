@@ -63,6 +63,7 @@ int Profile::Query(const std::string &target_user, UserStat *stat) {
     return kCgiCodeSystemError;
   }
 #endif
+  srand(time(NULL));
   stat->set_user(target_user);
   stat->set_login_count(rand() % 256);
   stat->set_enroll_time(time(NULL) - (rand() % 60 * 86400));

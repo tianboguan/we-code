@@ -18,5 +18,6 @@ message StripUserProfile {
   string user = 1;                    // 用户帐号
   string nickname = 2;                // 昵称
   string head = 3;                    // 头像
+  string signature = 4;               // 头像
 }
 

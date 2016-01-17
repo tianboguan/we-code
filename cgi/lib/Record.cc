@@ -168,6 +168,7 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     (iter->second).set_web_url("http://182.254.220.116/h5/record.html?record_id=" + iter->first);
   }
 
+#if 0
   if (filter_private) {
     for (iter = records.begin(); iter != records.end();) {
       if ((iter->second).is_delete()) {
@@ -177,6 +178,16 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
       }
     }
   }
+#else
+  for (iter = records.begin(); iter != records.end();) {
+    if ((iter->second).is_delete()
+        || (filter_private && !((iter->second).is_public()))) {
+      iter = records.erase(iter);
+    } else {
+      ++iter;
+    }
+  }
+#endif
 
   for (iter = records.begin(); iter != records.end(); ++iter) {
     users.insert((iter->second).user());
@@ -194,16 +205,16 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   // std::map<std::string, RecordStat> stats;
   // TODO get each record stats
   RecordStat stat;
-  stat.set_view(28);
-  stat.set_like(6);
-  stat.set_comment(1);
+  srand(time(NULL));
+  stat.set_view(rand() % 100 + 20);
+  stat.set_like(rand() % 20 + 10);
+  stat.set_comment(rand() % 10);
 
   std::map<std::string, RoughRecord>::reverse_iterator riter;
   for (riter = records.rbegin(); riter != records.rend(); ++riter) {
     ExtRecord ext_record;
     *(ext_record.mutable_record()) = riter->second;
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
-    //*(ext_record.mutable_interact()) = stats[riter->first];
     *(ext_record.mutable_interact()) = stat;
     *(res->add_records()) = ext_record;
   }

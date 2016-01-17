@@ -142,4 +142,5 @@ void ProfileApi::Profile2Base(const UserProfile &profile, StripUserProfile *base
   base->set_user(profile.user());
   base->set_nickname(profile.nickname());
   base->set_head(profile.head());
+  base->set_signature(profile.signature());
 }

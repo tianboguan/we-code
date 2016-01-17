@@ -32,6 +32,13 @@ int main(int argc, char *argv[]) {
   }
 
   RecommandReq req;
+  ret = parser.Parse(req);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << parser.Error();
+    SendPostResWithoutData(ret);
+    return 0;
+  }
+
   RecommandRes res;
   Recommand recommand(base.user());
   ret = recommand.Get(req, &res);
