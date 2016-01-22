@@ -33,10 +33,14 @@ int Account::Enroll(const EnrollReq &req, AccountRes *res) {
       LOG_ERROR << "get account info failed! user:" << user;
       return kCgiCodeSystemError;
     }
-    if (account_info.status() != USER_STATUS_ENROLL) {
+    if (account_info.status() == USER_STATUS_INVALID) {
       LOG_ERROR << "user status invalid! user:" << user
         << " status: " << account_info.status();
       return kCgiCodeSystemError;
+    } else if (account_info.status() != USER_STATUS_ENROLL){
+      LOG_ERROR << "user has enrolled! user: " << user
+         << ", status: "<< account_info.status();
+      return kCgiCodePhoneEnrolled;
     }
   } else {
     ret = CreateUser(req.phone(), &user);

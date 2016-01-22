@@ -29,6 +29,10 @@ int Recommand::Get(const RecommandReq &req, RecommandRes *res) {
 
   FollowApi follow_api(user_);
   for (riter = records.rbegin(); riter != records.rend(); ++riter) {
+    if (!(riter->second).is_public()) {
+      continue;
+    }
+
     RecommandUser recommand;
     std::string user = (riter->second).user();
     if (users.find(user) != users.end()) {

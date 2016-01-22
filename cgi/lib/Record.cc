@@ -129,7 +129,15 @@ int Record::GetHome(const QueryRecordListReq &req, QueryRecordListRes *res) {
     LOG_ERROR << "get home record failed! user: " << user_;
     return kCgiCodeSystemError;
   }
-  if (BuildRecordListRes(records, req.page(), res, false)
+
+  bool filter_private;
+  if (req.target_user() != user_) {
+    filter_private = true;
+  } else {
+    filter_private = false;
+  }
+
+  if (BuildRecordListRes(records, req.page(), res, filter_private)
       == kCgiCodeSystemError) {
     return kCgiCodeSystemError;
   }

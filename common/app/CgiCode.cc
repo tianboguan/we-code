@@ -8,7 +8,7 @@ std::string GetErrMsg(int code) {
   code2msg[kCgiCodeParamError] = "参数错误";
   code2msg[kCgiCodeSystemError] = "系统异常";
   code2msg[kCgiCodeOk] = "处理成功";
-  code2msg[kCgiCodePhoneEnrolled] = "该用户已经注册";
+  code2msg[kCgiCodePhoneEnrolled] = "该用户已经注册, 请直接登录";
   code2msg[kCgiCodeUserInvalid] = "非法用户";
   code2msg[kCgiCodeUserAbnormal] = "用户状态异常";
   code2msg[kCgiCodePasswdError] = "用户名或密码错误";
