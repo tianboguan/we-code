@@ -3,6 +3,7 @@
 #include <iterator>
 #include "common/app/CgiCode.h"
 #include "common/app/ProfileApi.h"
+#include "common/app/StatisticApi.h"
 #include "common/tencent_img/TencentImg.h"
 #include "thirdparty/plog/Log.h"
 #include "service/record/client/RecordClient.h"
@@ -61,11 +62,15 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
       << "record id: " << record_id << " error: " << client.Error();
   }
 
+  // user incr record count statistic
+  StatisticApi::AddRecord(user_);
+
   return kCgiCodeOk;
 }
 
 
 int Record::Delete(const DelRecordReq &req) {
+  StatisticApi::DelRecord(user_);
   return record_api_.Del(req.id());
 }
 
@@ -171,34 +176,18 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     int page, QueryRecordListRes *res, bool filter_private) {
   std::map<std::string, RoughRecord>::iterator iter;
   std::set<std::string> users;
+  std::vector<std::string> record_ids;
 
-  for (iter = records.begin(); iter != records.end(); ++iter) {
-    (iter->second).set_web_url("http://182.254.220.116/h5/record.html?record_id=" + iter->first);
-  }
-
-#if 0
-  if (filter_private) {
-    for (iter = records.begin(); iter != records.end();) {
-      if ((iter->second).is_delete()) {
-        iter = records.erase(iter);
-      } else {
-        ++iter;
-      }
-    }
-  }
-#else
   for (iter = records.begin(); iter != records.end();) {
     if ((iter->second).is_delete()
         || (filter_private && !((iter->second).is_public()))) {
       iter = records.erase(iter);
     } else {
+      (iter->second).set_web_url("http://182.254.220.116/h5/record.html?record_id=" + iter->first);
+      users.insert((iter->second).user());
+      record_ids.push_back(iter->first);
       ++iter;
     }
-  }
-#endif
-
-  for (iter = records.begin(); iter != records.end(); ++iter) {
-    users.insert((iter->second).user());
   }
 
   // Get user info
@@ -209,21 +198,19 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     return kCgiCodeSystemError;
   }
 
-  // Get record stat info
-  // std::map<std::string, RecordStat> stats;
-  // TODO get each record stats
-  RecordStat stat;
-  srand(time(NULL));
-  stat.set_view(rand() % 100 + 20);
-  stat.set_like(rand() % 20 + 10);
-  stat.set_comment(rand() % 10);
+  // Statistic process
+  // add view stat
+  StatisticApi::ViewRecords(record_ids);
+  // get interact stat
+  std::map<std::string, RecordStat> stats;
+  StatisticApi::GetRecordsStat(record_ids, &stats);
 
   std::map<std::string, RoughRecord>::reverse_iterator riter;
   for (riter = records.rbegin(); riter != records.rend(); ++riter) {
     ExtRecord ext_record;
     *(ext_record.mutable_record()) = riter->second;
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
-    *(ext_record.mutable_interact()) = stat;
+    *(ext_record.mutable_interact()) = stats[riter->first];
     *(res->add_records()) = ext_record;
   }
 

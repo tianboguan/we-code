@@ -7,7 +7,6 @@
 #include "common/app/ProfileApi.h"
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
-// #include <iostream>
 
 int RecordApi::Get(const std::string &id, RoughRecord *record) {
   RedisStr2Pb<RoughRecord> redis;

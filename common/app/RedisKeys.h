@@ -48,4 +48,8 @@ std::string GetAddressKey(const std::string &address_code);
 // ------ recommand data cache key ------------
 std::string GetRecommandKey(const std::string &user);
 
+// -------------- statistic data cache key --------
+std::string GetRecordStatisticKey(const std::string &id);
+std::string GetUserStatisticKey(const std::string &user);
+
 #endif // COMMON_APP_REDISKEYS_H_ 

@@ -6,10 +6,9 @@
 #include "common/app/CgiCode.h"
 #include "common/app/ProfileApi.h"
 #include "common/app/RecordApi.h"
+#include "common/app/StatisticApi.h"
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
-
-// #include <iostream>
 
 int InteractApi::Like(const std::string &record_id) {
   std::string id;
@@ -28,6 +27,10 @@ int InteractApi::Like(const std::string &record_id) {
   interact.set_record_id(record_id);
   interact.set_target_interact_id("");
   interact.set_is_delete(false);
+
+  // record incr like stat
+  StatisticApi::LikeRecord(record_id);
+  StatisticApi::UserLike(user_);
 
   return DispatchInteract(interact);
 }
@@ -53,6 +56,8 @@ int InteractApi::Unlike(const std::string &record_id) {
     return kCgiCodeOk;
   }
 
+  // record decr like stat
+  StatisticApi::UnlikeRecord(record_id);
   return DelInteract(interact_id, record_id);
 }
 
@@ -76,11 +81,14 @@ int InteractApi::Comment(const std::string &record_id,
   interact.set_target_interact_id(target_interact_id);
   interact.set_is_delete(false);
 
+  StatisticApi::CommentRecord(record_id);
+  StatisticApi::UserComment(record_id);
   return DispatchInteract(interact);
 }
 
 int InteractApi::Uncomment(const std::string &comment_id,
     const std::string &record_id) {
+  StatisticApi::UncommentRecord(record_id);
   return DelInteract(comment_id, record_id);
 }
 

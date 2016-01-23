@@ -4,7 +4,6 @@
 #include <sstream>
 #include <vector>
 #include <map>
-// #include <iostream>
 #include "common/utils/StringUtils.h"
 #include "thirdparty/plog/Log.h"
 #include "thirdparty/hiredis-master/hiredis.h"

@@ -5,6 +5,7 @@ cc_library(
     'FollowApi.cc',
     'ProfileApi.cc',
     'InteractApi.cc',
+    'StatisticApi.cc',
     'RecordApi.cc',
     'CgiCode.cc',
   ],
@@ -13,6 +14,7 @@ cc_library(
     '//proto:InteractProto',
     '//proto:RecordProto',
     '//proto:ProfileProto',
+    '//proto:StatisticProto',
     '//common/redis_utils:RedisUtils',
     '//common/utils:Utils',
   ]

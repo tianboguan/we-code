@@ -1,6 +1,7 @@
 #include "common/app/FollowApi.h"
 #include "common/app/RedisKeys.h"
 #include "common/app/CgiCode.h"
+#include "common/app/StatisticApi.h"
 #include "thirdparty/plog/Log.h"
 
 int FollowApi::Follow(const std::string &target_user) {
@@ -47,6 +48,10 @@ int FollowApi::Follow(const std::string &target_user) {
       " follow from list failed";
     return kCgiCodeSystemError ;
   }
+
+  // add statistic 
+  StatisticApi::UserFollow(user_);
+  StatisticApi::UserFollowed(target_user);
 
   return kCgiCodeOk;
 }

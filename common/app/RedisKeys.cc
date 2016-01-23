@@ -101,3 +101,11 @@ std::string GetAddressKey(const std::string &address_code) {
 std::string GetRecommandKey(const std::string &user) {
   return GetRecordRecentKey();
 }
+
+// -------------- statistic data cache key --------
+std::string GetRecordStatisticKey(const std::string &id) {
+  return "stat_r_" + id;
+}
+std::string GetUserStatisticKey(const std::string &user) {
+  return "stat_u_" + user;
+}
