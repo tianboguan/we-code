@@ -11,6 +11,11 @@ class InteractApi {
 
     int Like(const std::string &record_id);
     int Unlike(const std::string &record_id);
+    int GetUserLikeRecordStatus(const std::string &user,
+        const std::string &record_id, bool *is_liked);
+    int GetUserLikeRecordStatus(const std::string &user,
+        const std::vector<std::string> &records,
+        std::map<std::string, bool> *is_likeds);
     int Comment(const std::string &record_id, 
                 const std::string &text,
                 const std::string &target_interact_id = "");
@@ -29,6 +34,10 @@ class InteractApi {
     int ClearUserSendedInteracts();
 
   private:
+    int AddUserLikeStatus(const std::string &record_id,
+        const std::string &user);
+    int DeleteUserLikeStatus(const std::string &record_id,
+        const std::string &user);
     int CreateInterId(std::string *id);
     int DispatchInteract(const RoughInteract &interact);
     int DelInteract(const std::string &interact_id,

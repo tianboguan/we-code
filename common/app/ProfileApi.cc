@@ -53,7 +53,7 @@ int ProfileApi::Update(const std::string &user, const UserProfile &profile) {
   } else if (ret == kCgiCodeUserProfileInexist) {
     old_profile.set_user(user);
     old_profile.set_enrolltime(time(NULL));
-    old_profile.set_start_time(time(NULL));
+    // old_profile.set_start_time(0);
   }
 
   old_profile.MergeFrom(profile);

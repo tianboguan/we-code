@@ -28,18 +28,20 @@ message StripRecord {
   string text = 3;                     // 记录文本内容
 }
 
+
 // 记录互动统计
-message InterStat {
-  int32 view = 1;
-  int32 like = 2;
-  int32 comment = 3;
-}
+// message InterStat {
+//   int32 view = 1;
+//   int32 like = 2;
+//   int32 comment = 3;
+// }
 
 
 message ExtRecord {
  RoughRecord record = 1;                // 记录
  StripUserProfile user = 2;             // 用户
  RecordStat interact = 3;               // 互动数据，不cache，需单独拉取
+ string is_liked = 4;                   // "yes" | "no"
  // string web_url = 4;                    // h5分享页访问地址
 }
 

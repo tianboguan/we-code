@@ -87,6 +87,8 @@ int FollowApi::UnFollow(const std::string &target_user) {
     return kCgiCodeSystemError;
   }
 
+  StatisticApi::UserFollow(user_);
+  StatisticApi::UserFollowed(target_user);
   return 0;
 }
 

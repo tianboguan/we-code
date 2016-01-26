@@ -32,6 +32,7 @@ std::string GetFollowBlockKey(std::string user);
 std::string GetRecordSequenceNoKey();
 std::string GetRecordRoughDataKey(std::string id);
 std::string GetRecordInteractDataKey(std::string id);
+std::string GetRecordLikeListKey(std::string id);
 std::string GetRecordRecentKey();
 
 // -------- interact info cache key -------------

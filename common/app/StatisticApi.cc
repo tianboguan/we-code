@@ -168,6 +168,25 @@ int StatisticApi::UserFollowed(const std::string &user) {
     return -1;
   }
   return 0;
+}
+
+int StatisticApi::UserUnfollow(const std::string &user) {
+  RedisCpp  redis;
+  int ret = redis.Query("HINCRBY", GetUserStatisticKey(user), "follow", "-1");
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "user " << user << " incr unfollow stat failed!"; 
+    return -1;
+  }
+  return 0;
+}
+
+int StatisticApi::UserUnfollowed(const std::string &user) {
+  RedisCpp  redis;
+  int ret = redis.Query("HINCRBY", GetUserStatisticKey(user), "followed", "-1");
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "user " << user << " incr unfollowed stat failed!"; 
+    return -1;
+  }
   return 0;
 }
 
@@ -188,6 +207,9 @@ int StatisticApi::GetUserStat(const std::string &user, UserStat *stat) {
   stat->set_commented_count(atoi(values["commented"].c_str()));
   stat->set_like_count(atoi(values["like"].c_str()));
   stat->set_liked_count(atoi(values["liked"].c_str()));
+
+  LOG_ERROR << "------------------ user " << user << " -------------------"; 
+  LOG_ERROR << stat->DebugString();
   return kCgiCodeOk;
 }
 

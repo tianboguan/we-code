@@ -4,9 +4,53 @@
 #include "common/app/CgiCode.h"
 #include "common/app/ProfileApi.h"
 #include "common/app/StatisticApi.h"
+#include "common/app/InteractApi.h"
 #include "common/tencent_img/TencentImg.h"
 #include "thirdparty/plog/Log.h"
 #include "service/record/client/RecordClient.h"
+
+static void GetTokenValue(const std::string &text, const std::string &key,
+    std::string *value) {
+  std::size_t begin = text.find(key);
+  if (begin == std::string::npos) {
+    return;
+  }
+  std::size_t end = text.find(key, begin + key.length());
+  if (begin == std::string::npos) {
+    return;
+  }
+
+  if (end <= begin + key.length()) {
+    return;
+  }
+
+  size_t token_length = end - begin - key.length(); 
+  *value = text.substr(begin + key.length(), token_length);
+  return value;
+}
+
+int64_t GetTimeFromString(const std::string& str_time) {
+  struct tm* tmp_time = (struct tm*)malloc(sizeof(struct tm));  
+  strptime(str_time.c_str(),"%Y%m%d%H%M%S",tmp_time);  
+  time_t t = mktime(tmp_time);  
+  free(tmp_time);  
+  return t; 
+}
+
+static void GetSupperTimeAndAddress(const std::string text, int64_t *time,
+    std::string *address) {
+  std::string str_time;
+  GetTokenValue(text, "__address__", address);
+  GetTokenValue(text, "__time__", &str_time);
+  if (str_time.empty()) {
+    time = 0;
+  } else {
+    *time = GetTimeFromString(str_time);
+    LOG_ERROR << "time stamp: " << *time;
+  }
+
+  return;
+}
 
 int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
   std::string record_id;
@@ -14,16 +58,19 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
     LOG_ERROR << "get record id failed! user: " << user_;
     return kCgiCodeSystemError;
   }
+  int64_t super_time = 0;
+  std::string super_address;
+  GetSupperTimeAndAddress(req.text(), &super_time, &super_address);
 
   RoughRecord record;
   record.set_id(record_id);
   record.set_user(user_);
-  record.set_time(time(NULL));
+  record.set_time(super_time == 0 ? time(NULL) : super_time);
   record.set_weather(req.weather());
   record.set_mood(req.mood());
   record.set_status(req.status());
   record.set_text(req.text());
-  record.set_address(req.address());
+  record.set_address(super_address.empty() ? req.address() : super_address);
   record.set_is_delete(false);
   record.set_picture_count(req.picture());
   if (req.is_public() == "yes") {
@@ -201,9 +248,16 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
   // Statistic process
   // add view stat
   StatisticApi::ViewRecords(record_ids);
+
   // get interact stat
   std::map<std::string, RecordStat> stats;
   StatisticApi::GetRecordsStat(record_ids, &stats);
+
+  // get like status
+  InteractApi interact_api(user_);
+  std::map<std::string, bool> is_likeds;
+  interact_api.GetUserLikeRecordStatus(user_, record_ids, &is_likeds);
+
 
   std::map<std::string, RoughRecord>::reverse_iterator riter;
   for (riter = records.rbegin(); riter != records.rend(); ++riter) {
@@ -211,6 +265,7 @@ int Record::BuildRecordListRes(std::map<std::string, RoughRecord> &records,
     *(ext_record.mutable_record()) = riter->second;
     *(ext_record.mutable_user()) = profiles[(riter->second).user()];
     *(ext_record.mutable_interact()) = stats[riter->first];
+    ext_record.set_is_liked(is_likeds[riter->first] ? "yes" : "no");
     *(res->add_records()) = ext_record;
   }
 

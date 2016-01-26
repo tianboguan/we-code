@@ -32,6 +32,8 @@ int InteractApi::Like(const std::string &record_id) {
   StatisticApi::LikeRecord(record_id);
   StatisticApi::UserLike(user_);
 
+  AddUserLikeStatus(record_id, user_);
+
   return DispatchInteract(interact);
 }
 
@@ -58,7 +60,57 @@ int InteractApi::Unlike(const std::string &record_id) {
 
   // record decr like stat
   StatisticApi::UnlikeRecord(record_id);
+
+  DeleteUserLikeStatus(record_id, user_);
+
   return DelInteract(interact_id, record_id);
+}
+
+int InteractApi::GetUserLikeRecordStatus(const std::string &user,
+    const std::string &record_id, bool *is_liked) {
+  RedisCpp redis;
+  int status;
+  int ret = redis.Query("SISMEMBER", GetRecordLikeListKey(record_id),
+      user, &status);
+  if (ret != RedisCodeOK) {
+    LOG_ERROR << "Get user " << user << " like " << record_id
+      << " status failed!";
+    return kCgiCodeSystemError;
+  }
+  *is_liked = (status == 0 ? false : true);
+  return kCgiCodeOk;
+}
+
+int InteractApi::GetUserLikeRecordStatus(const std::string &user,
+    const std::vector<std::string> &records,
+    std::map<std::string, bool> *is_likeds) {
+  std::vector<std::string>::const_iterator iter;
+  for (iter = records.begin(); iter != records.end() ; ++iter) {
+    bool is_liked = false;
+    if (GetUserLikeRecordStatus(user, *iter, &is_liked)
+        == kCgiCodeSystemError) {
+      continue;
+    }
+
+
+    (*is_likeds)[*iter] = is_liked;
+  }
+
+  return kCgiCodeOk;
+}
+
+int InteractApi::AddUserLikeStatus(const std::string &record_id,
+    const std::string &user) {
+  RedisCpp redis;
+  return redis.Query("SADD", GetRecordLikeListKey(record_id), user) ==
+    RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
+}
+
+int InteractApi::DeleteUserLikeStatus(const std::string &record_id,
+    const std::string &user) {
+  RedisCpp redis;
+  return redis.Query("SREM", GetRecordLikeListKey(record_id), user) ==
+    RedisCodeOK ? kCgiCodeOk : kCgiCodeSystemError;
 }
 
 int InteractApi::Comment(const std::string &record_id, 

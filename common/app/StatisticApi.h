@@ -29,6 +29,8 @@ class StatisticApi {
     static int UserCommented(const std::string &user);
     static int UserFollow(const std::string &user);
     static int UserFollowed(const std::string &user);
+    static int UserUnfollow(const std::string &user);
+    static int UserUnfollowed(const std::string &user);
     static int GetUserStat(const std::string &user, UserStat *stat);
 };
 
