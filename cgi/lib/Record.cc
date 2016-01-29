@@ -9,6 +9,9 @@
 #include "thirdparty/plog/Log.h"
 #include "service/record/client/RecordClient.h"
 
+const std::string kTimeTag = "__hacktime__";
+const std::string kAddressTag = "__hackaddress__";
+
 static void GetTokenValue(const std::string &text, const std::string &key,
     std::string *value) {
   std::size_t begin = text.find(key);
@@ -26,7 +29,7 @@ static void GetTokenValue(const std::string &text, const std::string &key,
 
   size_t token_length = end - begin - key.length(); 
   *value = text.substr(begin + key.length(), token_length);
-  return value;
+  return;
 }
 
 int64_t GetTimeFromString(const std::string& str_time) {
@@ -40,8 +43,8 @@ int64_t GetTimeFromString(const std::string& str_time) {
 static void GetSupperTimeAndAddress(const std::string text, int64_t *time,
     std::string *address) {
   std::string str_time;
-  GetTokenValue(text, "__address__", address);
-  GetTokenValue(text, "__time__", &str_time);
+  GetTokenValue(text, kAddressTag, address);
+  GetTokenValue(text, kTimeTag, &str_time);
   if (str_time.empty()) {
     time = 0;
   } else {
@@ -50,6 +53,16 @@ static void GetSupperTimeAndAddress(const std::string text, int64_t *time,
   }
 
   return;
+}
+
+static std::string StripRecordText(std::string input) {
+  size_t time_start = input.find(kTimeTag);
+  size_t time_end = input.rfind(kTimeTag);
+  input.erase(time_start, time_end + kTimeTag.length());
+  size_t address_start = input.find(kAddressTag);
+  size_t address_end = input.rfind(kAddressTag);
+  input.erase(address_start, address_end + kAddressTag.length());
+  return input;
 }
 
 int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
@@ -69,7 +82,7 @@ int Record::Create(const CreateRecordReq &req, CreateRecordRes *res) {
   record.set_weather(req.weather());
   record.set_mood(req.mood());
   record.set_status(req.status());
-  record.set_text(req.text());
+  record.set_text(StripRecordText(req.text()));
   record.set_address(super_address.empty() ? req.address() : super_address);
   record.set_is_delete(false);
   record.set_picture_count(req.picture());
@@ -131,13 +144,15 @@ int Record::Get(const QueryRecordReq &req, ExtRecord *record) {
   std::map<std::string, RoughRecord> records;
   records[req.id()] = rough_record;
   QueryRecordListRes res;
-  if (BuildRecordListRes(records, 0, &res, true)
+  if (BuildRecordListRes(records, 0, &res, false)
       == kCgiCodeSystemError) {
     return kCgiCodeSystemError;
   }
 
   if (res.records_size() > 0) {
     *record = res.records(0);
+  } else {
+    return kCgiCodeSystemError;
   }
 
   return kCgiCodeOk;

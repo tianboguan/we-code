@@ -17,7 +17,12 @@ int Follow::FollowList(const FollowReq &req, FollowListRes *res) {
   std::vector<std::string> users;
   int ret = follow_api_.GetFollowTo(req.target_user(), &users);
   if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get user " << req.target_user() << " follow file failed!";
     return ret;
+  }
+
+  if (users.size() > 0) {
+    LOG_ERROR << "follow user: " << users[0];
   }
 
   return BuildFollowListRes(users, res);
