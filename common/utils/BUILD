@@ -25,3 +25,10 @@ cc_binary(
     '//common/utils:Utils',
   ]
 )
+
+cc_binary(
+  name = 'CallBackTest',
+  srcs = 'CallBackTest.cc',
+  deps = [
+  ]
+)

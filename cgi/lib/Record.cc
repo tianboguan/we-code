@@ -58,10 +58,14 @@ static void GetSupperTimeAndAddress(const std::string text, int64_t *time,
 static std::string StripRecordText(std::string input) {
   size_t time_start = input.find(kTimeTag);
   size_t time_end = input.rfind(kTimeTag);
-  input.erase(time_start, time_end + kTimeTag.length());
+  if ((time_start != std::string::npos) && (time_end != std::string::npos)) {
+    input.erase(time_start, time_end + kTimeTag.length());
+  }
   size_t address_start = input.find(kAddressTag);
   size_t address_end = input.rfind(kAddressTag);
-  input.erase(address_start, address_end + kAddressTag.length());
+  if ((address_start != std::string::npos) && (address_end != std::string::npos)) {
+    input.erase(address_start, address_end + kAddressTag.length());
+  }
   return input;
 }
 
