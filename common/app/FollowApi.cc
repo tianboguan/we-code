@@ -50,8 +50,8 @@ int FollowApi::Follow(const std::string &target_user) {
   }
 
   // add statistic 
-  StatisticApi::UserFollow(user_);
-  StatisticApi::UserFollowed(target_user);
+  StatisticApi::UpdateUserFollow(user_);
+  StatisticApi::UpdateUserFollowed(target_user);
 
   return kCgiCodeOk;
 }
@@ -87,8 +87,8 @@ int FollowApi::UnFollow(const std::string &target_user) {
     return kCgiCodeSystemError;
   }
 
-  StatisticApi::UserFollow(user_);
-  StatisticApi::UserFollowed(target_user);
+  StatisticApi::UpdateUserFollow(user_);
+  StatisticApi::UpdateUserFollowed(target_user);
   return 0;
 }
 

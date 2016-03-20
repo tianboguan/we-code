@@ -3,6 +3,8 @@
 #include <vector>
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisCpp.h"
+#include "common/utils/StringUtils.h"
+#include "common/app/FollowApi.h"
 #include "common/app/RedisKeys.h"
 #include "common/app/CgiCode.h"
 
@@ -150,26 +152,45 @@ int StatisticApi::UserCommented(const std::string &user) {
   return 0;
 }
 
-int StatisticApi::UserFollow(const std::string &user) {
+int StatisticApi::UpdateUserFollow(const std::string &user) {
+  FollowApi follow_api_(user);
+  std::vector<std::string> users;
+  int ret = follow_api_.GetFollowTo(user, &users);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get " << user << " follow list failed!"; 
+    return -1;
+  }
+
   RedisCpp  redis;
-  int ret = redis.Query("HINCRBY", GetUserStatisticKey(user), "follow", "1");
+  ret = redis.Query("HSET", GetUserStatisticKey(user), "follow",
+      value_to_string(users.size()));
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "user " << user << " incr follow stat failed!"; 
+    LOG_ERROR << "user " << user << " update user follow stat failed!"; 
     return -1;
   }
   return 0;
 }
 
-int StatisticApi::UserFollowed(const std::string &user) {
+int StatisticApi::UpdateUserFollowed(const std::string &user) {
+  FollowApi follow_api_(user);
+  std::vector<std::string> users;
+  int ret = follow_api_.GetFollowFrom(user, &users);
+  if (ret != kCgiCodeOk) {
+    LOG_ERROR << "get " << user << " followed list failed!"; 
+    return -1;
+  }
+
   RedisCpp  redis;
-  int ret = redis.Query("HINCRBY", GetUserStatisticKey(user), "followed", "1");
+  ret = redis.Query("HSET", GetUserStatisticKey(user), "followed",
+      value_to_string(users.size()));
   if (ret != RedisCodeOK) {
-    LOG_ERROR << "user " << user << " incr followed stat failed!"; 
+    LOG_ERROR << "user " << user << " update user followed stat failed!"; 
     return -1;
   }
   return 0;
 }
 
+#if 0
 int StatisticApi::UserUnfollow(const std::string &user) {
   RedisCpp  redis;
   int ret = redis.Query("HINCRBY", GetUserStatisticKey(user), "follow", "-1");
@@ -189,6 +210,7 @@ int StatisticApi::UserUnfollowed(const std::string &user) {
   }
   return 0;
 }
+#endif
 
 int StatisticApi::GetUserStat(const std::string &user, UserStat *stat) {
   RedisCpp  redis;

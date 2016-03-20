@@ -8,6 +8,19 @@
 #include "thirdparty/plog/Log.h"
 #include "common/redis_utils/RedisPb.h"
 
+static int DelListItems(const std::string key,
+    const std::vector<std::string> &items) {
+  std::vector<std::string>::const_iterator iter;
+  RedisCpp redis;
+  for (iter = items.begin(); iter != items.end(); ++iter) {
+    RedisCode ret = redis.Query("LREM", key, "0", *iter);
+    if (ret != RedisCodeOK) {
+      LOG_ERROR << "exec: \"LREM " << key << " 0 " << *iter << "\" failed!" ;
+    }
+  }
+  return 0;
+}
+
 int RecordApi::Get(const std::string &id, RoughRecord *record) {
   RedisStr2Pb<RoughRecord> redis;
   if (redis.Query("GET", GetRecordRoughDataKey(id), record) != RedisCodeOK) {
@@ -102,11 +115,13 @@ int RecordApi::GetHomeRecord(const std::string &user, int32_t page,
     return kCgiCodeNoMoreData;
   }
 
-  if (GetRecords(record_ids, records) != kCgiCodeOk) {
+  std::vector<std::string> del_records;
+  if (GetRecords(record_ids, records, &del_records) != kCgiCodeOk) {
     LOG_ERROR << "read user home records failed! user:" << user;
     return kCgiCodeSystemError;
   }
 
+  DelListItems(GetUserHomeRecordKey(user), del_records);
   return kCgiCodeOk;
 }
 
@@ -124,11 +139,13 @@ int RecordApi::GetActiveRecord(const std::string &user, int32_t page,
     return kCgiCodeNoMoreData;
   }
 
-  if (GetRecords(record_ids, records) != kCgiCodeOk) {
+  std::vector<std::string> del_records;
+  if (GetRecords(record_ids, records, &del_records) != kCgiCodeOk) {
     LOG_ERROR << "read user active records failed! user:" << user;
     return kCgiCodeSystemError;
   }
 
+  DelListItems(GetUserActiveRecordKey(user), del_records);
   return kCgiCodeOk;
 }
 
@@ -147,10 +164,13 @@ int RecordApi::GetRecentRecord(const std::string &user, int32_t page,
     return kCgiCodeNoMoreData;
   }
 
-  if (GetRecords(record_ids, records) != kCgiCodeOk) {
+  std::vector<std::string> del_records;
+  if (GetRecords(record_ids, records, &del_records) != kCgiCodeOk) {
     LOG_ERROR << "read user active records failed! user:" << user;
     return kCgiCodeSystemError;
   }
+
+  DelListItems(GetRecordRecentKey(), del_records);
   return kCgiCodeOk;
 }
 
@@ -196,7 +216,8 @@ int RecordApi::GetRecords(const std::string &key, int index_start,
 }
 
 int RecordApi::GetRecords(const std::vector<std::string> &ids,
-    std::map<std::string, RoughRecord> *records) {
+    std::map<std::string, RoughRecord> *records,
+    std::vector<std::string> *del_records) {
   if (ids.empty()) {
     return kCgiCodeOk;
   }
@@ -217,6 +238,7 @@ int RecordApi::GetRecords(const std::vector<std::string> &ids,
   for (std::map<std::string, RoughRecord>::iterator iter = tmp_records.begin();
       iter != tmp_records.end(); ++iter) {
     if (iter->second.is_delete()) {
+      del_records->push_back(iter->second.id());
       continue;
     }
     (*records)[(iter->second).id()] = iter->second;

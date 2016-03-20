@@ -7,7 +7,7 @@
 
 class RecordApi {
   public:
-    RecordApi(int page_count = 12) : page_count_(page_count) {}; 
+    RecordApi(int page_count = 28) : page_count_(page_count) {}; 
 
     int Get(const std::string &id, RoughRecord *record);
     int Get(const std::string &id, StripRecord *record);
@@ -34,7 +34,8 @@ class RecordApi {
     int GetRecords(const std::string &key, int index_start,
         int index_stop, std::vector<std::string> *ids);
     int GetRecords(const std::vector<std::string> &ids,
-        std::map<std::string, RoughRecord> *records);
+        std::map<std::string, RoughRecord> *records,
+        std::vector<std::string> *del_records);
 
   private:
     int page_count_;
